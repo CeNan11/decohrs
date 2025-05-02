@@ -51,8 +51,8 @@
     -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Adds an inner shadow when pressed */
 }
 
-.padding {
-    -fx-padding: 10px 50px;
+.insets {
+    -fx-background-insets: 2px 5px;
 }
 
 .menu-border-width-top {
