@@ -36,7 +36,7 @@
                   <String fx:value="deco-font-bold" />
                </styleClass>
             </Label>
-            <TextField promptText="USERNAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+            <TextField fx:id="username" promptText="USERNAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                <styleClass>
                   <String fx:value="transparent-textfield" />
                   <String fx:value="font-size-m" />
@@ -53,19 +53,19 @@
                   <String fx:value="font-size-m" />
                   <String fx:value="deco-font-bold" />
                </styleClass></Label>
-            <PasswordField promptText="PASSWORD" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+            <PasswordField fx:id="password" promptText="PASSWORD" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                <styleClass>
                   <String fx:value="transparent-textfield" />
                   <String fx:value="font-size-m" />
                </styleClass></PasswordField>
          </children>
       </HBox>
-      <Button fx:id="primaryButton" onAction="#navigateToMainMenu" stylesheets="@deco.css" text="LOGIN">
+      <Button minWidth="200.0" onAction="#navigateToActive" stylesheets="@deco.css" text="LOGIN">
          <styleClass>
             <String fx:value="deco-button" />
             <String fx:value="font-size-m" />
+            <String fx:value="default-button" />
             <String fx:value="deco-font-bold" />
-            <String fx:value="padding" />
          </styleClass></Button>
    </children>
    <padding>
