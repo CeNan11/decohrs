@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +23,8 @@ public class App extends Application {
         stage.setMaximized(true);
         stage.setMinHeight(800);
         stage.setMinWidth(1440);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/deco_images/decoLogo.png")));
+        stage.setTitle("DECOHRS");
         stage.show();
     }
 
