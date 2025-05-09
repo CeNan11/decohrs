@@ -5,25 +5,17 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-public class Active {
-
+public class Home {
+    
     @FXML
     private Label time;
 
+    @SuppressWarnings("unused")
     private ClockService clockService;
     
-    @FXML
-    private void initialize() {
-
-    }
-
     public void setClockService(ClockService clockService) {
         this.clockService = clockService;
         time.textProperty().bind(clockService.timeProperty());
-    }
-
-    @FXML private void navigateToHome() throws IOException {
-        App.setRoot("Home");
     }
 
     @FXML
@@ -31,14 +23,19 @@ public class Active {
         App.setRoot("Login");
     }
 
-    @FXML
-    private void navigateToAuditLogs() throws IOException {
-        App.setRoot("AuditLogs");
+    @FXML 
+    private void navigateToActive() throws IOException {
+        App.setRoot("Active");
     }
 
-    @FXML
+    @FXML 
     private void navigateToInactive() throws IOException {
         App.setRoot("Inactive");
+    }
+
+    @FXML 
+    private void navigateToAuditLogs() throws IOException {
+        App.setRoot("AuditLogs");
     }
 
     @FXML private void logout() throws IOException {

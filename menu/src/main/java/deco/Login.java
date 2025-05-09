@@ -1,14 +1,22 @@
 package deco;
 
 import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class Login {
 
     @FXML
-    private void navigateToActive() throws IOException {
-        App.setRoot("Active");
+    private Label time;
+
+    public void setClockService(ClockService clockService) {
+        time.textProperty().bind(clockService.timeProperty());
+    }
+
+    @FXML
+    private void navigateToHome() throws IOException {
+        App.setRoot("Home");
     }
 
     @FXML TextField username;
@@ -17,7 +25,7 @@ public class Login {
     @FXML private void login() throws IOException {
 
         if (username.getText().equals("admin") && password.getText().equals("admin")) {
-            navigateToActive();
+            navigateToHome();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Login Failed");
