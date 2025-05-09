@@ -20,6 +20,7 @@ public class ClockService {
         clock.play();
     }
 
+    @SuppressWarnings("exports")
     public SimpleStringProperty timeProperty() {
         return time;
     }
