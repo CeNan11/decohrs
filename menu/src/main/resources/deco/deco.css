@@ -106,3 +106,164 @@
     -fx-padding: 10px 20px;
     -fx-background-color: #DF5477;
 }
+
+.menu-employee {
+    -fx-background-color: #ABBEEF;
+    -fx-background-radius: 10px 10px 0px 0px;
+}
+
+.menu-active {
+    -fx-background-color: #AFDF54;    
+    -fx-background-radius: 10px 10px 0px 0px;
+}
+
+.menu-inactive {
+    -fx-background-color: #DF5477;
+    -fx-background-radius: 10px 10px 0px 0px;
+}
+
+.date-picker {
+    -fx-background-color: #ABBEEF;
+    -fx-background-radius: 50px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0 ,3)
+}
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-text-fill: #000000; /* Text color */
+    -fx-font-weight: bold;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.date-picker-popup {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ABBEEF;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+.profile {
+    -fx-background-color: #E7CA80;
+    -fx-background-radius: 10;
+}
+
+.profile:hover {
+    -fx-background-color: #ABBEEF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.0, 0, 4); /* Enhances the drop shadow on hover */
+}
+
+.profile:pressed {
+    -fx-background-color: #87A0D4;      /* Darker blue when pressed */
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Adds an inner shadow when pressed */
+}
+
+.profile-add {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+}
+
+.profile-add:hover {
+    -fx-background-color: #ABBEEF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.0, 0, 4); /* Enhances the drop shadow on hover */
+}
+
+.profile-add:pressed {
+    -fx-background-color: #87A0D4;      /* Darker blue when pressed */
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Adds an inner shadow when pressed */
+}
+
+.profile-alt {
+    -fx-background-color: #CCCCCC;
+    -fx-background-radius: 10;
+}
+
+.profile-alt:hover {
+    -fx-background-color: #ABBEEF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.0, 0, 4); /* Enhances the drop shadow on hover */
+}
+
+.profile-alt:pressed {
+    -fx-background-color: #87A0D4;      /* Darker blue when pressed */
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Adds an inner shadow when pressed */
+}
+
+
+/* Style the ScrollPane itself */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+/* Viewport inside the ScrollPane */
+.scroll-pane > .viewport {
+    -fx-background-color: white;
+}
+
+/* Scroll bars */
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Scroll bar track */
+.scroll-bar .track {
+    -fx-background-color: #e0e0e0;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+}
+
+/* Scroll bar thumb (the draggable part) */
+.scroll-bar .thumb {
+    -fx-background-color: #888;
+    -fx-background-insets: 2;
+    -fx-background-radius: 5;
+}
+
+/* Hover effect on thumb */
+.scroll-bar .thumb:hover {
+    -fx-background-color: #555;
+}
+
+/* Buttons (optional: hide or style increment/decrement buttons) */
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Arrow shape inside the buttons (optional) */
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-shape: "";
+}
+
+.home-grid {
+    -fx-border-width: 2;
+    -fx-border-color: #EFDCAB;
+    -fx-border-radius: 10;
+    -fx-border-insets: 10;
+}
+
+.transparent {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.audit-logs {
+    -fx-background-color: #ABBEEF;
+    -fx-border-radius: 10;
+    -fx-padding: 0 10 0 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0 ,3)
+}
+
+.audit-logs-items {
+    -fx-padding: 0 10 0 10;
+}

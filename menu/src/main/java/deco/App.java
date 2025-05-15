@@ -9,9 +9,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     private static Scene scene;
@@ -38,7 +35,7 @@ public class App extends Application {
         launch();
     }
 
-    public static void setRoot(String fxml) throws IOException {
+    public static Object setRoot(String fxml) throws IOException {
         FXMLLoader loader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         Parent root = loader.load();
 
@@ -46,23 +43,23 @@ public class App extends Application {
 
         switch (fxml) {
             case "Home":
-                if (controller instanceof Home) {
-                    ((Home) controller).setClockService(clockService);
+                if (controller instanceof HomeController) {
+                    ((HomeController) controller).setClockService(clockService);
                 }
                 break;
             case "Active":
-                if (controller instanceof Active) {
-                    ((Active) controller).setClockService(clockService);
+                if (controller instanceof ActiveController) {
+                    ((ActiveController) controller).setClockService(clockService);
                 }
                 break;
             case "Inactive":
-                if (controller instanceof Inactive) {
-                    ((Inactive) controller).setClockService(clockService);
+                if (controller instanceof InactiveController) {
+                    ((InactiveController) controller).setClockService(clockService);
                 }
                 break;
             case "AuditLogs":
-                if (controller instanceof AuditLogs) {
-                    ((AuditLogs) controller).setClockService(clockService);
+                if (controller instanceof AuditLogsController) {
+                    ((AuditLogsController) controller).setClockService(clockService);
                 }
                 break;
         }
@@ -72,5 +69,6 @@ public class App extends Application {
         } else {
             scene.setRoot(root);
         }
+        return controller;
     }
 }
