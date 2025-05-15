@@ -68,6 +68,14 @@
             <String fx:value="default-button" />
             <String fx:value="deco-font-bold" />
          </styleClass></Button>
+      <Button layoutX="550.0" layoutY="559.0" minWidth="200.0" onAction="#loginAsGuest" stylesheets="@deco.css" text="ENTER AS GUEST">
+         <styleClass>
+            <String fx:value="deco-button" />
+            <String fx:value="font-size-m" />
+            <String fx:value="default-button" />
+            <String fx:value="deco-font-bold" />
+         </styleClass>
+      </Button>
    </children>
    <padding>
       <Insets bottom="20.0" left="75.0" right="75.0" top="20.0" />

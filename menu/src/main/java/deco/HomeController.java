@@ -71,4 +71,14 @@ public class HomeController {
     @FXML private void logout() throws IOException {
         navigateToLogin();
     }
+
+    @FXML private void checkAsGuest() {
+        if (user.getRole() == User.roles.GUEST) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Access Denied");
+            alert.setHeaderText(null);
+            alert.setContentText("You do not have permission to access this page.");
+            alert.showAndWait();
+        }
+    }
 }

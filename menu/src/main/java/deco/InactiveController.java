@@ -1,7 +1,6 @@
     package deco;
 
     import java.io.IOException;
-    import java.util.function.Consumer;
 
     import entity.User;
     import javafx.animation.TranslateTransition;
@@ -17,7 +16,7 @@
     import javafx.scene.layout.StackPane;
     import javafx.util.Duration;
 
-    public class InactiveController {
+    public class InactiveController implements FilterableController{
         
         @FXML private Label time;
         @FXML private StackPane stackPane;
@@ -119,54 +118,49 @@
             navigateToLogin();
         }
 
-        @FXML
-        private void showFilter() {
-            showOverlay("Filter.fxml", null);
-        }
+    @FXML
+    private void showFilter() {
+        try {
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("Filter.fxml"));
+            Parent overlay = loader.load();
+            
+            // Get the FilterController and pass this controller to it
+            FilterController filterController = loader.getController();
+            filterController.setParentController(this);
 
-        
-
-        private <T> void showOverlay(String fxmlPath, Consumer<T> controllerConsumer) {
-            try {
-                FXMLLoader loader = new FXMLLoader(App.class.getResource(fxmlPath));
-                Parent overlay = loader.load();
-
-                // Optional: get controller and pass to the consumer
-                T controller = loader.getController();
-                if (controllerConsumer != null) {
-                    controllerConsumer.accept(controller);
-                }
-
-                // Background overlay
-                StackPane backgroundOverlay = new StackPane();
-                backgroundOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4);");
-                backgroundOverlay.setPrefSize(stackPane.getWidth(), stackPane.getHeight());
-                backgroundOverlay.prefWidthProperty().bind(stackPane.widthProperty());
-                backgroundOverlay.prefHeightProperty().bind(stackPane.heightProperty());
-
-                backgroundOverlay.setOnMouseClicked(event -> closeOverlay(overlay, backgroundOverlay));
-                overlay.setOnMouseClicked(event -> event.consume());
-
-                StackPane.setAlignment(overlay, Pos.TOP_RIGHT);
-                StackPane.setMargin(overlay, new Insets(0, 100, 0, 0));
-                overlay.setTranslateY(-400); // Start position for animation
-
-                stackPane.getChildren().addAll(backgroundOverlay, overlay);
-
-                // Slide-in animation
-                TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), overlay);
-                slideIn.setFromY(-400);
-                slideIn.setToY(0);
-                slideIn.play();
-
-            } catch (IOException e) {
-                e.printStackTrace(); // Replace with logging in production
-            }
-        }
-        private void closeOverlay(Parent overlay, StackPane backgroundOverlay) {
-            TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), overlay);
-            slideOut.setToY(-400);
-            slideOut.setOnFinished(event -> stackPane.getChildren().removeAll(backgroundOverlay, overlay));
-            slideOut.play();
+            // Background overlay
+            StackPane backgroundOverlay = new StackPane();
+            backgroundOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4);");
+            backgroundOverlay.setPrefSize(stackPane.getWidth(), stackPane.getHeight());
+            backgroundOverlay.prefWidthProperty().bind(stackPane.widthProperty());
+            backgroundOverlay.prefHeightProperty().bind(stackPane.heightProperty());
+            
+            // Set overlay properties in FilterController
+            filterController.setOverlay(overlay, stackPane, backgroundOverlay);
+            
+            backgroundOverlay.setOnMouseClicked(event -> filterController.handleClose());
+            overlay.setOnMouseClicked(event -> event.consume());
+            
+            StackPane.setAlignment(overlay, Pos.TOP_RIGHT);
+            StackPane.setMargin(overlay, new Insets(0, 100, 0, 0));
+            overlay.setTranslateY(-400); // Start position for animation
+            
+            stackPane.getChildren().addAll(backgroundOverlay, overlay);
+            
+            // Slide-in animation
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), overlay);
+            slideIn.setFromY(-400);
+            slideIn.setToY(0);
+            slideIn.play();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+    @Override
+    public void applyFilterData(FilterData data) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'applyFilterData'");
+    }
+}

@@ -1,7 +1,6 @@
 package deco;
 
 import java.io.IOException;
-import java.util.function.Consumer;
 
 import entity.User;
 import javafx.animation.TranslateTransition;
@@ -15,7 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
     
-    public class ActiveController {
+    public class ActiveController implements FilterableController{
 
     @FXML private Label time;
     @FXML private StackPane stackPane;
@@ -119,7 +118,7 @@ import javafx.util.Duration;
     }    
 
     @FXML private void logout() throws IOException {
-        App.setRoot("Login");
+        navigateToLogin();
     }
 
     @FXML
@@ -165,4 +164,15 @@ import javafx.util.Duration;
     public void applyFilterData(FilterData data) {
     System.out.println(data);
     }
+
+        @FXML private void checkAsGuest() {
+        if (user.getRole() == User.roles.GUEST) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Access Denied");
+            alert.setHeaderText(null);
+            alert.setContentText("You do not have permission to access this page.");
+            alert.showAndWait();
+        }
+    }
+
 }
