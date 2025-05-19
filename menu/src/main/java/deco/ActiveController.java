@@ -24,6 +24,7 @@ import javafx.util.Duration;
     @FXML private Button prev;
     @FXML private Label pageLabel;
     @FXML private Label totalLabel;
+    @FXML private HBox auditLogsHBox;
     
     private User user;
     private static final int ITEMS_PER_PAGE = 19;
@@ -36,7 +37,7 @@ import javafx.util.Duration;
     }
     
     public void updatePage(int page) {
-        this.pageLabel.setText(String.valueOf("PAGE: " + (currentPage+1)));
+        pageLabel.setText(String.valueOf("PAGE: " + (currentPage+1)));
         totalLabel.setText(String.valueOf("TOTAL: " + (TOTAL_ITEMS)));
         
         flowPane.getChildren().clear();
@@ -94,6 +95,10 @@ import javafx.util.Duration;
 
     public void setUser(User user) {
         this.user = user;
+
+        if (checkAsGuest()) {
+            auditLogsHBox.setVisible(false);
+        }
     }
 
     @FXML
@@ -165,14 +170,11 @@ import javafx.util.Duration;
     System.out.println(data);
     }
 
-        @FXML private void checkAsGuest() {
+    @FXML private boolean checkAsGuest() {
         if (user.getRole() == User.roles.GUEST) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Access Denied");
-            alert.setHeaderText(null);
-            alert.setContentText("You do not have permission to access this page.");
-            alert.showAndWait();
+            return true;
+        } else {
+            return false;
         }
     }
-
 }

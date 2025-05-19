@@ -10,10 +10,12 @@
     import javafx.geometry.Pos;
     import javafx.scene.Node;
     import javafx.scene.Parent;
-    import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
     import javafx.scene.control.Label;
     import javafx.scene.layout.FlowPane;
-    import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
     import javafx.util.Duration;
 
     public class InactiveController implements FilterableController{
@@ -26,6 +28,8 @@
         @FXML private Button prev;
         @FXML private Label pageLabel;
         @FXML private Label totalLabel;
+        @FXML private HBox auditLogsHBox;
+
         
         private User user;
         private static final int ITEMS_PER_PAGE = 20;
@@ -91,6 +95,10 @@
 
         public void setUser(User user) {
             this.user = user;
+
+            if (checkAsGuest()) {
+            auditLogsHBox.setVisible(false);
+            }
         }
 
         @FXML private void navigateToHome() throws IOException {
@@ -162,5 +170,13 @@
     public void applyFilterData(FilterData data) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'applyFilterData'");
+    }
+
+    @FXML private boolean checkAsGuest() {
+        if (user.getRole() == User.roles.GUEST) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

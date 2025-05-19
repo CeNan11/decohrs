@@ -9,6 +9,7 @@ import java.util.Locale;
 import entity.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 
 public class HomeController {
     
@@ -17,6 +18,7 @@ public class HomeController {
     @FXML private Label date;
 
     private User user;
+    @FXML private HBox auditLogsHBox;
 
     @FXML
     private void initialize() {
@@ -28,12 +30,16 @@ public class HomeController {
 
         String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
 
-        date.setText(String.format("It is %s!%n%s", dayOfTheWeek, formattedDate));
+        date.setText(String.format("It is %s!%n%s", dayOfTheWeek, formattedDate));        
     }
 
     public void setUser(User user) {
         this.user = user;
         greet.setText(String.format("Welcome, %s!", user.getUsername()));
+
+        if (checkAsGuest()) {
+            auditLogsHBox.setVisible(false);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -72,13 +78,11 @@ public class HomeController {
         navigateToLogin();
     }
 
-    @FXML private void checkAsGuest() {
+    @FXML private boolean checkAsGuest() {
         if (user.getRole() == User.roles.GUEST) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Access Denied");
-            alert.setHeaderText(null);
-            alert.setContentText("You do not have permission to access this page.");
-            alert.showAndWait();
+            return true;
+        } else {
+            return false;
         }
     }
 }

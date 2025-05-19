@@ -252,4 +252,34 @@ public class Employee {
     public void setBirthCertificate(BirthCertificate birthCertificate) {
         this.birthCertificate = birthCertificate;
     }
+
+    @Override
+    public String toString() {
+        return "Employee {" +
+            "\n  Employee No: " + employeeNo +
+            "\n  Name: " + firstName + " " + (middleName != null ? middleName + " " : "") + lastName +
+            "\n  Position: " + position +
+            "\n  Department: " + department +
+            "\n  Status: " + (status != null ? status.name() : "N/A") +
+            "\n  Contact Number: " + contactNumber +
+            "\n  Date Hired: " + (dateHired != null ? dateHired.toString() : "N/A") +
+            "\n  Date Regularized: " + (dateRegularized != null ? dateRegularized.toString() : "N/A") +
+            "\n  Current Address: " + currentAddress +
+            "\n  Home Address: " + homeAddress +
+            "\n  Place of Birth: " + placeOfBirth +
+            "\n  Date of Birth: " + (dateOfBirth != null ? dateOfBirth.toString() : "N/A") +
+            "\n  Gender: " + gender +
+            "\n  Civil Status: " + civilStatus +
+            "\n  Blood Type: " + bloodType +
+            "\n  SSS Number: " + SSSNumber +
+            "\n  PHIC Number: " + PHICNumber +
+            "\n  TIN: " + TIN +
+            "\n  HDMF No: " + HDMFNo +
+            "\n  Emergency Contact: " + (emergencyContact != null ? emergencyContact.toString() : "N/A") +
+            "\n  Family Background: " + (familyBackground != null ? familyBackground.toString() : "N/A") +
+            "\n  Children: " + (children != null ? children.size() + " child(ren)" : "0") +
+            "\n  Education: " + (education != null ? education.toString() : "N/A") +
+            "\n  Birth Certificate: " + (birthCertificate != null ? birthCertificate.toString() : "N/A") +
+            "\n}";
+    }
 }

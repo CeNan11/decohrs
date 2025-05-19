@@ -72,7 +72,7 @@
                   <Insets bottom="10.0" left="20.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="224.0" onMouseClicked="#navigateToAuditLogs" spacing="20.0" styleClass="menu-sideButton" stylesheets="@deco.css">
+            <HBox fx:id="auditLogsHBox" alignment="CENTER_LEFT" layoutX="10.0" layoutY="224.0" onMouseClicked="#navigateToAuditLogs" spacing="20.0" styleClass="menu-sideButton" stylesheets="@deco.css">
                <children>
                   <ImageView fitHeight="30.0" fitWidth="30.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0 ,3);">
                      <image>
