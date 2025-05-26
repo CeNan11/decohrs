@@ -16,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
+import services.ClockService;
+import services.FilterData;
     
     public class ActiveController implements FilterableController{
 
@@ -34,7 +36,6 @@ import javafx.util.Duration;
     private static final int ITEMS_PER_PAGE = 19;
     private int currentPage = 0;
     private static final int TOTAL_ITEMS = 120; // Total number of items in the list
-
     @FXML
     private void initialize() {
         // Initialize the employees list with sample data
@@ -54,21 +55,31 @@ import javafx.util.Duration;
     }
     
     public void updatePage(int page) {
-        pageLabel.setText(String.valueOf("PAGE: " + (currentPage+1)));
-        totalLabel.setText(String.valueOf("TOTAL: " + (employees.size())));
+        // Update current page
+        currentPage = page;
+        
+        // Update labels
+        pageLabel.setText("PAGE: " + (currentPage + 1));
+        int totalPages = (int) Math.ceil((double) employees.size() / ITEMS_PER_PAGE);
+        totalLabel.setText("TOTAL: " + totalPages);
         
         flowPane.getChildren().clear();
         
-        int start = page * ITEMS_PER_PAGE;
+        int start = currentPage * ITEMS_PER_PAGE;
         int end = Math.min(start + ITEMS_PER_PAGE, employees.size());
 
-        // Add the "Add Profile" card first
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_add.fxml"));
-            Node profileCardNode = loader.load();
-            flowPane.getChildren().add(profileCardNode);
-        } catch (IOException error) {
-            error.printStackTrace();
+        // Add the "Add Profile" card first (only on first page and for non-guest users)
+        if (currentPage == 0 && (user == null || user.getRole() != User.roles.GUEST)) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_add.fxml"));
+                Node profileCardNode = loader.load();
+                Profile_add controller = loader.getController();
+                controller.setUser(user);
+
+                flowPane.getChildren().add(profileCardNode);
+            } catch (IOException error) {
+                error.printStackTrace();
+            }
         }
         
         // Add employee cards
@@ -93,24 +104,24 @@ import javafx.util.Duration;
                 error.printStackTrace();
             }
         }
-        
-        prev.setDisable(page == 0);
-        next.setDisable((page + 1) * ITEMS_PER_PAGE >= employees.size());
+
+        // Update button states
+        prev.setDisable(currentPage == 0);
+        next.setDisable(currentPage >= totalPages - 1);
     }
 
     @FXML
     private void prevPage() {
         if (currentPage > 0) {
-            currentPage--;
-            updatePage(currentPage);
+            updatePage(currentPage - 1);
         }
     }
     
     @FXML
     private void nextPage() {
-        if ((currentPage + 1) * ITEMS_PER_PAGE < employees.size()) {
-            currentPage++;
-            updatePage(currentPage);
+        int totalPages = (int) Math.ceil((double) employees.size() / ITEMS_PER_PAGE);
+        if (currentPage < totalPages - 1) {
+            updatePage(currentPage + 1);
         }
     }
 

@@ -1,18 +1,22 @@
-    package deco;
+package deco;
 
-    import java.io.IOException;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import entity.EmployeeStatus;
 import entity.User;
-    import javafx.animation.TranslateTransition;
-    import javafx.fxml.FXML;
-    import javafx.fxml.FXMLLoader;
-    import javafx.geometry.Insets;
-    import javafx.geometry.Pos;
-    import javafx.scene.*;
+import entity.Employee;
+import javafx.animation.TranslateTransition;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.*;
     import javafx.scene.control.*;
     import javafx.scene.layout.*;
     import javafx.util.Duration;
+import services.ClockService;
+import services.FilterData;
 
     public class InactiveController implements FilterableController{
         
@@ -26,66 +30,88 @@ import entity.User;
         @FXML private Label totalLabel;
         @FXML private HBox auditLogsHBox;
 
-        
+        private ArrayList<Employee> employees;
         private User user;
         private static final int ITEMS_PER_PAGE = 20;
         private int currentPage = 0;
         private static final int TOTAL_ITEMS = 30; // Total number of items in the list
-        @SuppressWarnings("unused")
-        private ClockService clockService;
         
         @FXML
         private void initialize() {
-            updatePage(currentPage);
+            // Initialize the employees list with sample data
+            employees = new ArrayList<>();
+            // TODO: Replace this with actual database data
+            for (int i = 1; i <= TOTAL_ITEMS; i++) {
+                Employee emp = new Employee();
+                emp.setEmployeeNo("EMP" + String.format("%03d", i));
+                emp.setFirstName("First" + i);
+                emp.setLastName("Last" + i);
+                emp.setPosition("Position " + i);
+                emp.setDepartment("Department " + i);
+                emp.setStatus(EmployeeStatus.INACTIVE);
+                employees.add(emp);
+            }
+                updatePage(currentPage);
         }
 
         public void updatePage(int page) {
-            this.pageLabel.setText(String.valueOf("PAGE: " + (currentPage+1)));
-            totalLabel.setText(String.valueOf("TOTAL: " + TOTAL_ITEMS));
+            // Update current page
+            currentPage = page;
+            
+            // Update labels
+            this.pageLabel.setText("PAGE: " + (currentPage + 1));
+            int totalPages = (int) Math.ceil((double) employees.size() / ITEMS_PER_PAGE);
+            totalLabel.setText("TOTAL: " + totalPages);
 
             flowPane.getChildren().clear();
 
-            int start = page * ITEMS_PER_PAGE;
-            int end = Math.min(start + ITEMS_PER_PAGE, TOTAL_ITEMS);
+            int start = currentPage * ITEMS_PER_PAGE;
+            int end = Math.min(start + ITEMS_PER_PAGE, employees.size());
             
-            for (int i = start + 1; i <= end; i++) {
+            for (int i = start; i < end; i++) {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_Card.fxml"));
                     Node card = loader.load();
                     ProfileCardController controller = loader.getController();
 
-                    controller.initData(EmployeeStatus.INACTIVE, "Name", "Position");
-
+                    Employee employee = employees.get(i);
+                    controller.initData(
+                        employee.getStatus(),
+                        employee.getFirstName() + " " + employee.getLastName(),
+                        employee.getPosition()
+                    );
+                    controller.setEmployee(employee);
+                    controller.setUser(user);
+                    
                     card.getStyleClass().add("profile-alt");
                     flowPane.getChildren().add(card);
 
                 } catch (IOException error) {
                     error.printStackTrace();
                 }
-
-                prev.setDisable(page == 0);
-                next.setDisable((page + 1) * ITEMS_PER_PAGE >= TOTAL_ITEMS);
             }
+
+            // Update button states
+            prev.setDisable(currentPage == 0);
+            next.setDisable(currentPage >= totalPages - 1);
         }
 
         @FXML
         private void prevPage() {
             if (currentPage > 0) {
-                currentPage--;
-                updatePage(currentPage);
+                updatePage(currentPage - 1);
             }
         }
         
         @FXML
         private void nextPage() {
-            if ((currentPage + 1) * ITEMS_PER_PAGE < TOTAL_ITEMS) {
-                currentPage++;
-                updatePage(currentPage);
+            int totalPages = (int) Math.ceil((double) employees.size() / ITEMS_PER_PAGE);
+            if (currentPage < totalPages - 1) {
+                updatePage(currentPage + 1);
             }
         }
 
         public void setClockService(ClockService clockService) {
-            this.clockService = clockService;
             time.textProperty().bind(clockService.timeProperty());
         }
 

@@ -70,7 +70,7 @@ public class ProfileController {
 
     @FXML
     private void navigateToActive() throws IOException {
-        Object controller = App.setRoot("Home");
-        ((HomeController) controller).setUser(user);
+        Object controller = App.setRoot("Active");
+        ((ActiveController) controller).setUser(user);
     }
 }

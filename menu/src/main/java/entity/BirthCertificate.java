@@ -15,9 +15,9 @@ public class BirthCertificate {
         return certificateFile;
     }
     
-    // Getters and setters
-    public String getDocumentNumber() {
-        return documentNumber;
+    // Setters and getters
+    public void setCertificateFile(byte[] certificateFile) {
+        this.certificateFile = certificateFile;
     }
     
     public void setDocumentNumber(String documentNumber) {
@@ -27,8 +27,8 @@ public class BirthCertificate {
     public byte[] getCertificateFile() {
         return certificateFile;
     }
-    
-    public void setCertificateFile(byte[] certificateFile) {
-        this.certificateFile = certificateFile;
+
+    public String getDocumentNumber() {
+        return documentNumber;
     }
 }

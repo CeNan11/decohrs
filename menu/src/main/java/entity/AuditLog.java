@@ -23,7 +23,23 @@ public class AuditLog {
         return new ArrayList<>(); // Placeholder
     }
     
-    // Getters and setters
+    // Setters and getters
+    public void setAction(String action) {
+        this.action = action;
+    }
+    
+    public void setTargetEmployee(String targetEmployee) {
+        this.targetEmployee = targetEmployee;
+    }
+    
+    public void setPerformedBy(String performedBy) {
+        this.performedBy = performedBy;
+    }
+    
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -32,31 +48,15 @@ public class AuditLog {
         return action;
     }
     
-    public void setAction(String action) {
-        this.action = action;
-    }
-    
     public String getTargetEmployee() {
         return targetEmployee;
-    }
-    
-    public void setTargetEmployee(String targetEmployee) {
-        this.targetEmployee = targetEmployee;
     }
     
     public String getPerformedBy() {
         return performedBy;
     }
     
-    public void setPerformedBy(String performedBy) {
-        this.performedBy = performedBy;
-    }
-    
     public String getDetails() {
         return details;
-    }
-    
-    public void setDetails(String details) {
-        this.details = details;
     }
 }

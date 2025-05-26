@@ -2,6 +2,10 @@
     -fx-background-color: linear-gradient(from 0% 50% to 0% 100%, #E7CA80, #EFDCAB);
 }
 
+.inactive {
+    -fx-background-color: #CCCCCC;
+}
+
 .deco-font {
     -fx-font-family: "Arial";
 }
@@ -26,6 +30,21 @@
 
 .text-field {
     -fx-prompt-text-fill: black;
+}
+
+.crud-textfield {
+    -fx-background-color: #ABBEEF;
+    -fx-background-radius: 50px;
+    -fx-padding: 5px 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0 ,3)
+}
+
+.crud-padding {
+    -fx-padding: 5px 20px;
+}
+
+.crud-padding-datePicker {
+    -fx-padding: 3px 10px 3px 10px;
 }
 
 .deco-login-pane {

@@ -13,85 +13,85 @@ public class FamilyBackground {
     private String spouseName;
     private String spouseBirthPlace;
     private Date spouseBirthDate;
-    
-    // Getters and setters
-    public String getFathersName() {
-        return fathersName;
-    }
-    
+
+    // Setters and getters
     public void setFathersName(String fathersName) {
         this.fathersName = fathersName;
     }
-    
-    public Date getFathersBirthdate() {
-        return fathersBirthdate;
-    }
-    
+
     public void setFathersBirthdate(Date fathersBirthdate) {
         this.fathersBirthdate = fathersBirthdate;
     }
-    
-    public String getFathersSSS() {
-        return fathersSSS;
-    }
-    
+
     public void setFathersSSS(String fathersSSS) {
         this.fathersSSS = fathersSSS;
     }
-    
-    public String getMothersName() {
-        return mothersName;
-    }
-    
+
     public void setMothersName(String mothersName) {
         this.mothersName = mothersName;
     }
-    
-    public Date getMothersBirthdate() {
-        return mothersBirthdate;
-    }
-    
+
     public void setMothersBirthdate(Date mothersBirthdate) {
         this.mothersBirthdate = mothersBirthdate;
     }
-    
-    public String getMothersSSS() {
-        return mothersSSS;
-    }
-    
+
     public void setMothersSSS(String mothersSSS) {
         this.mothersSSS = mothersSSS;
     }
-    
-    public int getNumberOfSiblings() {
-        return numberOfSiblings;
-    }
-    
+
     public void setNumberOfSiblings(int numberOfSiblings) {
         this.numberOfSiblings = numberOfSiblings;
     }
-    
-    public String getSpouseName() {
-        return spouseName;
-    }
-    
+
     public void setSpouseName(String spouseName) {
         this.spouseName = spouseName;
     }
-    
-    public String getSpouseBirthPlace() {
-        return spouseBirthPlace;
-    }
-    
+
     public void setSpouseBirthPlace(String spouseBirthPlace) {
         this.spouseBirthPlace = spouseBirthPlace;
     }
-    
-    public Date getSpouseBirthDate() {
-        return spouseBirthDate;
-    }
-    
+
     public void setSpouseBirthDate(Date spouseBirthDate) {
         this.spouseBirthDate = spouseBirthDate;
+    }
+
+    public String getFathersName() {
+        return fathersName;
+    }
+
+    public Date getFathersBirthdate() {
+        return fathersBirthdate;
+    }
+
+    public String getFathersSSS() {
+        return fathersSSS;
+    }
+
+    public String getMothersName() {
+        return mothersName;
+    }
+
+    public Date getMothersBirthdate() {
+        return mothersBirthdate;
+    }
+
+    public String getMothersSSS() {
+        return mothersSSS;
+    }
+
+    public int getNumberOfSiblings() {
+        return numberOfSiblings;
+    }
+
+    public String getSpouseName() {
+        return spouseName;
+    }
+
+    public String getSpouseBirthPlace() {
+        return spouseBirthPlace;
+    }
+
+    public Date getSpouseBirthDate() {
+        return spouseBirthDate;
     }
 }

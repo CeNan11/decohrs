@@ -7,6 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import services.FilterData;
 
 public class FilterController {
 

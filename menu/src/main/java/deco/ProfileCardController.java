@@ -45,8 +45,7 @@ public class ProfileCardController {
         
         // Set both employee and user data
         profileController.setEmployee(employee);
-        if (user != null) {
-            profileController.setUser(user);
-        }
+        profileController.setUser(user);
+
     }
 }

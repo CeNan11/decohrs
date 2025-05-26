@@ -13,12 +13,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="root" stylesheets="@deco.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="deco.ProfileController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="inactive" stylesheets="@deco.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="deco.ProfileController">
    <top>
-      <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="20.0" styleClass="r" stylesheets="@deco.css" BorderPane.alignment="TOP_CENTER">
+      <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="20.0" stylesheets="@deco.css" BorderPane.alignment="TOP_CENTER">
          <children>
-            <Circle fill="#afdf54" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.0, 0, 4);" />
-            <Label stylesheets="@deco.css" text="ACTIVE" HBox.hgrow="ALWAYS">
+            <Circle fill="#df5477" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.0, 0, 4);" />
+            <Label stylesheets="@deco.css" text="INACTIVE" HBox.hgrow="ALWAYS">
                <styleClass>
                   <String fx:value="deco-font" />
                   <String fx:value="deco-font-bold" />
@@ -51,7 +51,7 @@
             <Insets />
          </BorderPane.margin>
          <content>
-            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="root" stylesheets="@deco.css">
+            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="inactive" stylesheets="@deco.css">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>

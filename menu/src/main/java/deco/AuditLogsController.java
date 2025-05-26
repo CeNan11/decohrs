@@ -18,7 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
-
+import services.ClockService;
 import tables.AuditLogTableItem;
 
 public class AuditLogsController {

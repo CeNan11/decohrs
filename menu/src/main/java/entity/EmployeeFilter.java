@@ -73,76 +73,76 @@ public class EmployeeFilter {
         this.educationalAttainmentLevel = null;
     }
     
-    // Getters and setters for all filter attributes
-    public String getPosition() {
-        return position;
-    }
-    
+    // Setters and getters
     public void setPosition(String position) {
         this.position = position;
     }
-    
-    public String getDepartment() {
-        return department;
-    }
-    
+
     public void setDepartment(String department) {
         this.department = department;
     }
-    
-    public Date getDateHired() {
-        return dateHired;
-    }
-    
+
     public void setDateHired(Date dateHired) {
         this.dateHired = dateHired;
     }
-    
-    public Date getDateRegularized() {
-        return dateRegularized;
-    }
-    
+
     public void setDateRegularized(Date dateRegularized) {
         this.dateRegularized = dateRegularized;
     }
-    
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-    
+
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-    
-    public String getGender() {
-        return gender;
-    }
-    
+
     public void setGender(String gender) {
         this.gender = gender;
     }
-    
-    public String getCivilStatus() {
-        return civilStatus;
-    }
-    
+
     public void setCivilStatus(String civilStatus) {
         this.civilStatus = civilStatus;
     }
-    
-    public String getBloodType() {
-        return bloodType;
-    }
-    
+
     public void setBloodType(String bloodType) {
         this.bloodType = bloodType;
     }
-    
-    public String getEducationalAttainmentLevel() {
-        return educationalAttainmentLevel;
-    }
-    
+
     public void setEducationalAttainmentLevel(String educationalAttainmentLevel) {
         this.educationalAttainmentLevel = educationalAttainmentLevel;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public Date getDateHired() {
+        return dateHired;
+    }
+
+    public Date getDateRegularized() {
+        return dateRegularized;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getCivilStatus() {
+        return civilStatus;
+    }
+
+    public String getBloodType() {
+        return bloodType;
+    }
+
+    public String getEducationalAttainmentLevel() {
+        return educationalAttainmentLevel;
     }
 }
