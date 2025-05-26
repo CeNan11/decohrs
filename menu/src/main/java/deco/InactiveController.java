@@ -2,20 +2,16 @@
 
     import java.io.IOException;
 
-    import entity.User;
+import entity.EmployeeStatus;
+import entity.User;
     import javafx.animation.TranslateTransition;
     import javafx.fxml.FXML;
     import javafx.fxml.FXMLLoader;
     import javafx.geometry.Insets;
     import javafx.geometry.Pos;
-    import javafx.scene.Node;
-    import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-    import javafx.scene.control.Label;
-    import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+    import javafx.scene.*;
+    import javafx.scene.control.*;
+    import javafx.scene.layout.*;
     import javafx.util.Duration;
 
     public class InactiveController implements FilterableController{
@@ -58,7 +54,7 @@ import javafx.scene.layout.StackPane;
                     Node card = loader.load();
                     ProfileCardController controller = loader.getController();
 
-                    controller.initData("Inactive", "Name", "Position");
+                    controller.initData(EmployeeStatus.INACTIVE, "Name", "Position");
 
                     card.getStyleClass().add("profile-alt");
                     flowPane.getChildren().add(card);

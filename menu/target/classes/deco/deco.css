@@ -98,13 +98,27 @@
 }
 
 .menu-create {
-    -fx-padding: 10px 20px;
     -fx-background-color: #AFDF54;
 }
 
 .menu-edit {
-    -fx-padding: 10px 20px;
     -fx-background-color: #DF5477;
+}
+
+.menu-edit-button {
+    -fx-background-color: #DF5477;
+    -fx-background-radius: 50px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0, 0 ,3)
+}
+
+.menu-edit-button:hover {
+    -fx-background-color: #ABBEEF;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.0, 0, 4); /* Enhances the drop shadow on hover */
+}
+
+.menu-edit-button:pressed {
+    -fx-background-color: #87A0D4;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.0, 0, 2); /* Adds an inner shadow when pressed */
 }
 
 .menu-employee {

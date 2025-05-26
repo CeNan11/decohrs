@@ -1,7 +1,10 @@
 package deco;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import entity.Employee;
+import entity.EmployeeStatus;
 import entity.User;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -25,7 +28,8 @@ import javafx.util.Duration;
     @FXML private Label pageLabel;
     @FXML private Label totalLabel;
     @FXML private HBox auditLogsHBox;
-    
+
+    private ArrayList<Employee> employees;
     private User user;
     private static final int ITEMS_PER_PAGE = 19;
     private int currentPage = 0;
@@ -33,34 +37,55 @@ import javafx.util.Duration;
 
     @FXML
     private void initialize() {
+        // Initialize the employees list with sample data
+        employees = new ArrayList<>();
+        // TODO: Replace this with actual database data
+        for (int i = 1; i <= TOTAL_ITEMS; i++) {
+            Employee emp = new Employee();
+            emp.setEmployeeNo("EMP" + String.format("%03d", i));
+            emp.setFirstName("First" + i);
+            emp.setLastName("Last" + i);
+            emp.setPosition("Position " + i);
+            emp.setDepartment("Department " + i);
+            emp.setStatus(EmployeeStatus.ACTIVE);
+            employees.add(emp);
+        }
         updatePage(currentPage);
     }
     
     public void updatePage(int page) {
         pageLabel.setText(String.valueOf("PAGE: " + (currentPage+1)));
-        totalLabel.setText(String.valueOf("TOTAL: " + (TOTAL_ITEMS)));
+        totalLabel.setText(String.valueOf("TOTAL: " + (employees.size())));
         
         flowPane.getChildren().clear();
         
         int start = page * ITEMS_PER_PAGE;
-        int end = Math.min(start + ITEMS_PER_PAGE, TOTAL_ITEMS);
+        int end = Math.min(start + ITEMS_PER_PAGE, employees.size());
 
+        // Add the "Add Profile" card first
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_add.fxml"));
             Node profileCardNode = loader.load();
-    
             flowPane.getChildren().add(profileCardNode);
         } catch (IOException error) {
             error.printStackTrace();
         }
         
-        for (int i = start + 1; i <= end; i++) {
+        // Add employee cards
+        for (int i = start; i < end; i++) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_Card.fxml"));
                 Node card = loader.load();
                 ProfileCardController controller = loader.getController();
 
-                controller.initData("Active", "Name", "Position");
+                Employee employee = employees.get(i);
+                controller.initData(
+                    employee.getStatus(),
+                    employee.getFirstName() + " " + employee.getLastName(),
+                    employee.getPosition()
+                );
+                controller.setEmployee(employee);
+                controller.setUser(user);
 
                 flowPane.getChildren().add(card);
 
@@ -70,7 +95,7 @@ import javafx.util.Duration;
         }
         
         prev.setDisable(page == 0);
-        next.setDisable((page + 1) * ITEMS_PER_PAGE >= TOTAL_ITEMS);
+        next.setDisable((page + 1) * ITEMS_PER_PAGE >= employees.size());
     }
 
     @FXML
@@ -83,7 +108,7 @@ import javafx.util.Duration;
     
     @FXML
     private void nextPage() {
-        if ((currentPage + 1) * ITEMS_PER_PAGE < TOTAL_ITEMS) {
+        if ((currentPage + 1) * ITEMS_PER_PAGE < employees.size()) {
             currentPage++;
             updatePage(currentPage);
         }

@@ -38,12 +38,7 @@ public class Employee {
         this.children = new ArrayList<>();
         this.status = EmployeeStatus.ACTIVE;
     }
-    
-    public String viewProfile() {
-        return "Employee #" + employeeNo + ": " + firstName + " " + lastName;
-    }
-    
-    // Getters and setters
+        // Getters and setters
     public String getEmployeeNo() {
         return employeeNo;
     }

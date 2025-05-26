@@ -26,7 +26,8 @@ public class FilterController {
     @FXML DatePicker dateOfBirthDatePicker;
 
     public void initialize() {
-        sortByComboBox.getItems().addAll("Name", "Age", "Department", "Position", "Gender", "Civil Status", "Education Attainment", "Date Hired", "Date Regularized", "Date of Birth");
+        sortByComboBox.getItems().addAll("Name", "Age", "Department", "Position", "Gender", "Civil Status", 
+        "Education Attainment", "Date Hired", "Date Regularized", "Date of Birth");
         orderByComboBox.getItems().addAll("Ascending", "Descending");
         positionComboBox.getItems().addAll("Manager", "Supervisor", "Employee", "Intern");
         departmentComboBox.getItems().addAll("HR", "IT", "Finance", "Marketing", "Sales");

@@ -33,9 +33,4 @@ public class LoginController {
             alert.showAndWait();
         }
     }
-
-    @FXML private void loginAsGuest() throws IOException {
-        User user = new User("guest", "guest", User.roles.GUEST);
-        navigateToHome(user);
-    }
 }
