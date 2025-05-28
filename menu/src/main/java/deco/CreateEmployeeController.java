@@ -18,6 +18,7 @@ import entity.Child;
 import entity.Department;
 import entity.Education;
 import entity.EmergencyContact;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,6 +26,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import services.EmployeeService;
 import services.EntityService;
 
 import java.io.File;
@@ -217,8 +219,16 @@ public class CreateEmployeeController {
         employee.setGender(gender.getValue());
         employee.setCivilStatus(civilStatus.getValue());
         employee.setBloodType(bloodType.getValue());
-        employee.setDepartment(department.getValue());
-        employee.setPosition(position.getValue());
+
+        // Set department and position
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EntityService entityService = new EntityService(connection);
+            employee.setDepartmentId(entityService.getDepartmentByName(department.getValue()).getDepartmentId());
+            employee.setPositionId(entityService.getPositionByName(position.getValue()).getPositionId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         // Set dates
         employee.setHireDate(hireDate.getValue() != null ? Date.valueOf(hireDate.getValue()) : null);
@@ -278,6 +288,33 @@ public class CreateEmployeeController {
         return education;
     }
 
+    private ArrayList<WorkExperience> saveWorkAllExperience() {
+        ArrayList<WorkExperience> workExperiences = new ArrayList<>();
+        
+        WorkExperience work1 = new WorkExperience();
+        work1.setCompanyName(experienceCompany1.getText());
+        work1.setPositionHeld(experiencePosition1.getText());
+        work1.setDuration(experienceDuration1.getText());
+        work1.setRemarks(experienceRemarks1.getText());
+        workExperiences.add(work1);
+
+        WorkExperience work2 = new WorkExperience();
+        work2.setCompanyName(experienceCompany2.getText());
+        work2.setPositionHeld(experiencePosition2.getText());
+        work2.setDuration(experienceDuration2.getText());
+        work2.setRemarks(experienceRemarks2.getText());
+        workExperiences.add(work2);
+
+        WorkExperience work3 = new WorkExperience();    
+        work3.setCompanyName(experienceCompany3.getText());
+        work3.setPositionHeld(experiencePosition3.getText());
+        work3.setDuration(experienceDuration3.getText());
+        work3.setRemarks(experienceRemarks3.getText());
+        workExperiences.add(work3);
+
+        return workExperiences;
+    }
+
     @FXML
     private void handleSave() {
         try {
@@ -294,28 +331,23 @@ public class CreateEmployeeController {
             
             // Save employee to database
             try {
+                Connection connection = DriverManager.getConnection(localHost, username, pass);
+                // Insert employee into the database
+                EmployeeService employeeService = new EmployeeService(connection);
+                employeeService.insertEmployee(employee);
 
-                // Add employee to local list
-                if (employees == null) {
-                    employees = new ArrayList<>();
-                }
-                employees.add(employee);
+                Platform.runLater(() -> {
+                    try {
+                        employeeService.insertEducation(employee.getEmployeeId(), employee.getEducation());    
+                        employeeService.insertWorkExperience(employee.getEmployeeId(), employee.getWorkExperiences());
+                    } catch (SQLException e) {
+                        showError("Database Error", "Failed to save employee: " + e.getMessage());
+                    }
+                });
 
                 // Navigate back to active employees list
-                FXMLLoader loader = new FXMLLoader(App.class.getResource("Active.fxml"));
-                Parent root = loader.load();
-                
-                // Get the ActiveController and add the new employee
-                ActiveController activeController = loader.getController();
-                activeController.setUser(user);
-                activeController.setEmployees(employees);
-                
-                // Get the current scene and set the new root
-                Stage stage = (Stage) employeeCode.getScene().getWindow();
-                stage.getScene().setRoot(root);
-                
-                // Update the view to show the new employee
-                activeController.updatePage(0);
+                Object controller = App.setRoot("Active");
+                ((ActiveController) controller).setUser(user);
 
                 System.out.println(employee);
             } catch (Exception e) {

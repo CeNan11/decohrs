@@ -68,4 +68,63 @@ public class EntityService {
         return positions;
     }
     
+    public Department getDepartmentById(int departmentId) throws SQLException {
+        String sql = "SELECT * FROM Departments WHERE department_id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, departmentId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Department department = new Department();
+                department.setDepartmentId(rs.getInt("department_id"));
+                department.setDepartmentName(rs.getString("department_name"));
+                return department;
+            }
+        }
+        return null;
+    }
+
+    public Position getPositionById(int positionId) throws SQLException {
+        String sql = "SELECT * FROM Positions WHERE position_id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, positionId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Position position = new Position();
+                position.setPositionId(rs.getInt("position_id"));
+                position.setPositionTitle(rs.getString("position_title"));
+                return position;
+            }
+        }
+        return null;
+    }
+
+    public Department getDepartmentByName(String departmentName) throws SQLException {
+        String sql = "SELECT * FROM Departments WHERE department_name = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, departmentName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Department department = new Department();
+                department.setDepartmentId(rs.getInt("department_id"));
+                department.setDepartmentName(rs.getString("department_name"));
+                return department;
+            }
+        }
+        return null;
+    }
+
+    public Position getPositionByName(String positionName) throws SQLException {
+        String sql = "SELECT * FROM Positions WHERE position_title = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, positionName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Position position = new Position();
+                position.setPositionId(rs.getInt("position_id"));
+                position.setPositionTitle(rs.getString("position_title"));
+                return position;
+            }
+        }
+        return null;
+    }
 }

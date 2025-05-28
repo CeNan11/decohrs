@@ -20,10 +20,10 @@ public class ProfileCardAltController {
     private User user;
 
     // ===== Data Management Methods =====
-    public void initData(EmployeeStatus status, String name, String position) {
+    public void initData(EmployeeStatus status, String name, String positionId) {
         this.status.setText(status.toString());
         this.name.setText(name);
-        this.position.setText(position);
+        this.position.setText(String.valueOf(positionId));
         
         // Set status color based on employee status
         if (status == EmployeeStatus.ACTIVE) {

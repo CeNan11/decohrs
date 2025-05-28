@@ -20,7 +20,6 @@ CREATE TABLE Employees (
     suffix VARCHAR(20),
     
     contact_number_primary VARCHAR(20),
-    email_address VARCHAR(191),
     current_address TEXT,
     home_address TEXT,
     date_of_birth DATE,
@@ -39,7 +38,6 @@ CREATE TABLE Employees (
     pagibig_number VARCHAR(20) UNIQUE,
     father_full_name VARCHAR(255),
     father_DOB DATE,
-    father_sss_number VARCHAR(20),
     mother_full_name VARCHAR(255),
     mother_DOB DATE,
     emergency_contact_name VARCHAR(255),
@@ -94,8 +92,8 @@ CREATE TABLE WorkExperience (
     position_held VARCHAR(255) NOT NULL,
     start_date DATE,
     end_date DATE,
-    duration_text VARCHAR(100),
-    responsibilities_remarks TEXT,
+    duration VARCHAR(100),
+    remarks TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE CASCADE

@@ -71,8 +71,8 @@ public class ProfileActiveController {
         
         currentAddress.setText(employee.getCurrentAddress());
         homeAddress.setText(employee.getHomeAddress()); 
-        position.setText(employee.getPosition());
-        department.setText(employee.getDepartment());
+        position.setText(employee.getPositionId().toString());
+        department.setText(employee.getDepartmentId().toString());
         
         // Format dates
         if (employee.getHireDate() != null) {

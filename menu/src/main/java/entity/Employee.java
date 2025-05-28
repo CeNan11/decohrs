@@ -40,8 +40,6 @@ public class Employee {
     private String civilStatus;
     private String bloodType;
     private EmployeeStatus status;
-    private String department;
-    private String position;
 
     // Government IDs
     private String sssNumber;
@@ -56,6 +54,9 @@ public class Employee {
     private Education education;
     private BirthCertificate birthCertificate;
     private List<Child> children;
+
+    // Work Experience
+    private ArrayList<WorkExperience> workExperiences;
 
     public Employee() {
         this.children = new ArrayList<>();
@@ -87,8 +88,6 @@ public class Employee {
     public String getCivilStatus() { return civilStatus; }
     public String getBloodType() { return bloodType; }
     public EmployeeStatus getStatus() { return status; }
-    public String getDepartment() { return department; }
-    public String getPosition() { return position; }
     public String getSSSNumber() { return sssNumber; }
     public String getPHICNumber() { return philHealthNumber; }
     public String getTIN() { return tinNumber; }
@@ -98,7 +97,7 @@ public class Employee {
     public Education getEducation() { return education; }
     public BirthCertificate getBirthCertificate() { return birthCertificate; }
     public List<Child> getChildren() { return children; }
-
+    public ArrayList<WorkExperience> getWorkExperiences() { return workExperiences; }
     // Setters
     public void setEmployeeId(Integer employeeId) { this.employeeId = employeeId; }
     public void setEmployeeCode(String employeeCode) { this.employeeCode = employeeCode; }
@@ -123,8 +122,6 @@ public class Employee {
     public void setCivilStatus(String civilStatus) { this.civilStatus = civilStatus; }
     public void setBloodType(String bloodType) { this.bloodType = bloodType; }
     public void setStatus(EmployeeStatus status) { this.status = status; }
-    public void setDepartment(String department) { this.department = department; }
-    public void setPosition(String position) { this.position = position; }
     public void setSSSNumber(String sssNumber) { this.sssNumber = sssNumber; }
     public void setPHICNumber(String philHealthNumber) { this.philHealthNumber = philHealthNumber; }
     public void setTIN(String tinNumber) { this.tinNumber = tinNumber; }
@@ -135,6 +132,8 @@ public class Employee {
     public void setBirthCertificate(BirthCertificate birthCertificate) { this.birthCertificate = birthCertificate; }
     public void setChildren(List<Child> children) { this.children = children; }
     public void addChild(Child child) { this.children.add(child); }
+    public void setWorkExperiences(ArrayList<WorkExperience> workExperiences) { this.workExperiences = workExperiences; }
+    public void addWorkExperience(WorkExperience workExperience) { this.workExperiences.add(workExperience); }
 
     @Override
     public String toString() {
@@ -152,9 +151,7 @@ public class Employee {
                 ", gender='" + gender + '\'' +
                 ", civilStatus='" + civilStatus + '\'' +
                 ", bloodType='" + bloodType + '\'' +
-                ", department='" + department + '\'' +
                 ", departmentId=" + departmentId +
-                ", position='" + position + '\'' +
                 ", positionId=" + positionId +
                 ", hireDate=" + hireDate +
                 ", regularizationDate=" + regularizationDate +

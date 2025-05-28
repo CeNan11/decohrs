@@ -94,7 +94,7 @@ public class InactiveController implements FilterableController {
                 controller.initData(
                     employee.getStatus(),
                     employee.getFirstName() + " " + employee.getLastName(),
-                    employee.getPosition()
+                    employee.getPositionId().toString()
                 );
                 controller.setEmployee(employee);
                 
@@ -242,8 +242,8 @@ public class InactiveController implements FilterableController {
         emp.setEmployeeCode("EMP" + String.format("%03d", index));
         emp.setFirstName("First" + index);
         emp.setLastName("Last" + index);
-        emp.setPosition("Position " + index);
-        emp.setDepartment("Department " + index);
+        emp.setPositionId(index);
+        emp.setDepartmentId(index);
         emp.setMiddleName("Middle" + index);
         emp.setCurrentAddress("Current Address " + index);
         emp.setHomeAddress("Home Address " + index);

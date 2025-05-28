@@ -20,12 +20,12 @@ public class EmployeeFilter {
         
         // Apply position filter
         if (position != null && !position.isEmpty()) {
-            filteredEmployees.removeIf(e -> !e.getPosition().equals(position));
+            filteredEmployees.removeIf(e -> !e.getPositionId().equals(position));
         }
         
         // Apply department filter
         if (department != null && !department.isEmpty()) {
-            filteredEmployees.removeIf(e -> !e.getDepartment().equals(department));
+            filteredEmployees.removeIf(e -> !e.getDepartmentId().equals(department));
         }
         
         // Apply date hired filter
