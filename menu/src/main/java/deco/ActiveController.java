@@ -88,7 +88,6 @@ public class ActiveController implements FilterableController {
     }
 
     private void addProfileCardIfNeeded() {
-        System.out.println(user.getRole());
         if (currentPage == 0 && (user == null || user.getRole() == User.roles.ADMIN)) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("ProfileAdd.fxml"));
@@ -108,14 +107,13 @@ public class ActiveController implements FilterableController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_Card.fxml"));
                 Node card = loader.load();
                 ProfileCardController controller = loader.getController();
-                controller.setUser(user);
-
                 Employee employee = employees.get(i);
                 controller.initData(
                     employee.getStatus(),
                     employee.getFirstName() + " " + employee.getLastName(),
                     employee.getPosition()
                 );
+                controller.setUser(user);
                 controller.setEmployee(employee);
                 flowPane.getChildren().add(card);
             } catch (IOException error) {

@@ -34,14 +34,9 @@ public class ProfileCardController {
 
     @FXML
     private void navigateToProfile() throws IOException {
-        if (employee == null) {
-            // Handle error case - maybe show an alert
-            System.err.println("Error: No employee data available");
-            return;
-        }
 
-        Object controller = App.setRoot("Profile");
-        ((ProfileController) controller).setEmployee(employee);
-        ((ProfileController) controller).setUser(user);
+        Object controller = App.setRoot("ProfileActive");
+        ((ProfileActiveController) controller).setEmployee(employee);
+        ((ProfileActiveController) controller).setUser(user);
     }
 }

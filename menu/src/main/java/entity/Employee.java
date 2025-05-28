@@ -22,7 +22,6 @@ public class Employee {
     // Contact Information
     private String emailAddress;
     private String contactNumberPrimary;
-    private String contactNumberSecondary;
     private String currentAddress;
     private String homeAddress;
 
@@ -76,7 +75,6 @@ public class Employee {
     public String getNationality() { return nationality; }
     public String getEmailAddress() { return emailAddress; }
     public String getContactNumberPrimary() { return contactNumberPrimary; }
-    public String getContactNumberSecondary() { return contactNumberSecondary; }
     public String getCurrentAddress() { return currentAddress; }
     public String getHomeAddress() { return homeAddress; }
     public Integer getDepartmentId() { return departmentId; }
@@ -113,7 +111,6 @@ public class Employee {
     public void setNationality(String nationality) { this.nationality = nationality; }
     public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
     public void setContactNumberPrimary(String contactNumberPrimary) { this.contactNumberPrimary = contactNumberPrimary; }
-    public void setContactNumberSecondary(String contactNumberSecondary) { this.contactNumberSecondary = contactNumberSecondary; }
     public void setCurrentAddress(String currentAddress) { this.currentAddress = currentAddress; }
     public void setHomeAddress(String homeAddress) { this.homeAddress = homeAddress; }
     public void setDepartmentId(Integer departmentId) { this.departmentId = departmentId; }

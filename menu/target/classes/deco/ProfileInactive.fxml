@@ -195,7 +195,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <Label fx:id="employeeNo" layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="EMPLOYEE NO">
+                                    <Label fx:id="employeeCode" layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="EMPLOYEE NO">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="font-size-s" />
@@ -208,7 +208,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <Label fx:id="dateHired" layoutX="10.0" layoutY="30.0" stylesheets="@deco.css" text="DATE HIRED">
+                                    <Label fx:id="hireDate" layoutX="10.0" layoutY="30.0" stylesheets="@deco.css" text="DATE HIRED">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="font-size-s" />
@@ -221,7 +221,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <Label fx:id="dateRegularized" layoutX="10.0" layoutY="50.0" stylesheets="@deco.css" text="DATE REGULARIZED">
+                                    <Label fx:id="regularizationDate" layoutX="10.0" layoutY="50.0" stylesheets="@deco.css" text="DATE REGULARIZED">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="font-size-s" />
@@ -329,7 +329,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <Label fx:id="SSSNumber" stylesheets="@deco.css" text="SSS NUMBER">
+                              <Label fx:id="sssNumber" stylesheets="@deco.css" text="SSS NUMBER">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="font-size-s" />
@@ -349,7 +349,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <Label fx:id="PHICNumber" stylesheets="@deco.css" text="PHIC NO.">
+                              <Label fx:id="pagIbigNumber" stylesheets="@deco.css" text="PHIC NO.">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="font-size-s" />
@@ -366,7 +366,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <Label fx:id="TIN" stylesheets="@deco.css" text="TIN">
+                              <Label fx:id="tinNumber" stylesheets="@deco.css" text="TIN">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="font-size-s" />
@@ -386,7 +386,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <Label fx:id="HDMFNo" stylesheets="@deco.css" text="HDMF NO.">
+                              <Label fx:id="philHealthNumber" stylesheets="@deco.css" text="HDMF NO.">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="font-size-s" />

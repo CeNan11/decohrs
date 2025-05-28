@@ -1,0 +1,1100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="root" stylesheets="@deco.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="deco.ProfileActiveController">
+   <top>
+      <HBox alignment="CENTER_LEFT" fillHeight="false" spacing="20.0" styleClass="r" stylesheets="@deco.css" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <Circle fill="#afdf54" radius="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.0, 0, 4);" />
+            <Label stylesheets="@deco.css" text="ACTIVE" HBox.hgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="deco-font" />
+                  <String fx:value="deco-font-bold" />
+                  <String fx:value="font-size-m" />
+                  <String fx:value="deco-shadow" />
+               </styleClass>
+            </Label>
+            <Pane HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER" onMouseClicked="#navigateToActive">
+               <children>
+                  <ImageView fitHeight="40.0" fitWidth="40.0">
+                     <image>
+                        <Image url="@../deco_images/exit.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+         </padding>
+      </HBox>
+   </top>
+   <center>
+      <ScrollPane fitToHeight="true" fitToWidth="true" stylesheets="@deco.css">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <content>
+            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="10.0" styleClass="root" stylesheets="@deco.css">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="NAME OF EMPLOYEE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="CONTACT NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="42.0" stylesheets="@deco.css" text="POSITION">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="74.0" stylesheets="@deco.css" text="DEPARTMENT">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="106.0" stylesheets="@deco.css" text="CURRENT ADDRESS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="138.0" stylesheets="@deco.css" text="HOME ADDRESS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="210.0" stylesheets="@deco.css" text="PLACE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="250.0" stylesheets="@deco.css" text="DATE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="290.0" stylesheets="@deco.css" text="GENDER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="fullName" stylesheets="@deco.css" text="NAME OF EMPLOYEE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="contactNumber" stylesheets="@deco.css" text="CONTACT NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="position" stylesheets="@deco.css" text="POSITION">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="department" stylesheets="@deco.css" text="DEPARTMENT">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="currentAddress" stylesheets="@deco.css" text="CURRENT ADDRSS:">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="homeAddress" stylesheets="@deco.css" text="HOME ADDRESS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="placeOfBirth" stylesheets="@deco.css" text="PLACE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="dateOfBirth" stylesheets="@deco.css" text="DATE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="gender" stylesheets="@deco.css" text="GENDER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <HBox spacing="10.0">
+                           <children>
+                              <VBox spacing="10.0">
+                                 <children>
+                                    <Label stylesheets="@deco.css" text="EMPLOYEE NO">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <Label fx:id="employeeCode" layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="EMPLOYEE NO">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <Label stylesheets="@deco.css" text="DATE HIRED">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <Label fx:id="hireDate" layoutX="10.0" layoutY="30.0" stylesheets="@deco.css" text="DATE HIRED">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <Label stylesheets="@deco.css" text="DATE REGULARIZED">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <Label fx:id="regularizationDate" layoutX="10.0" layoutY="50.0" stylesheets="@deco.css" text="DATE REGULARIZED">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <HBox layoutX="10.0" layoutY="10.0">
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="NAME OF CONTACT">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="ADDRESS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="NAME OF CONTACT">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label stylesheets="@deco.css" text="ADDRESS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="RELATIONSHIP">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="CONTACT NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="580.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="RELATIONSHIP">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label stylesheets="@deco.css" text="CONTACT NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator layoutX="10.0" layoutY="280.0" prefWidth="200.0" />
+                  <HBox layoutX="10.0" layoutY="293.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="SSS NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="sssNumber" stylesheets="@deco.css" text="SSS NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="PHIC NO.">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="philHealthNumber" stylesheets="@deco.css" text="PHIC NO.">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="TIN">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="tinNumber" stylesheets="@deco.css" text="TIN">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="580.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="HDMF NO.">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="pagIbigNumber" stylesheets="@deco.css" text="HDMF NO.">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="958.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="BLOOD TYPE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label fx:id="bloodType" stylesheets="@deco.css" text="BLOOD TYPE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="293.0">
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="FATHER'S NAME">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="MOTHER'S NAME">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="FATHER'S NAME" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label stylesheets="@deco.css" text="MOTHER'S NAME" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="BIRTHDATE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="BIRTHDATE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="580.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="BIRTHDATE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label stylesheets="@deco.css" text="BIRTHDATE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="973.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="SSS NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                    <String fx:value="deco-font-bold" />
+                                 </styleClass>
+                              </Label>
+                              <Label stylesheets="@deco.css" text="SSS NUMBER">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="426.0">
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="CIVIL STATUS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="45.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="civilStatus" layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="CIVIL STATUS" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+                           <children>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="NO. OF SIBLINGS (INCLUDING SELF)">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="580.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS" />
+                        <VBox layoutX="973.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="0">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator layoutX="10.0" layoutY="353.0" prefWidth="200.0" />
+                  <HBox layoutX="10.0" layoutY="293.0">
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="SPOUSE / PARTNER NAME">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="SPOUSE / PARTNER NAME">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="PLACE / DATE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="580.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="ADDRESS" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox alignment="TOP_RIGHT" layoutX="916.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="DATE OF BIRTH" textAlignment="RIGHT" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox layoutX="10.0" layoutY="529.0">
+                     <children>
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="NAME OF CHILD / CHILDREN" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="NAME OF CHILD / CHILDREN">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="NAME OF CHILD / CHILDREN">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="NAME OF CHILD / CHILDREN">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="DATE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                    <String fx:value="deco-font-bold" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="DATE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="DATE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="DATE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="PLACE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="PLACE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="PLACE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="PLACE OF BIRTH">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="580.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="GENDER" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                    <String fx:value="deco-font-bold" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="GENDER" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="GENDER" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="GENDER" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator layoutX="10.0" layoutY="516.0" prefWidth="200.0" />
+                  <HBox layoutX="10.0" layoutY="559.0">
+                     <children>
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="PRIMARY" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="TERTIARY">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="COLLEGE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="VOCATIONAL">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="100.0" stylesheets="@deco.css" text="POST-GRAD">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="130.0" stylesheets="@deco.css" text="CERTIFICATION / LICENSES">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="PRIMARY">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="TERTIARY">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="COLLEGE">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="VOCATIONAL">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="100.0" stylesheets="@deco.css" text="POST-GRAD">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="130.0" stylesheets="@deco.css" text="CERTIFICATION / LICENSES">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="100.0" stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="130.0" stylesheets="@deco.css" text="ISSUED ON">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="160.0" stylesheets="@deco.css" text="VALID UNTIL">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="580.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="YEAR GRADUATED" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="YEAR GRADUATED" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="YEAR GRADUATED" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="YEAR GRADUATED" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="100.0" stylesheets="@deco.css" text="YEAR GRADUATED" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="130.0" stylesheets="@deco.css" text="ISSUED ON" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="160.0" stylesheets="@deco.css" text="VALID UNTIL" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator layoutX="10.0" layoutY="679.0" prefWidth="200.0" />
+                  <HBox layoutX="10.0" layoutY="692.0">
+                     <children>
+                        <VBox spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="DURATION" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="DURATION">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="DURATION">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="DURATION">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label stylesheets="@deco.css" text="NAME OF COMPANY" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="NAME OF COMPANY">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="NAME OF COMPANY">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="NAME OF COMPANY">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="YEAR GRADUATED">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets right="20.0" />
+                           </padding>
+                        </VBox>
+                        <VBox layoutX="580.0" layoutY="10.0" prefWidth="250.0" spacing="10.0">
+                           <children>
+                              <Label stylesheets="@deco.css" text="REMARKS" textOverrun="CLIP" wrapText="true" VBox.vgrow="ALWAYS">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="deco-font-bold" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="10.0" stylesheets="@deco.css" text="REMARKS" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="40.0" stylesheets="@deco.css" text="REMARKS" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                              <Label layoutX="10.0" layoutY="70.0" stylesheets="@deco.css" text="REMARKS" textOverrun="CLIP" wrapText="true">
+                                 <styleClass>
+                                    <String fx:value="deco-font" />
+                                    <String fx:value="font-size-s" />
+                                 </styleClass>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" fillHeight="false" stylesheets="@deco.css">
+                     <children>
+                        <Label stylesheets="@deco.css" text="EDIT">
+                           <styleClass>
+                              <String fx:value="deco-font" />
+                              <String fx:value="deco-font-bold" />
+                              <String fx:value="font-size-m" />
+                              <String fx:value="deco-shadow" />
+                           </styleClass>
+                        </Label>
+                     </children>
+                     <styleClass>
+                        <String fx:value="menu-edit" />
+                        <String fx:value="menu-edit-button" />
+                     </styleClass>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>

@@ -9,7 +9,7 @@ public class FamilyBackground {
     private Date motherDOB;
     private Integer numberOfSiblings;
     private String spouseName;
-    private String spouseBirthPlace;
+    private String spouseAddress;
     private Date spouseBirthDate;
 
     public FamilyBackground() {}
@@ -21,7 +21,7 @@ public class FamilyBackground {
     public Date getMotherDOB() { return motherDOB; }
     public Integer getNumberOfSiblings() { return numberOfSiblings; }
     public String getSpouseName() { return spouseName; }
-    public String getSpouseBirthPlace() { return spouseBirthPlace; }
+    public String getSpouseAddress() { return spouseAddress; }
     public Date getSpouseBirthDate() { return spouseBirthDate; }
 
     // Setters
@@ -31,7 +31,7 @@ public class FamilyBackground {
     public void setMotherDOB(Date motherDOB) { this.motherDOB = motherDOB; }
     public void setNumberOfSiblings(Integer numberOfSiblings) { this.numberOfSiblings = numberOfSiblings; }
     public void setSpouseName(String spouseName) { this.spouseName = spouseName; }
-    public void setSpouseBirthPlace(String spouseBirthPlace) { this.spouseBirthPlace = spouseBirthPlace; }
+    public void setSpouseAddress(String spouseBirthPlace) { this.spouseAddress = spouseBirthPlace; }
     public void setSpouseBirthDate(Date spouseBirthDate) { this.spouseBirthDate = spouseBirthDate; }
 
     @Override

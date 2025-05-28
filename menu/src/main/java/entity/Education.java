@@ -5,14 +5,19 @@ import java.sql.Date;
 public class Education {
     private Integer educationId;
     private Integer employeeId;
-    private String educationLevel;
-    private String institutionName;
-    private String courseDegreeProgram;
-    private String yearGraduated;
+    private String primarySchool;
+    private Date primaryYearGraduated;
+    private String tertiarySchool;
+    private Date tertiaryYearGraduated;
+    private String collegeSchool;
+    private Date collegeYearGraduated;
+    private String vocationalSchool;
+    private Date vocationalYearGraduated;
+    private String postGraduateSchool;
+    private Date postGraduateYearGraduated;
     private String certificateLicenseName;
     private Date dateIssued;
     private Date validUntil;
-    private String remarks;
 
     // Constructors
     public Education() {}
@@ -20,43 +25,57 @@ public class Education {
     // Getters
     public Integer getEducationId() { return educationId; }
     public Integer getEmployeeId() { return employeeId; }
-    public String getEducationLevel() { return educationLevel; }
-    public String getInstitutionName() { return institutionName; }
-    public String getCourseDegreeProgram() { return courseDegreeProgram; }
-    public String getYearGraduated() { return yearGraduated; }
+    public String getPrimarySchool() { return primarySchool; }
+    public Date getPrimaryYearGraduated() { return primaryYearGraduated; }
+    public String getTertiarySchool() { return tertiarySchool; }
+    public Date getTertiaryYearGraduated() { return tertiaryYearGraduated; }
+    public String getCollegeSchool() { return collegeSchool; }
+    public Date getCollegeYearGraduated() { return collegeYearGraduated; }
+    public String getVocationalSchool() { return vocationalSchool; }
+    public Date getVocationalYearGraduated() { return vocationalYearGraduated; }
+    public String getPostGraduateSchool() { return postGraduateSchool; }
+    public Date getPostGraduateYearGraduated() { return postGraduateYearGraduated; }
     public String getCertificateLicenseName() { return certificateLicenseName; }
     public Date getDateIssued() { return dateIssued; }
     public Date getValidUntil() { return validUntil; }
-    public String getRemarks() { return remarks; }
 
     // Setters
     public void setEducationId(Integer educationId) { this.educationId = educationId; }
     public void setEmployeeId(Integer employeeId) { this.employeeId = employeeId; }
-    public void setEducationLevel(String educationLevel) { this.educationLevel = educationLevel; }
-    public void setInstitutionName(String institutionName) { this.institutionName = institutionName; }
-    public void setCourseDegreeProgram(String courseDegreeProgram) { this.courseDegreeProgram = courseDegreeProgram; }
-    public void setYearGraduated(String yearGraduated) { this.yearGraduated = yearGraduated; }
+    public void setPrimarySchool(String primarySchool) { this.primarySchool = primarySchool; }
+    public void setPrimaryYearGraduated(Date primaryYearGraduated) { this.primaryYearGraduated = primaryYearGraduated; }
+    public void setTertiarySchool(String tertiarySchool) { this.tertiarySchool = tertiarySchool; }
+    public void setTertiaryYearGraduated(Date tertiaryYearGraduated) { this.tertiaryYearGraduated = tertiaryYearGraduated; }
+    public void setCollegeSchool(String collegeSchool) { this.collegeSchool = collegeSchool; }
+    public void setCollegeYearGraduated(Date collegeYearGraduated) { this.collegeYearGraduated = collegeYearGraduated; }
+    public void setVocationalSchool(String vocationalSchool) { this.vocationalSchool = vocationalSchool; }
+    public void setVocationalYearGraduated(Date vocationalYearGraduated) { this.vocationalYearGraduated = vocationalYearGraduated; }
+    public void setPostGraduateSchool(String postGraduateSchool) { this.postGraduateSchool = postGraduateSchool; }
+    public void setPostGraduateYearGraduated(Date postGraduateYearGraduated) { this.postGraduateYearGraduated = postGraduateYearGraduated; }
     public void setCertificateLicenseName(String certificateLicenseName) { this.certificateLicenseName = certificateLicenseName; }
     public void setDateIssued(Date dateIssued) { this.dateIssued = dateIssued; }
     public void setValidUntil(Date validUntil) { this.validUntil = validUntil; }
-    public void setRemarks(String remarks) { this.remarks = remarks; }
 
     // Other methods
     @Override 
     public String toString() {
         return String.format("Education { " +
-            "educationId=%d, " +
-            "employeeId=%d, " + 
-            "educationLevel='%s', " +
-            "institutionName='%s', " +
-            "courseDegreeProgram='%s', " +
-            "yearGraduated='%s', " +
-            "certificateLicenseName='%s', " +
-            "dateIssued=%s, " +
-            "validUntil=%s, " +
-            "remarks='%s' }", 
-            educationId, employeeId, educationLevel, institutionName, 
-            courseDegreeProgram, yearGraduated, certificateLicenseName,
-            dateIssued, validUntil, remarks);
+            "primarySchool: %s, " +
+            "primaryYearGraduated: %s, " +
+            "tertiarySchool: %s, " +
+            "tertiaryYearGraduated: %s, " +
+            "collegeSchool: %s, " +
+            "collegeYearGraduated: %s, " +
+            "vocationalSchool: %s, " +
+            "vocationalYearGraduated: %s, " +
+            "postGraduateSchool: %s, " +
+            "postGraduateYearGraduated: %s, " +
+            "certificateLicenseName: %s, " +
+            "dateIssued: %s, " +
+            "validUntil: %s }", 
+            primarySchool, primaryYearGraduated, tertiarySchool, tertiaryYearGraduated, 
+            collegeSchool, collegeYearGraduated, vocationalSchool, vocationalYearGraduated, 
+            postGraduateSchool, postGraduateYearGraduated, certificateLicenseName, 
+            dateIssued, validUntil);
     }
 }

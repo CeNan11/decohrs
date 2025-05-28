@@ -1,5 +1,6 @@
 package deco;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import entity.User;
 
 public class ProfileInactiveController {
     
+    // Basic Information
     @FXML private Label employeeCode;
     @FXML private Label fullName;
     @FXML private Label currentAddress;
@@ -18,14 +20,16 @@ public class ProfileInactiveController {
     @FXML private Label department;
     @FXML private Label hireDate;
     @FXML private Label regularizationDate;
-    @FXML private Label contactNumberPrimary;
-    @FXML private Label contactNumberSecondary;
-    @FXML private Label emailAddress;
+    @FXML private Label contactNumber;
+
+    // Personal Information
     @FXML private Label placeOfBirth;
     @FXML private Label dateOfBirth;
     @FXML private Label gender;
     @FXML private Label civilStatus;
     @FXML private Label bloodType;
+
+    // Government Information
     @FXML private Label sssNumber;
     @FXML private Label philHealthNumber;
     @FXML private Label tinNumber;
@@ -35,25 +39,23 @@ public class ProfileInactiveController {
     private User user;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
 
+    @FXML
+    private void initialize() {
+        Platform.runLater(() -> {
+            setEmployeeData();
+        });
+    }
+
+    
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
     public void setUser(User user) {
         this.user = user;
         System.out.println("User set in Inactive Profile: " + user.getUsername());
     }
-
-    public void setEmployee(Employee employee) {
-        setEmployeeData(employee);
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-    
-    public void initData(Employee employee) {
-        setEmployeeData(employee);
-    }
-
-    private void setEmployeeData(Employee employee) {
-        this.employee = employee;
+        
+    private void setEmployeeData() {
         employeeCode.setText(employee.getEmployeeCode());
         
         // Format full name with suffix if present
@@ -80,9 +82,7 @@ public class ProfileInactiveController {
             regularizationDate.setText(dateFormat.format(employee.getRegularizationDate()));
         }
         
-        contactNumberPrimary.setText(employee.getContactNumberPrimary());
-        contactNumberSecondary.setText(employee.getContactNumberSecondary());
-        emailAddress.setText(employee.getEmailAddress());
+        contactNumber.setText(employee.getContactNumberPrimary());
         placeOfBirth.setText(employee.getPlaceOfBirth());
         
         if (employee.getDateOfBirth() != null) {
@@ -96,6 +96,10 @@ public class ProfileInactiveController {
         philHealthNumber.setText(employee.getPHICNumber());
         tinNumber.setText(employee.getTIN());
         pagIbigNumber.setText(employee.getHDMFNo());
+    }
+
+    public Employee getEmployee() {
+        return employee;
     }
 
     @FXML

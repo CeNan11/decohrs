@@ -67,10 +67,6 @@ public class ProfileCardAltController {
     // ===== Navigation Methods =====
     @FXML
     private void navigateToProfile() throws IOException {
-        if (employee == null) {
-            System.err.println("Error: No employee data available");
-            return;
-        }
 
         Object controller = App.setRoot("ProfileInactive");
         ((ProfileInactiveController) controller).setEmployee(employee);

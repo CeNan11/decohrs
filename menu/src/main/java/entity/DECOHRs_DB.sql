@@ -71,10 +71,14 @@ CREATE TABLE Dependents (
 CREATE TABLE EducationalBackground (
     education_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT NOT NULL,
-    education_level ENUM('Primary', 'Secondary', 'Tertiary', 'College', 'Vocational', 'Post-Graduate', 'Certificate', 'License') NOT NULL,
-    institution_name VARCHAR(255),
-    course_degree_program VARCHAR(255),
-    year_graduated VARCHAR(10) NULL,
+    primary_school VARCHAR(255) NULL,
+    primary_year_graduated Date,
+    tertiary_school VARCHAR(255) NULL,
+    tertiary_year_graduated Date,
+    college_school VARCHAR(255) NULL,
+    college_year_graduated Date,
+    vocational_school VARCHAR(255) NULL,
+    vocational_year_graduated Date,
     certificate_license_name VARCHAR(255) NULL,
     date_issued DATE NULL,
     valid_until DATE NULL,
@@ -101,15 +105,12 @@ CREATE TABLE WorkExperience (
 -- USERS (Admin, Employee, EVP)
 CREATE TABLE Users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
-    employee_id INT NULL UNIQUE, 
     username VARCHAR(50) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL, 
-    email VARCHAR(191) UNIQUE, 
-    is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE SET NULL
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
 CREATE TABLE Roles (
     role_id INT AUTO_INCREMENT PRIMARY KEY,
     role_name VARCHAR(50) NOT NULL UNIQUE --  'Admin', 'EVP', 'Employee', 'Manager'

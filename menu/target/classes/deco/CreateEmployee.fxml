@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="3000.0" prefWidth="1280.0" styleClass="root" stylesheets="@deco.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="deco.CreateEmployeeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="root" stylesheets="@deco.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="deco.CreateEmployeeController">
    <top>
       <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="menu-create" stylesheets="@deco.css" BorderPane.alignment="TOP_CENTER">
          <children>
@@ -78,7 +78,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="firstName" promptText="FIRST NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -96,7 +96,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="MIDDLE NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="middleName" promptText="MIDDLE NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -121,7 +121,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="LAST NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="lastName" promptText="LAST NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -139,7 +139,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="SUFFIX" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="suffix" promptText="SUFFIX" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -152,11 +152,29 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <HBox spacing="20.0">
+                  <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
                      <children>
-                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                        <Label stylesheets="@deco.css" text="EMPLOYEE NUMBER">
+                           <styleClass>
+                              <String fx:value="deco-font" />
+                              <String fx:value="deco-font-bold" />
+                              <String fx:value="font-size-s" />
+                           </styleClass>
+                        </Label>
+                        <TextField fx:id="employeeCode" promptText="EMPLOYEE NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                           <styleClass>
+                              <String fx:value="deco-font" />
+                              <String fx:value="transparent-textfield" />
+                              <String fx:value="font-size-s" />
+                           </styleClass>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" spacing="20.0">
+                     <children>
+                        <VBox spacing="10.0">
                            <children>
-                              <VBox>
+                              <VBox VBox.vgrow="NEVER">
                                  <children>
                                     <Label stylesheets="@deco.css" text="POSITION">
                                        <styleClass>
@@ -168,7 +186,7 @@
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                    <ComboBox maxWidth="1.7976931348623157E308" promptText="POSITION" stylesheets="@deco.css">
+                                    <ComboBox fx:id="position" minWidth="500.0" promptText="POSITION" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -180,7 +198,7 @@
                                     </ComboBox>
                                  </children>
                               </VBox>
-                              <VBox>
+                              <VBox VBox.vgrow="NEVER">
                                  <children>
                                     <Label stylesheets="@deco.css" text="DATE HIRED">
                                        <styleClass>
@@ -192,7 +210,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <DatePicker maxWidth="1.7976931348623157E308" promptText="DATE HIRED" stylesheets="@deco.css">
+                                    <DatePicker fx:id="hireDate" minWidth="500.0" promptText="DATE HIRED" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="crud-padding-datePicker" />
                                           <String fx:value="deco-font" />
@@ -204,9 +222,9 @@
                               </VBox>
                            </children>
                         </VBox>
-                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                        <VBox spacing="10.0">
                            <children>
-                              <VBox>
+                              <VBox VBox.vgrow="NEVER">
                                  <children>
                                     <Label stylesheets="@deco.css" text="DEPARTMENT">
                                        <styleClass>
@@ -218,7 +236,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ComboBox maxWidth="1.7976931348623157E308" promptText="DEPARTMENT" stylesheets="@deco.css">
+                                    <ComboBox fx:id="department" minWidth="500.0" promptText="DEPARTMENT" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -230,7 +248,7 @@
                                     </ComboBox>
                                  </children>
                               </VBox>
-                              <VBox>
+                              <VBox VBox.vgrow="NEVER">
                                  <children>
                                     <Label stylesheets="@deco.css" text="DATE REGULARIZED">
                                        <styleClass>
@@ -242,7 +260,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <DatePicker maxWidth="1.7976931348623157E308" promptText="DATE REGULARIZED" stylesheets="@deco.css">
+                                    <DatePicker fx:id="regularizationDate" minWidth="500.0" promptText="DATE REGULARIZED" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="crud-padding-datePicker" />
                                           <String fx:value="deco-font" />
@@ -276,7 +294,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <TextField promptText="CONTACT NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="contactNumber" promptText="CONTACT NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="transparent-textfield" />
@@ -298,7 +316,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <TextField promptText="CURRENT ADDRESS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="currentAddress" promptText="CURRENT ADDRESS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="transparent-textfield" />
@@ -320,7 +338,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <TextField promptText="HOME ADDRESS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="homeAddress" promptText="HOME ADDRESS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="transparent-textfield" />
@@ -340,7 +358,7 @@
                               <String fx:value="font-size-s" />
                            </styleClass>
                         </Label>
-                        <TextField promptText="PLACE OF BIRTH" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="placeOfBirth" promptText="PLACE OF BIRTH" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                            <styleClass>
                               <String fx:value="deco-font" />
                               <String fx:value="transparent-textfield" />
@@ -351,7 +369,7 @@
                   </HBox>
                   <HBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" spacing="20.0">
                      <children>
-                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                        <VBox alignment="TOP_CENTER" spacing="10.0">
                            <children>
                               <VBox>
                                  <children>
@@ -365,7 +383,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <DatePicker maxWidth="1.7976931348623157E308" promptText="DATE OF BIRTH" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
+                                    <DatePicker fx:id="dateOfBirth" minWidth="500.0" promptText="DATE OF BIRTH" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="crud-padding-datePicker" />
                                           <String fx:value="deco-font" />
@@ -387,7 +405,7 @@
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                    <ComboBox maxWidth="1.7976931348623157E308" promptText="POSITION" stylesheets="@deco.css">
+                                    <ComboBox fx:id="civilStatus" minWidth="500.0" promptText="CIVIL STATUS" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -407,7 +425,7 @@
                               <Insets />
                            </opaqueInsets>
                         </VBox>
-                        <VBox minWidth="-Infinity" spacing="10.0" HBox.hgrow="ALWAYS">
+                        <VBox minWidth="-Infinity" spacing="10.0">
                            <children>
                               <VBox VBox.vgrow="ALWAYS">
                                  <children>
@@ -421,7 +439,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ComboBox depthTest="DISABLE" maxWidth="1.7976931348623157E308" promptText="GENDER" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
+                                    <ComboBox fx:id="gender" depthTest="DISABLE" minWidth="500.0" promptText="GENDER" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -433,7 +451,7 @@
                                     </ComboBox>
                                  </children>
                               </VBox>
-                              <VBox VBox.vgrow="ALWAYS">
+                              <VBox minWidth="500.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <Label stylesheets="@deco.css" text="BLOOD TYPE">
                                        <styleClass>
@@ -445,7 +463,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ComboBox maxWidth="1.7976931348623157E308" promptText="BLOOD TYPE" stylesheets="@deco.css">
+                                    <ComboBox fx:id="bloodType" minWidth="500.0" promptText="BLOOD TYPE" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -469,6 +487,98 @@
                   </HBox>
                   <HBox layoutX="30.0" layoutY="30.0" spacing="20.0" />
                   <Separator layoutX="30.0" layoutY="799.0" prefWidth="200.0" />
+                  <Label layoutX="446.0" layoutY="1058.0" stylesheets="@deco.css" text="EMERGENCY CONTACT">
+                     <styleClass>
+                        <String fx:value="deco-font" />
+                        <String fx:value="deco-font-bold" />
+                        <String fx:value="font-size-m" />
+                     </styleClass>
+                  </Label>
+                  <HBox spacing="20.0">
+                     <children>
+                        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
+                                 <children>
+                                    <Label stylesheets="@deco.css" text="NAME OF CONTACT" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <TextField fx:id="emergencyContactName" promptText="NAME OF CONTACT" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="transparent-textfield" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
+                                 <children>
+                                    <Label stylesheets="@deco.css" text="ADDRESS" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <TextField fx:id="emergencyContactAddress" promptText="ADDRESS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="transparent-textfield" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="20.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
+                                 <children>
+                                    <Label stylesheets="@deco.css" text="RELATIONSHIP" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <TextField fx:id="emergencyContactRelationship" promptText="RELATIONSHIP" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="transparent-textfield" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
+                                 <children>
+                                    <Label stylesheets="@deco.css" text="CONTACT NUMBER" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <TextField fx:id="emergencyContactNumber" promptText="CONTACT NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="transparent-textfield" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Separator layoutX="30.0" layoutY="2466.0" prefWidth="200.0" />
                   <Label layoutX="469.0" layoutY="875.0" stylesheets="@deco.css" text="GOVERNMENT INFORMATION">
                      <styleClass>
                         <String fx:value="deco-font" />
@@ -489,7 +599,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="SSS NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="sssNumber" promptText="SSS NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -507,7 +617,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="TIN" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="tinNumber" promptText="TIN" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -529,7 +639,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="PHIC NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="philHealthNumber" promptText="PHIC NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -547,7 +657,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="HDMF NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="pagIbigNumber" promptText="HDMF NUMBER" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -577,7 +687,7 @@
                               <String fx:value="font-size-s" />
                            </styleClass>
                         </Label>
-                        <TextField promptText="ADDRESS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="spouseAddress" promptText="ADDRESS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                            <styleClass>
                               <String fx:value="deco-font" />
                               <String fx:value="transparent-textfield" />
@@ -597,7 +707,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </Label>
-                              <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="SPOUSE / PARTNER NAME" HBox.hgrow="ALWAYS">
+                              <TextField fx:id="spouseName" promptText="SPOUSE / PARTNER NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="transparent-textfield" />
@@ -618,7 +728,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker maxWidth="1.7976931348623157E308" promptText="DATE OF BIRTH" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
+                              <DatePicker fx:id="spouseBirthDate" promptText="DATE OF BIRTH" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -630,34 +740,41 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Label layoutX="490.0" layoutY="1376.0" stylesheets="@deco.css" text="Father">
-                     <styleClass>
-                        <String fx:value="deco-font" />
-                        <String fx:value="deco-font-bold" />
-                        <String fx:value="font-size-s" />
-                     </styleClass>
-                  </Label>
                   <HBox alignment="BOTTOM_LEFT" fillHeight="false" spacing="20.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                        <VBox HBox.hgrow="ALWAYS">
                            <children>
-                              <Label stylesheets="@deco.css" text="FULL NAME" HBox.hgrow="ALWAYS">
+                              <Label stylesheets="@deco.css" text="Father">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="deco-font-bold" />
                                     <String fx:value="font-size-s" />
                                  </styleClass>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
                               </Label>
-                              <TextField promptText="FULL NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
-                                 <styleClass>
-                                    <String fx:value="deco-font" />
-                                    <String fx:value="transparent-textfield" />
-                                    <String fx:value="font-size-s" />
-                                 </styleClass>
-                              </TextField>
+                              <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
+                                 <children>
+                                    <Label stylesheets="@deco.css" text="FULL NAME" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <TextField fx:id="fathersName" promptText="FULL NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="transparent-textfield" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                        <VBox HBox.hgrow="ALWAYS">
+                        </VBox>
+                        <VBox>
                            <children>
                               <Label stylesheets="@deco.css" text="DATE OF BIRTH">
                                  <styleClass>
@@ -669,7 +786,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker maxWidth="1.7976931348623157E308" promptText="DATE OF BIRTH" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
+                              <DatePicker fx:id="fathersBirthdate" promptText="DATE OF BIRTH" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -681,34 +798,41 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Label layoutX="625.0" layoutY="1546.0" stylesheets="@deco.css" text="Mother">
-                     <styleClass>
-                        <String fx:value="deco-font" />
-                        <String fx:value="deco-font-bold" />
-                        <String fx:value="font-size-s" />
-                     </styleClass>
-                  </Label>
                   <HBox alignment="BOTTOM_LEFT" fillHeight="false" layoutX="30.0" layoutY="1657.0" spacing="20.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                        <VBox HBox.hgrow="ALWAYS">
                            <children>
-                              <Label stylesheets="@deco.css" text="FULL NAME" HBox.hgrow="ALWAYS">
+                              <Label stylesheets="@deco.css" text="Mother">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="deco-font-bold" />
                                     <String fx:value="font-size-s" />
                                  </styleClass>
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
                               </Label>
-                              <TextField promptText="FULL NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
-                                 <styleClass>
-                                    <String fx:value="deco-font" />
-                                    <String fx:value="transparent-textfield" />
-                                    <String fx:value="font-size-s" />
-                                 </styleClass>
-                              </TextField>
+                              <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
+                                 <children>
+                                    <Label stylesheets="@deco.css" text="FULL NAME" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="deco-font-bold" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </Label>
+                                    <TextField fx:id="mothersName" promptText="FULL NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                       <styleClass>
+                                          <String fx:value="deco-font" />
+                                          <String fx:value="transparent-textfield" />
+                                          <String fx:value="font-size-s" />
+                                       </styleClass>
+                                    </TextField>
+                                 </children>
+                              </HBox>
                            </children>
-                        </HBox>
-                        <VBox HBox.hgrow="ALWAYS">
+                        </VBox>
+                        <VBox>
                            <children>
                               <Label stylesheets="@deco.css" text="DATE OF BIRTH">
                                  <styleClass>
@@ -720,7 +844,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker maxWidth="1.7976931348623157E308" promptText="DATE OF BIRTH" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
+                              <DatePicker fx:id="mothersBirthdate" promptText="DATE OF BIRTH" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -753,7 +877,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="NAME" HBox.hgrow="ALWAYS">
+                                    <TextField promptText="NAME" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -771,7 +895,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="PLACE OF BIRTH" HBox.hgrow="ALWAYS">
+                                    <TextField promptText="PLACE OF BIRTH" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -843,7 +967,7 @@
                      </styleClass>
                   </Button>
                   <Separator layoutX="30.0" layoutY="963.0" prefWidth="200.0" />
-                  <Label layoutX="490.0" layoutY="1428.0" stylesheets="@deco.css" text="FAMILY BACKGROUND">
+                  <Label layoutX="490.0" layoutY="1428.0" stylesheets="@deco.css" text="EDUCATION BACKGROUND">
                      <styleClass>
                         <String fx:value="deco-font" />
                         <String fx:value="deco-font-bold" />
@@ -863,7 +987,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="PRIMARY" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="primarySchool" promptText="PRIMARY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -881,7 +1005,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="TERTIARY" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="tertiarySchool" promptText="TERTIARY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -899,7 +1023,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="COLLLEGE" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="collegeSchool" promptText="COLLLEGE" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -917,7 +1041,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="VOCATIONAL" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="vocationalSchool" promptText="VOCATIONAL" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -935,7 +1059,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="POST-GRAD" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="postGraduateSchool" promptText="POST-GRAD" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -953,7 +1077,7 @@
                                           <String fx:value="font-size-s" />
                                        </styleClass>
                                     </Label>
-                                    <TextField promptText="FIRST NAME" stylesheets="@deco.css" text="CERTIFICATE / LICENSES" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="certificateLicenseName" promptText="CERTIFICATE / LICENSES" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -966,7 +1090,7 @@
                         </VBox>
                         <VBox spacing="22.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <DatePicker maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="primaryYearGraduated" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -974,7 +1098,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="tertiaryYearGraduated" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -982,7 +1106,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker layoutX="10.0" layoutY="68.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="collegeYearGraduated" layoutX="10.0" layoutY="68.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -990,7 +1114,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker layoutX="10.0" layoutY="126.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="vocationalYearGraduated" layoutX="10.0" layoutY="126.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -998,7 +1122,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker layoutX="10.0" layoutY="184.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="postGraduateYearGraduated" layoutX="10.0" layoutY="184.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1006,7 +1130,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker layoutX="10.0" layoutY="242.0" maxWidth="1.7976931348623157E308" promptText="ISSUED ON" stylesheets="@deco.css">
+                              <DatePicker fx:id="dateIssued" layoutX="10.0" layoutY="242.0" maxWidth="1.7976931348623157E308" promptText="ISSUED ON" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1014,7 +1138,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker layoutX="10.0" layoutY="300.0" maxWidth="1.7976931348623157E308" promptText="VALID UNTIL" stylesheets="@deco.css">
+                              <DatePicker fx:id="validUntil" layoutX="10.0" layoutY="300.0" maxWidth="1.7976931348623157E308" promptText="VALID UNTIL" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1051,7 +1175,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="DURATION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceDuration1" promptText="DURATION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1062,7 +1186,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="60.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="DURATION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceDuration2" promptText="DURATION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1073,7 +1197,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="120.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="DURATION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceDuration3" promptText="DURATION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1099,7 +1223,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField prefWidth="400.0" promptText="NAME OF THE COMPANY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceCompany1" prefWidth="400.0" promptText="NAME OF THE COMPANY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1110,7 +1234,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="60.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="NAME OF THE COMPANY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceCompany2" promptText="NAME OF THE COMPANY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1121,7 +1245,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="120.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="NAME OF THE COMPANY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceCompany3" promptText="NAME OF THE COMPANY" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1147,7 +1271,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="POSITION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experiencePosition1" promptText="POSITION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1158,7 +1282,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="60.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="POSITION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experiencePosition2" promptText="POSITION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1169,7 +1293,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="120.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="POSITION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experiencePosition3" promptText="POSITION" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1195,7 +1319,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="REMARKS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceRemarks1" promptText="REMARKS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1206,7 +1330,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="60.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="REMARKS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceRemarks2" promptText="REMARKS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1217,7 +1341,7 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="10.0" layoutY="120.0" styleClass="crud-textfield" stylesheets="@deco.css">
                                  <children>
-                                    <TextField promptText="REMARKS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="experienceRemarks3" promptText="REMARKS" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="transparent-textfield" />
@@ -1240,7 +1364,7 @@
                               <String fx:value="font-size-m" />
                            </styleClass>
                         </Button>
-                        <Button layoutX="10.0" layoutY="50.0" mnemonicParsing="false" stylesheets="@deco.css" text="CREATE NEW EMPLOYEE">
+                        <Button layoutX="10.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleSave" stylesheets="@deco.css" text="CREATE NEW EMPLOYEE">
                            <styleClass>
                               <String fx:value="default-button" />
                               <String fx:value="deco-font" />

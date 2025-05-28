@@ -1,16 +1,23 @@
 package deco;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import entity.Employee;
 import entity.EmployeeStatus;
+import entity.FamilyBackground;
+import entity.Position;
 import entity.User;
 import entity.WorkExperience;
 import entity.Child;
-
+import entity.Department;
+import entity.Education;
+import entity.EmergencyContact;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,6 +25,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import services.EntityService;
+
 import java.io.File;
 import java.nio.file.Files;
 
@@ -57,13 +66,11 @@ public class CreateEmployeeController {
     // Family Background
     @FXML private TextField fathersName;
     @FXML private DatePicker fathersBirthdate;
-    @FXML private TextField fathersSSS;
     @FXML private TextField mothersName;
     @FXML private DatePicker mothersBirthdate;
-    @FXML private TextField mothersSSS;
     @FXML private TextField numberOfSiblings;
     @FXML private TextField spouseName;
-    @FXML private TextField spouseBirthPlace;
+    @FXML private TextField spouseAddress;
     @FXML private DatePicker spouseBirthDate;
 
     // Education
@@ -71,6 +78,15 @@ public class CreateEmployeeController {
     @FXML private DatePicker primaryYearGraduated;
     @FXML private TextField tertiarySchool;
     @FXML private DatePicker tertiaryYearGraduated;
+    @FXML private TextField collegeSchool;
+    @FXML private DatePicker collegeYearGraduated;
+    @FXML private TextField vocationalSchool;
+    @FXML private DatePicker vocationalYearGraduated;
+    @FXML private TextField postGraduateSchool;
+    @FXML private DatePicker postGraduateYearGraduated;
+    @FXML private TextField certificateLicenseName;
+    @FXML private DatePicker dateIssued;
+    @FXML private DatePicker validUntil;
 
     // Birth Certificate
     @FXML private TextField birthCertificateNumber;
@@ -98,14 +114,31 @@ public class CreateEmployeeController {
     private User user;
     private ArrayList<Employee> employees;
 
+    private ArrayList<Department> departments;
+    private ArrayList<Position> positions;
+
+    private static String localHost = "jdbc:mysql://localhost:3306/DECOHRS_DB";
+    private static String username = "root";
+    private static String pass = "";
+
     @FXML
     private void initialize() {
         // Initialize ComboBoxes
         gender.getItems().addAll("Male", "Female", "Other");
         civilStatus.getItems().addAll("Single", "Married", "Widowed", "Separated", "Divorced");
         bloodType.getItems().addAll("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
-        position.getItems().addAll("Position 1", "Position 2", "Position 3");
-        department.getItems().addAll("Department 1", "Department 2", "Department 3");
+
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EntityService entityService = new EntityService(connection);
+            departments = entityService.getDepartments();
+            positions = entityService.getPositions();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        position.getItems().addAll(positions.stream().map(Position::getPositionTitle).toArray(String[]::new));
+        department.getItems().addAll(departments.stream().map(Department::getDepartmentName).toArray(String[]::new));
         
         
         // Initialize employees list if null
@@ -167,47 +200,97 @@ public class CreateEmployeeController {
         removeButton.setOnAction(e -> childrenContainer.getChildren().remove(childEntry));
     }
 
+    private Employee saveEmployee() {
+        Employee employee = new Employee();
+            
+        // Set basic employee information
+        employee.setEmployeeCode(employeeCode.getText());
+        employee.setFirstName(firstName.getText());
+        employee.setMiddleName(middleName.getText());
+        employee.setLastName(lastName.getText());
+        employee.setSuffix(suffix.getText());
+        employee.setCurrentAddress(currentAddress.getText());
+        employee.setHomeAddress(homeAddress.getText());
+        employee.setContactNumberPrimary(contactNumber.getText());
+        employee.setPlaceOfBirth(placeOfBirth.getText());
+        employee.setDateOfBirth(dateOfBirth.getValue() != null ? Date.valueOf(dateOfBirth.getValue()) : null);
+        employee.setGender(gender.getValue());
+        employee.setCivilStatus(civilStatus.getValue());
+        employee.setBloodType(bloodType.getValue());
+        employee.setDepartment(department.getValue());
+        employee.setPosition(position.getValue());
+
+        // Set dates
+        employee.setHireDate(hireDate.getValue() != null ? Date.valueOf(hireDate.getValue()) : null);
+        employee.setRegularizationDate(regularizationDate.getValue() != null ? Date.valueOf(regularizationDate.getValue()) : null);
+
+        // Set government IDs
+        employee.setSSSNumber(sssNumber.getText());
+        employee.setPHICNumber(philHealthNumber.getText());
+        employee.setTIN(tinNumber.getText());
+        employee.setHDMFNo(pagIbigNumber.getText());
+
+        // Set status
+        employee.setStatus(EmployeeStatus.ACTIVE);
+
+        return employee;
+    }
+
+    private EmergencyContact saveEmergencyContact() {
+        EmergencyContact emergencyContact = new EmergencyContact();
+        emergencyContact.setName(emergencyContactName.getText());
+        emergencyContact.setRelationship(emergencyContactRelationship.getText());
+        emergencyContact.setAddress(emergencyContactAddress.getText());
+        emergencyContact.setContactNumber(emergencyContactNumber.getText());
+
+        return emergencyContact;
+    }
+
+    private FamilyBackground saveFamilyBackground() {
+        FamilyBackground familyBackground = new FamilyBackground();
+        familyBackground.setFatherName(fathersName.getText());
+        familyBackground.setFatherDOB(fathersBirthdate.getValue() != null ? Date.valueOf(fathersBirthdate.getValue()) : null);
+        familyBackground.setMotherName(mothersName.getText());
+        familyBackground.setMotherDOB(mothersBirthdate.getValue() != null ? Date.valueOf(mothersBirthdate.getValue()) : null);
+        familyBackground.setSpouseName(spouseName.getText());
+        familyBackground.setSpouseAddress(spouseAddress.getText());
+        familyBackground.setSpouseBirthDate(spouseBirthDate.getValue() != null ? Date.valueOf(spouseBirthDate.getValue()) : null);
+
+        return familyBackground;
+    }
+
+    private Education saveEducation() {
+        Education education = new Education();
+        education.setPrimarySchool(primarySchool.getText());
+        education.setPrimaryYearGraduated(primaryYearGraduated.getValue() != null ? Date.valueOf(primaryYearGraduated.getValue()) : null);
+        education.setTertiarySchool(tertiarySchool.getText());
+        education.setTertiaryYearGraduated(tertiaryYearGraduated.getValue() != null ? Date.valueOf(tertiaryYearGraduated.getValue()) : null);
+        education.setCollegeSchool(collegeSchool.getText());
+        education.setCollegeYearGraduated(collegeYearGraduated.getValue() != null ? Date.valueOf(collegeYearGraduated.getValue()) : null);
+        education.setVocationalSchool(vocationalSchool.getText());
+        education.setVocationalYearGraduated(vocationalYearGraduated.getValue() != null ? Date.valueOf(vocationalYearGraduated.getValue()) : null);
+        education.setPostGraduateSchool(postGraduateSchool.getText());
+        education.setPostGraduateYearGraduated(postGraduateYearGraduated.getValue() != null ? Date.valueOf(postGraduateYearGraduated.getValue()) : null);
+        education.setCertificateLicenseName(certificateLicenseName.getText());
+        education.setDateIssued(dateIssued.getValue() != null ? Date.valueOf(dateIssued.getValue()) : null);
+        education.setValidUntil(validUntil.getValue() != null ? Date.valueOf(validUntil.getValue()) : null);
+
+        return education;
+    }
+
     @FXML
     private void handleSave() {
         try {
             // Create new employee
-            Employee employee = new Employee();
-            
-            // Set basic employee information
-            employee.setEmployeeCode(employeeCode.getText());
-            employee.setFirstName(firstName.getText());
-            employee.setMiddleName(middleName.getText());
-            employee.setLastName(lastName.getText());
-            employee.setSuffix(suffix.getText());
-            employee.setCurrentAddress(currentAddress.getText());
-            employee.setHomeAddress(homeAddress.getText());
-            employee.setContactNumberPrimary(contactNumber.getText());
-            employee.setPlaceOfBirth(placeOfBirth.getText());
-            employee.setDateOfBirth(dateOfBirth.getValue() != null ? Date.valueOf(dateOfBirth.getValue()) : null);
-            employee.setGender(gender.getValue());
-            employee.setCivilStatus(civilStatus.getValue());
-            employee.setBloodType(bloodType.getValue());
-            employee.setDepartment(department.getValue());
-            employee.setPosition(position.getValue());
-            
-            // Set IDs from ComboBox selections
-            // TODO: Implement proper ID mapping from display values
-            
-            
-            // Set dates
-            employee.setHireDate(hireDate.getValue() != null ? Date.valueOf(hireDate.getValue()) : null);
-            employee.setRegularizationDate(regularizationDate.getValue() != null ? Date.valueOf(regularizationDate.getValue()) : null);
-            
-            // Family Background
-
-            // Set government IDs
-            employee.setSSSNumber(sssNumber.getText());
-            employee.setPHICNumber(philHealthNumber.getText());
-            employee.setTIN(tinNumber.getText());
-            employee.setHDMFNo(pagIbigNumber.getText());
+            Employee employee = saveEmployee();
+            EmergencyContact emergencyContact = saveEmergencyContact();
+            employee.setEmergencyContact(emergencyContact);
+            FamilyBackground familyBackground = saveFamilyBackground();
+            employee.setFamilyBackground(familyBackground);
+            Education education = saveEducation();
+            employee.setEducation(education);
             
             // Set status as ACTIVE for new employees
-            employee.setStatus(EmployeeStatus.ACTIVE);
             
             // Save employee to database
             try {
