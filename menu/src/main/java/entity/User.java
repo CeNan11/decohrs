@@ -26,4 +26,12 @@ public class User {
     
     public String getUsername() { return username; }
     public roles getRole() { return role; }
+
+    @Override
+    public String toString() {
+        return "User {" +
+            "\n  Username: " + username +
+            "\n  Role: " + role +
+            "\n}";
+    }
 }

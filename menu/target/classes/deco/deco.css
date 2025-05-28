@@ -300,3 +300,16 @@
 .audit-logs-items {
     -fx-padding: 0 10 0 10;
 }
+
+.separator {
+    -fx-background-color: #000000; /* Black color */
+    -fx-pref-height: 1px; /* Height for horizontal, width for vertical */
+    -fx-pref-width: 100%;   /* Occupy full width of container */
+  }
+  
+  .separator:vertical {
+    -fx-background-color: #000000;
+    -fx-pref-width: 1px;   /* Width for vertical, height for horizontal */
+    -fx-pref-height: 100%;  /* Occupy full height of container */
+  }
+  

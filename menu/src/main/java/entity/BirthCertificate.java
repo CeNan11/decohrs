@@ -31,4 +31,12 @@ public class BirthCertificate {
     public String getDocumentNumber() {
         return documentNumber;
     }
+
+    @Override
+    public String toString() {
+        return "BirthCertificate {" +
+            "\n  Document Number: " + documentNumber +
+            "\n  Certificate File: " + (certificateFile != null ? "Present" : "Not Available") +
+            "\n}";
+    }
 }

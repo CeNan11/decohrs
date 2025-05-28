@@ -41,11 +41,7 @@ public class ProfileCardController {
         }
 
         Object controller = App.setRoot("Profile");
-        ProfileController profileController = (ProfileController) controller;
-        
-        // Set both employee and user data
-        profileController.setEmployee(employee);
-        profileController.setUser(user);
-
+        ((ProfileController) controller).setEmployee(employee);
+        ((ProfileController) controller).setUser(user);
     }
 }

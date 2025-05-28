@@ -19,11 +19,11 @@ public class LoginController {
     
     @FXML private void login() throws IOException {
 
-        User user = new User(username.getText(), password.getText(), null);
-
         if (username.getText().equals("admin") && password.getText().equals("admin")) {
+            User user = new User("admin", "admin", User.roles.ADMIN);
             navigateToHome(user);
         } else if (username.getText().equals("evp") && password.getText().equals("evp")) {
+            User user = new User("evp", "evp", User.roles.EVP);
             navigateToHome(user);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -32,5 +32,10 @@ public class LoginController {
             alert.setContentText("Invalid username or password");
             alert.showAndWait();
         }
+    }
+
+    @FXML private void loginAsGuest() throws IOException {
+        User user = new User("guest", "guest", User.roles.GUEST);
+        navigateToHome(user);
     }
 }

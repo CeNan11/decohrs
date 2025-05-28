@@ -31,7 +31,7 @@ public class HomeController {
 
         String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"));
 
-        date.setText(String.format("It is %s!%n%s", dayOfTheWeek, formattedDate));        
+        date.setText(String.format("It is %s!%n%s", dayOfTheWeek, formattedDate));  
     }
 
     public void setUser(User user) {
@@ -60,7 +60,6 @@ public class HomeController {
     private void navigateToActive() throws IOException {
         Object controller = App.setRoot("Active");
         ((ActiveController) controller).setUser(user);
-
     }
 
     @FXML 

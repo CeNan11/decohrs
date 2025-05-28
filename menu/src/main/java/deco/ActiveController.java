@@ -7,6 +7,7 @@ import entity.Employee;
 import entity.EmployeeStatus;
 import entity.User;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -19,75 +20,95 @@ import javafx.util.Duration;
 import services.ClockService;
 import services.FilterData;
     
-    public class ActiveController implements FilterableController{
-
+public class ActiveController implements FilterableController {
+    // ===== FXML Components =====
     @FXML private Label time;
     @FXML private StackPane stackPane;
     @FXML private FlowPane flowPane;
-
     @FXML private Button next;
     @FXML private Button prev;
     @FXML private Label pageLabel;
     @FXML private Label totalLabel;
     @FXML private HBox auditLogsHBox;
 
+    // ===== Class Properties =====
     private ArrayList<Employee> employees;
     private User user;
     private static final int ITEMS_PER_PAGE = 19;
     private int currentPage = 0;
-    private static final int TOTAL_ITEMS = 120; // Total number of items in the list
+
+    // ===== Initialization Methods =====
     @FXML
     private void initialize() {
-        // Initialize the employees list with sample data
-        employees = new ArrayList<>();
-        // TODO: Replace this with actual database data
-        for (int i = 1; i <= TOTAL_ITEMS; i++) {
-            Employee emp = new Employee();
-            emp.setEmployeeNo("EMP" + String.format("%03d", i));
-            emp.setFirstName("First" + i);
-            emp.setLastName("Last" + i);
-            emp.setPosition("Position " + i);
-            emp.setDepartment("Department " + i);
-            emp.setStatus(EmployeeStatus.ACTIVE);
-            employees.add(emp);
-        }
+        Platform.runLater(() -> {
+            if (employees == null) {
+                employees = new ArrayList<>();
+            } 
+            initializeEmployees();
+            updatePage(currentPage);
+        });
+    }
+
+    // ===== Data Management Methods =====
+    public void setEmployees(ArrayList<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public ArrayList<Employee> getEmployees() {
+        return employees;
+    }
+
+    public Employee getEmployee(Employee employee) {
+        return employee;
+    }
+
+    public void addNewEmployee(Employee employee) {
+        employees.add(employee);
         updatePage(currentPage);
     }
-    
+
+    // ===== Page Management Methods =====
     public void updatePage(int page) {
-        // Update current page
         currentPage = page;
-        
-        // Update labels
-        pageLabel.setText("PAGE: " + (currentPage + 1));
-        int totalPages = (int) Math.ceil((double) employees.size() / ITEMS_PER_PAGE);
-        totalLabel.setText("TOTAL: " + totalPages);
-        
+        updatePageLabels();
         flowPane.getChildren().clear();
         
         int start = currentPage * ITEMS_PER_PAGE;
         int end = Math.min(start + ITEMS_PER_PAGE, employees.size());
 
-        // Add the "Add Profile" card first (only on first page and for non-guest users)
-        if (currentPage == 0 && (user == null || user.getRole() != User.roles.GUEST)) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_add.fxml"));
-                Node profileCardNode = loader.load();
-                Profile_add controller = loader.getController();
-                controller.setUser(user);
+        addProfileCardIfNeeded();
+        addEmployeeCards(start, end);
+        updateNavigationButtons();
+    }
 
+    private void updatePageLabels() {
+        pageLabel.setText("PAGE: " + (currentPage + 1));
+        int totalPages = (int) Math.ceil((double) employees.size() / ITEMS_PER_PAGE);
+        totalLabel.setText("TOTAL: " + totalPages);
+    }
+
+    private void addProfileCardIfNeeded() {
+        System.out.println(user.getRole());
+        if (currentPage == 0 && (user == null || user.getRole() == User.roles.ADMIN)) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("ProfileAdd.fxml"));
+                Node profileCardNode = loader.load();
+                ProfileAdd controller = loader.getController();
+                controller.setUser(user);
                 flowPane.getChildren().add(profileCardNode);
             } catch (IOException error) {
                 error.printStackTrace();
             }
         }
-        
-        // Add employee cards
+    }
+
+    private void addEmployeeCards(int start, int end) {
         for (int i = start; i < end; i++) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_Card.fxml"));
                 Node card = loader.load();
                 ProfileCardController controller = loader.getController();
+                controller.setUser(user);
 
                 Employee employee = employees.get(i);
                 controller.initData(
@@ -96,16 +117,15 @@ import services.FilterData;
                     employee.getPosition()
                 );
                 controller.setEmployee(employee);
-                controller.setUser(user);
-
                 flowPane.getChildren().add(card);
-
             } catch (IOException error) {
                 error.printStackTrace();
             }
         }
+    }
 
-        // Update button states
+    private void updateNavigationButtons() {
+        int totalPages = (int) Math.ceil((double) employees.size() / ITEMS_PER_PAGE);
         prev.setDisable(currentPage == 0);
         next.setDisable(currentPage >= totalPages - 1);
     }
@@ -125,18 +145,20 @@ import services.FilterData;
         }
     }
 
-    public void setClockService(ClockService clockService) {
-        time.textProperty().bind(clockService.timeProperty());
-    }
-
+    // ===== User Management Methods =====
     public void setUser(User user) {
         this.user = user;
-
         if (checkAsGuest()) {
             auditLogsHBox.setVisible(false);
         }
     }
 
+    @FXML 
+    private boolean checkAsGuest() {
+        return user.getRole() == User.roles.GUEST;
+    }
+
+    // ===== Navigation Methods =====
     @FXML
     private void navigateToHome() throws IOException {
         Object controller = App.setRoot("Home");
@@ -149,68 +171,125 @@ import services.FilterData;
         ((InactiveController) controller).setUser(user);
     }
 
-    @FXML private void navigateToAuditLogs() throws IOException {
+    @FXML 
+    private void navigateToAuditLogs() throws IOException {
         Object controller = App.setRoot("AuditLogs");
         ((AuditLogsController) controller).setUser(user);
     }
 
-    @FXML void navigateToLogin() throws IOException {
+    @FXML 
+    private void navigateToLogin() throws IOException {
         App.setRoot("Login");
     }    
 
-    @FXML private void logout() throws IOException {
+    @FXML 
+    private void logout() throws IOException {
         navigateToLogin();
     }
 
+    // ===== Filter Methods =====
     @FXML
     private void showFilter() {
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("Filter.fxml"));
             Parent overlay = loader.load();
             
-            // Get the FilterController and pass this controller to it
             FilterController filterController = loader.getController();
             filterController.setParentController(this);
             
-            // Background overlay
-            StackPane backgroundOverlay = new StackPane();
-            backgroundOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4);");
-            backgroundOverlay.setPrefSize(stackPane.getWidth(), stackPane.getHeight());
-            backgroundOverlay.prefWidthProperty().bind(stackPane.widthProperty());
-            backgroundOverlay.prefHeightProperty().bind(stackPane.heightProperty());
-            
-            // Set overlay properties in FilterController
-            filterController.setOverlay(overlay, stackPane, backgroundOverlay);
-            
-            backgroundOverlay.setOnMouseClicked(event -> filterController.handleClose());
-            overlay.setOnMouseClicked(event -> event.consume());
-            
-            StackPane.setAlignment(overlay, Pos.TOP_RIGHT);
-            StackPane.setMargin(overlay, new Insets(0, 100, 0, 0));
-            overlay.setTranslateY(-400); // Start position for animation
-            
-            stackPane.getChildren().addAll(backgroundOverlay, overlay);
-            
-            // Slide-in animation
-            TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), overlay);
-            slideIn.setFromY(-400);
-            slideIn.setToY(0);
-            slideIn.play();
+            setupFilterOverlay(overlay, filterController);
             
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void applyFilterData(FilterData data) {
-    System.out.println(data);
+    private void setupFilterOverlay(Parent overlay, FilterController filterController) {
+        StackPane backgroundOverlay = createBackgroundOverlay();
+        filterController.setOverlay(overlay, stackPane, backgroundOverlay);
+        
+        setupOverlayInteractions(overlay, backgroundOverlay, filterController);
+        setupOverlayPosition(overlay);
+        addOverlayToScene(overlay, backgroundOverlay);
+        animateOverlay(overlay);
     }
 
-    @FXML private boolean checkAsGuest() {
-        if (user.getRole() == User.roles.GUEST) {
-            return true;
-        } else {
-            return false;
+    private StackPane createBackgroundOverlay() {
+        StackPane backgroundOverlay = new StackPane();
+        backgroundOverlay.setStyle("-fx-background-color: rgba(0, 0, 0, 0.4);");
+        backgroundOverlay.setPrefSize(stackPane.getWidth(), stackPane.getHeight());
+        backgroundOverlay.prefWidthProperty().bind(stackPane.widthProperty());
+        backgroundOverlay.prefHeightProperty().bind(stackPane.heightProperty());
+        return backgroundOverlay;
+    }
+
+    private void setupOverlayInteractions(Parent overlay, StackPane backgroundOverlay, FilterController filterController) {
+        backgroundOverlay.setOnMouseClicked(event -> filterController.handleClose());
+        overlay.setOnMouseClicked(event -> event.consume());
+    }
+
+    private void setupOverlayPosition(Parent overlay) {
+        StackPane.setAlignment(overlay, Pos.TOP_RIGHT);
+        StackPane.setMargin(overlay, new Insets(0, 100, 0, 0));
+        overlay.setTranslateY(-400);
+    }
+
+    private void addOverlayToScene(Parent overlay, StackPane backgroundOverlay) {
+        stackPane.getChildren().addAll(backgroundOverlay, overlay);
+    }
+
+    private void animateOverlay(Parent overlay) {
+        TranslateTransition slideIn = new TranslateTransition(Duration.millis(300), overlay);
+        slideIn.setFromY(-400);
+        slideIn.setToY(0);
+        slideIn.play();
+    }
+
+    // ===== Service Methods =====
+    public void setClockService(ClockService clockService) {
+        time.textProperty().bind(clockService.timeProperty());
+    }
+
+    @Override
+    public void applyFilterData(FilterData data) {
+        System.out.println(data);
+    }
+
+        // ===== Employee sample =====
+
+    @SuppressWarnings("unused")
+    private void initializeEmployees() {
+        employees = new ArrayList<>();
+        // TODO: Replace this with actual database data
+        for (int i = 1; i <= 10; i++) {
+            Employee emp = createSampleEmployee(i);
+            employees.add(emp);
         }
+    }
+
+    private Employee createSampleEmployee(int index) {
+        Employee emp = new Employee();
+        emp.setEmployeeCode("EMP" + String.format("%03d", index));
+        emp.setFirstName("First" + index);
+        emp.setLastName("Last" + index);
+        emp.setPosition("Position " + index);
+        emp.setDepartment("Department " + index);
+        emp.setMiddleName("Middle" + index);
+        emp.setCurrentAddress("Current Address " + index);
+        emp.setHomeAddress("Home Address " + index);
+        emp.setContactNumberPrimary("09123456789");
+        emp.setPlaceOfBirth("Place of Birth " + index);
+        emp.setGender("Male");
+        emp.setCivilStatus("Single");
+        emp.setBloodType("O+");
+        emp.setSSSNumber("SSS-" + index);
+        emp.setPHICNumber("PHIC-" + index);
+        emp.setTIN("TIN-" + index);
+        emp.setHDMFNo("HDMF-" + index);
+        emp.setDateOfBirth(java.sql.Date.valueOf("2000-01-01"));
+        emp.setHireDate(java.sql.Date.valueOf("2023-01-01"));
+        emp.setRegularizationDate(java.sql.Date.valueOf("2023-07-01"));
+        emp.setStatus(EmployeeStatus.ACTIVE);
+        return emp;
     }
 }

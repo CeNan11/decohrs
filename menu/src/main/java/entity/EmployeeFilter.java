@@ -30,12 +30,12 @@ public class EmployeeFilter {
         
         // Apply date hired filter
         if (dateHired != null) {
-            filteredEmployees.removeIf(e -> !e.getDateHired().equals(dateHired));
+            filteredEmployees.removeIf(e -> !e.getHireDate().equals(dateHired));
         }
         
         // Apply date regularized filter
         if (dateRegularized != null) {
-            filteredEmployees.removeIf(e -> !e.getDateRegularized().equals(dateRegularized));
+            filteredEmployees.removeIf(e -> !e.getRegularizationDate().equals(dateRegularized));
         }
         
         // Apply date of birth filter
@@ -144,5 +144,20 @@ public class EmployeeFilter {
 
     public String getEducationalAttainmentLevel() {
         return educationalAttainmentLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeFilter {" +
+            "\n  Position: " + (position != null ? position : "N/A") +
+            "\n  Department: " + (department != null ? department : "N/A") +
+            "\n  Date Hired: " + (dateHired != null ? dateHired.toString() : "N/A") +
+            "\n  Date Regularized: " + (dateRegularized != null ? dateRegularized.toString() : "N/A") +
+            "\n  Date of Birth: " + (dateOfBirth != null ? dateOfBirth.toString() : "N/A") +
+            "\n  Gender: " + (gender != null ? gender : "N/A") +
+            "\n  Civil Status: " + (civilStatus != null ? civilStatus : "N/A") +
+            "\n  Blood Type: " + (bloodType != null ? bloodType : "N/A") +
+            "\n  Educational Attainment Level: " + (educationalAttainmentLevel != null ? educationalAttainmentLevel : "N/A") +
+            "\n}";
     }
 }

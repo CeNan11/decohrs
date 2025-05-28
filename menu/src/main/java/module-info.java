@@ -3,6 +3,7 @@ module deco {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
+    requires java.sql;
 
     opens deco to javafx.fxml;
     opens entity to javafx.fxml;

@@ -23,40 +23,27 @@ public class AuditLog {
         return new ArrayList<>(); // Placeholder
     }
     
-    // Setters and getters
-    public void setAction(String action) {
-        this.action = action;
-    }
-    
-    public void setTargetEmployee(String targetEmployee) {
-        this.targetEmployee = targetEmployee;
-    }
-    
-    public void setPerformedBy(String performedBy) {
-        this.performedBy = performedBy;
-    }
-    
-    public void setDetails(String details) {
-        this.details = details;
-    }
+    // Setters
+    public void setAction(String action) { this.action = action; }
+    public void setTargetEmployee(String targetEmployee) { this.targetEmployee = targetEmployee; }
+    public void setPerformedBy(String performedBy) { this.performedBy = performedBy; }
+    public void setDetails(String details) { this.details = details; }
 
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-    
-    public String getAction() {
-        return action;
-    }
-    
-    public String getTargetEmployee() {
-        return targetEmployee;
-    }
-    
-    public String getPerformedBy() {
-        return performedBy;
-    }
-    
-    public String getDetails() {
-        return details;
+    // Getters
+    public Date getDateCreated() { return dateCreated; }
+    public String getAction() { return action; }
+    public String getTargetEmployee() { return targetEmployee; }
+    public String getPerformedBy() { return performedBy; }
+    public String getDetails() { return details; }
+
+    @Override
+    public String toString() {
+        return "AuditLog {" +
+            "\n  Date Created: " + (dateCreated != null ? dateCreated.toString() : "N/A") +
+            "\n  Action: " + action +
+            "\n  Target Employee: " + targetEmployee +
+            "\n  Performed By: " + performedBy +
+            "\n  Details: " + details +
+            "\n}";
     }
 }
