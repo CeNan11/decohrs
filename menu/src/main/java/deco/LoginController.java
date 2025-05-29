@@ -23,8 +23,25 @@ public class LoginController {
     @FXML PasswordField password;
 
     public void initialize() {
+        if (userService.getUsers().isEmpty()) {
+            System.out.println("No users found, registering users");
+            registerUsers();
+        } else {
+            System.out.println("Users found, not registering users");
+        }
+
         passwordTextField.setVisible(false);
         passwordTextField.textProperty().bindBidirectional(password.textProperty());
+    }
+
+    private void registerUsers() {
+        User user1 = new User("admin", "admin", User.roles.ADMIN);
+        User user2 = new User("evp", "evp", User.roles.EVP);
+        User user3 = new User("guest", "guest", User.roles.GUEST);
+
+        userService.registerUser(user1.getUsername(), user1.getPassword(), user1.getRole());
+        userService.registerUser(user2.getUsername(), user2.getPassword(), user2.getRole());
+        userService.registerUser(user3.getUsername(), user3.getPassword(), user3.getRole());
     }
 
     public LoginController() {

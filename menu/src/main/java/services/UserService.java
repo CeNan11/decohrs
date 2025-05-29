@@ -98,6 +98,25 @@ public class UserService {
         }
     }
     
+    public ArrayList<User> getUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        String sql = "SELECT u.username, u.password_hash, r.role_name " +
+                    "FROM Users u " +
+                    "JOIN UserRoles ur ON u.user_id = ur.user_id " +
+                    "JOIN Roles r ON ur.role_id = r.role_id";
+        
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    users.add(new User(rs.getString("username"), rs.getString("password_hash"), convertToUserRole(rs.getString("role_name"))));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+    
     // Authenticate user and return User object
     public Optional<User> authenticateUser(String username, String password) {
         String sql = "SELECT u.user_id, u.password_hash, r.role_name " +
