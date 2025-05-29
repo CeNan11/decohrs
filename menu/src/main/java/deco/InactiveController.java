@@ -129,6 +129,7 @@ public class InactiveController implements FilterableController {
     // ===== User Management Methods =====
     public void setUser(User user) {
         this.user = user;
+
         if (checkAsGuest()) {
             auditLogsHBox.setVisible(false);
         }

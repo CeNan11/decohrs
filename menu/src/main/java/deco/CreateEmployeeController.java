@@ -326,7 +326,9 @@ public class CreateEmployeeController {
             employee.setFamilyBackground(familyBackground);
             Education education = saveEducation();
             employee.setEducation(education);
-            
+            ArrayList<WorkExperience> workExperiences = saveWorkAllExperience();
+            employee.setWorkExperiences(workExperiences);
+
             // Set status as ACTIVE for new employees
             
             // Save employee to database
@@ -334,17 +336,17 @@ public class CreateEmployeeController {
                 Connection connection = DriverManager.getConnection(localHost, username, pass);
                 // Insert employee into the database
                 EmployeeService employeeService = new EmployeeService(connection);
-                employeeService.insertEmployee(employee);
+                int employeeId = employeeService.insertEmployee(employee);
 
-                Platform.runLater(() -> {
-                    try {
-                        employeeService.insertEducation(employee.getEmployeeId(), employee.getEducation());    
-                        employeeService.insertWorkExperience(employee.getEmployeeId(), employee.getWorkExperiences());
-                    } catch (SQLException e) {
-                        showError("Database Error", "Failed to save employee: " + e.getMessage());
-                    }
-                });
+                // Set the employee ID to the employee object
+                employee.setEmployeeId(employeeId);
 
+                // Insert education into the database
+                employeeService.insertEducation(employee.getEmployeeId(), employee.getEducation());    
+
+                // Insert work experiences into the database
+                employeeService.insertWorkExperience(employee.getEmployeeId(), employee.getWorkExperiences());
+                
                 // Navigate back to active employees list
                 Object controller = App.setRoot("Active");
                 ((ActiveController) controller).setUser(user);

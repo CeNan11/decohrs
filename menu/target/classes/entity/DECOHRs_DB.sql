@@ -143,3 +143,54 @@ CREATE TABLE UserRoles (
 --     FOREIGN KEY (position_id) REFERENCES Positions(position_id),
 --     FOREIGN KEY (approved_by_user_id) REFERENCES Users(user_id)
 -- );
+
+
+-- GETTERS
+
+DELIMITER //
+CREATE PROCEDURE GetEmployeeDetailsByID (IN employee_id_param INT)
+BEGIN
+    SELECT
+        e.employee_id,
+        e.company_employee_id,
+        e.last_name,
+        e.first_name,
+        e.middle_name,
+        e.suffix,
+        e.contact_number_primary,
+        e.current_address,
+        e.home_address,
+        e.date_of_birth,
+        e.place_of_birth,
+        e.gender,
+        e.civil_status,
+        e.blood_type,
+        e.number_of_siblings,
+        e.hire_date,
+        e.regularization_date,
+        e.employment_status,
+        e.profile_picture_path,
+        e.sss_number,
+        e.philhealth_number,
+        e.tin_number,
+        e.pagibig_number,
+        e.father_full_name,
+        e.father_DOB,
+        e.mother_full_name,
+        e.mother_DOB,
+        e.emergency_contact_name,
+        e.emergency_contact_relationship,
+        e.emergency_contact_address,
+        e.emergency_contact_number,
+        d.department_name,
+        p.position_title
+    FROM
+        Employees e
+    LEFT JOIN
+        Departments d ON e.current_department_id = d.department_id
+    LEFT JOIN
+        Positions p ON e.current_position_id = p.position_id
+    WHERE
+        e.employee_id = employee_id_param;
+END //
+DELIMITER ;

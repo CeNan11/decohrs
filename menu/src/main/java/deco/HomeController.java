@@ -40,6 +40,7 @@ public class HomeController {
 
         if (checkAsGuest()) {
             auditLogsHBox.setVisible(false);
+            
         }
     }
 

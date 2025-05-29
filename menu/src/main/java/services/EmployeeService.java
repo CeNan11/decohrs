@@ -23,7 +23,7 @@ public class EmployeeService {
     }
 
     // Insert a new employee with all related data
-    public void insertEmployee(Employee employee) throws SQLException {
+    public int insertEmployee(Employee employee) throws SQLException {
         String sql = "INSERT INTO Employees (" +
             "company_employee_id, last_name, first_name, middle_name, suffix, " + // 1-5
             "contact_number_primary, current_address, home_address, " + // 6-8
@@ -79,6 +79,15 @@ public class EmployeeService {
             if (affectedRows == 0) {
                 throw new SQLException("Creating employee failed, no rows affected.");
             }
+            
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int employeeId = generatedKeys.getInt(1); // Get the first generated key
+                    return employeeId; // Return the generated employeeId
+                } else {
+                    throw new SQLException("Creating employee failed, no ID obtained.");
+                }
+            }
         }
     }
 
@@ -133,18 +142,32 @@ public class EmployeeService {
 
     // Get employee by ID
     public Employee getEmployeeById(int employeeId) throws SQLException {
-        String sql = "SELECT * FROM Employees WHERE employee_id = ?";
+        String sql = "{Call GetEmployeeDetailsByID(?)}";
         
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (CallableStatement pstmt = connection.prepareCall(sql)) {
             pstmt.setInt(1, employeeId);
             
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToEmployee(rs);
+                    Employee employee = mapResultSetToEmployee(rs);
+                    return employee;
                 }
             }
         }
         return null;
+    }
+
+    public ArrayList<Employee> getEmployees() throws SQLException {
+        ArrayList<Employee> employees = new ArrayList<>();
+        String sql = "SELECT * FROM Employees";
+        
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                employees.add(mapResultSetToEmployee(rs));
+            }
+        }
+        return employees;
     }
 
     public Employee getEmployeeByCode(String employeeCode) throws SQLException {
@@ -178,34 +201,69 @@ public class EmployeeService {
     // Map ResultSet to Employee object
     private Employee mapResultSetToEmployee(ResultSet rs) throws SQLException {
         Employee employee = new Employee();
+
+        // Employee ID
         employee.setEmployeeId(rs.getInt("employee_id"));
+
+        // Employee code
         employee.setEmployeeCode(rs.getString("company_employee_id"));
+
+        // Name
         employee.setLastName(rs.getString("last_name"));
         employee.setFirstName(rs.getString("first_name"));
         employee.setMiddleName(rs.getString("middle_name"));
         employee.setSuffix(rs.getString("suffix"));
+
+        // Contact number and address
         employee.setContactNumberPrimary(rs.getString("contact_number_primary"));
-        employee.setEmailAddress(rs.getString("email_address"));
         employee.setCurrentAddress(rs.getString("current_address"));
         employee.setHomeAddress(rs.getString("home_address"));
         employee.setDateOfBirth(rs.getDate("date_of_birth"));
         employee.setPlaceOfBirth(rs.getString("place_of_birth"));
         employee.setGender(rs.getString("gender"));
+
+        // Civil status and blood type
         employee.setCivilStatus(rs.getString("civil_status"));
         employee.setBloodType(rs.getString("blood_type"));
+
+        // Hire date and regularization date
         employee.setHireDate(rs.getDate("hire_date"));
         employee.setRegularizationDate(rs.getDate("regularization_date"));
-        employee.setStatus(EmployeeStatus.valueOf(rs.getString("employment_status")));
+        if (rs.getString("employment_status").equals("Active")) {
+            employee.setStatus(EmployeeStatus.ACTIVE);
+        } else {
+            employee.setStatus(EmployeeStatus.INACTIVE);
+        }
+
+        // SSS, PHIC, TIN, and Pagibig
         employee.setSSSNumber(rs.getString("sss_number"));
         employee.setPHICNumber(rs.getString("philhealth_number"));
         employee.setTIN(rs.getString("tin_number"));
         employee.setHDMFNo(rs.getString("pagibig_number"));
+
+        // Department and Position
         employee.setDepartmentId(rs.getInt("current_department_id"));
         employee.setPositionId(rs.getInt("current_position_id"));
+
+        // Family background
+        FamilyBackground family = new FamilyBackground();
+        family.setFatherName(rs.getString("father_full_name"));
+        family.setFatherDOB(rs.getDate("father_DOB"));
+        family.setMotherName(rs.getString("mother_full_name"));
+        family.setMotherDOB(rs.getDate("mother_DOB"));
+        int siblings = 0;
+        try { siblings = rs.getInt("number_of_siblings"); } catch (Exception ignore) {}
+        family.setNumberOfSiblings(siblings);
+        employee.setFamilyBackground(family);
         
-        // Load related data
-        // loadEmployeeRelatedData(employee);
-        
+        // Emergency contact
+        EmergencyContact emergency = new EmergencyContact();
+        emergency.setName(rs.getString("emergency_contact_name"));
+        emergency.setRelationship(rs.getString("emergency_contact_relationship"));
+        emergency.setAddress(rs.getString("emergency_contact_address"));
+        emergency.setContactNumber(rs.getString("emergency_contact_number"));
+        employee.setEmergencyContact(emergency);
+
         return employee;
     }
 
@@ -293,12 +351,13 @@ public class EmployeeService {
     // Update employee
     public boolean updateEmployee(Employee employee) throws SQLException {
         String sql = "UPDATE Employees SET " +
-            "company_employee_id = ?, last_name = ?, first_name = ?, middle_name = ?, " +
-            "suffix = ?, contact_number_primary = ?, email_address = ?, " +
-            "current_address = ?, home_address = ?, date_of_birth = ?, " +
-            "place_of_birth = ?, gender = ?, civil_status = ?, blood_type = ?, " +
-            "hire_date = ?, regularization_date = ?, employment_status = ?, " +
+            "company_employee_id = ?, last_name = ?, first_name = ?, middle_name = ?, suffix = ?, " +
+            "contact_number_primary = ?, current_address = ?, home_address = ?, " +
+            "date_of_birth = ?, place_of_birth = ?, gender = ?, civil_status = ?, blood_type = ?, " +
+            "number_of_siblings = ?, hire_date = ?, regularization_date = ?, employment_status = ?, " +
             "sss_number = ?, philhealth_number = ?, tin_number = ?, pagibig_number = ?, " +
+            "father_full_name = ?, father_DOB = ?, mother_full_name = ?, mother_DOB = ?, " +
+            "emergency_contact_name = ?, emergency_contact_relationship = ?, emergency_contact_address = ?, emergency_contact_number = ?, " +
             "current_department_id = ?, current_position_id = ? " +
             "WHERE employee_id = ?";
 
@@ -310,7 +369,6 @@ public class EmployeeService {
             pstmt.setString(paramIndex++, employee.getMiddleName() != null ? employee.getMiddleName() : "");
             pstmt.setString(paramIndex++, employee.getSuffix() != null ? employee.getSuffix() : "");
             pstmt.setString(paramIndex++, employee.getContactNumberPrimary() != null ? employee.getContactNumberPrimary() : "");
-            pstmt.setString(paramIndex++, employee.getEmailAddress() != null ? employee.getEmailAddress() : "");
             pstmt.setString(paramIndex++, employee.getCurrentAddress() != null ? employee.getCurrentAddress() : "");
             pstmt.setString(paramIndex++, employee.getHomeAddress() != null ? employee.getHomeAddress() : "");
             pstmt.setDate(paramIndex++, employee.getDateOfBirth() != null ? employee.getDateOfBirth() : null);
@@ -318,28 +376,28 @@ public class EmployeeService {
             pstmt.setString(paramIndex++, employee.getGender() != null ? employee.getGender() : "");
             pstmt.setString(paramIndex++, employee.getCivilStatus() != null ? employee.getCivilStatus() : "");
             pstmt.setString(paramIndex++, employee.getBloodType() != null ? employee.getBloodType() : "");
+            pstmt.setInt(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getNumberOfSiblings() != null) ? employee.getFamilyBackground().getNumberOfSiblings() : 0);
             pstmt.setDate(paramIndex++, employee.getHireDate() != null ? employee.getHireDate() : null);
             pstmt.setDate(paramIndex++, employee.getRegularizationDate() != null ? employee.getRegularizationDate() : null);
-            pstmt.setString(paramIndex++, employee.getStatus().toString());
+            pstmt.setString(paramIndex++, employee.getStatus() != null ? employee.getStatus().toString() : "ACTIVE");
             pstmt.setString(paramIndex++, employee.getSSSNumber() != null ? employee.getSSSNumber() : "");
             pstmt.setString(paramIndex++, employee.getPHICNumber() != null ? employee.getPHICNumber() : "");
             pstmt.setString(paramIndex++, employee.getTIN() != null ? employee.getTIN() : "");
             pstmt.setString(paramIndex++, employee.getHDMFNo() != null ? employee.getHDMFNo() : "");
+            // Family background
+            pstmt.setString(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getFatherName() != null) ? employee.getFamilyBackground().getFatherName() : "");
+            pstmt.setDate(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getFatherDOB() != null) ? employee.getFamilyBackground().getFatherDOB() : null);
+            pstmt.setString(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getMotherName() != null) ? employee.getFamilyBackground().getMotherName() : "");
+            pstmt.setDate(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getMotherDOB() != null) ? employee.getFamilyBackground().getMotherDOB() : null);
+            // Emergency contact
+            pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getName() != null) ? employee.getEmergencyContact().getName() : "");
+            pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getRelationship() != null) ? employee.getEmergencyContact().getRelationship() : "");
+            pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getAddress() != null) ? employee.getEmergencyContact().getAddress() : "");
+            pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getContactNumber() != null) ? employee.getEmergencyContact().getContactNumber() : "");
+            // Department and Position
             pstmt.setInt(paramIndex++, employee.getDepartmentId() != null ? employee.getDepartmentId() : 0);
             pstmt.setInt(paramIndex++, employee.getPositionId() != null ? employee.getPositionId() : 0);
-            pstmt.setInt(paramIndex++, employee.getEmployeeId() != 0 ? employee.getEmployeeId() : 0);
-
-            // Family background
-            pstmt.setString(paramIndex++, employee.getFamilyBackground().getFatherName() != null ? employee.getFamilyBackground().getFatherName() : "");
-            pstmt.setDate(paramIndex++, employee.getFamilyBackground().getFatherDOB() != null ? employee.getFamilyBackground().getFatherDOB() : null);
-            pstmt.setString(paramIndex++, employee.getFamilyBackground().getMotherName() != null ? employee.getFamilyBackground().getMotherName() : "");
-            pstmt.setDate(paramIndex++, employee.getFamilyBackground().getMotherDOB() != null ? employee.getFamilyBackground().getMotherDOB() : null);
-
-            // Emergency contact
-            pstmt.setString(paramIndex++, employee.getEmergencyContact().getName() != null ? employee.getEmergencyContact().getName() : "");
-            pstmt.setString(paramIndex++, employee.getEmergencyContact().getRelationship() != null ? employee.getEmergencyContact().getRelationship() : "");
-            pstmt.setString(paramIndex++, employee.getEmergencyContact().getAddress() != null ? employee.getEmergencyContact().getAddress() : "");
-            pstmt.setString(paramIndex++, employee.getEmergencyContact().getContactNumber() != null ? employee.getEmergencyContact().getContactNumber() : "");
+            pstmt.setInt(paramIndex++, employee.getEmployeeId() != null ? employee.getEmployeeId() : 0);
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;

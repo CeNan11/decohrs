@@ -1,6 +1,9 @@
 package deco;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entity.Employee;
@@ -18,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import services.ClockService;
+import services.EmployeeService;
 import services.FilterData;
     
 public class ActiveController implements FilterableController {
@@ -108,11 +112,13 @@ public class ActiveController implements FilterableController {
                 Node card = loader.load();
                 ProfileCardController controller = loader.getController();
                 Employee employee = employees.get(i);
+
                 controller.initData(
                     employee.getStatus(),
                     employee.getFirstName() + " " + employee.getLastName(),
                     employee.getPositionId().toString()
                 );
+
                 controller.setUser(user);
                 controller.setEmployee(employee);
                 flowPane.getChildren().add(card);
@@ -146,6 +152,7 @@ public class ActiveController implements FilterableController {
     // ===== User Management Methods =====
     public void setUser(User user) {
         this.user = user;
+
         if (checkAsGuest()) {
             auditLogsHBox.setVisible(false);
         }
@@ -255,39 +262,55 @@ public class ActiveController implements FilterableController {
 
         // ===== Employee sample =====
 
-    @SuppressWarnings("unused")
-    private void initializeEmployees() {
-        employees = new ArrayList<>();
-        // TODO: Replace this with actual database data
-        for (int i = 1; i <= 10; i++) {
-            Employee emp = createSampleEmployee(i);
-            employees.add(emp);
-        }
-    }
+    // @SuppressWarnings("unused")
+    // private void initializeEmployees() {
+    //     employees = new ArrayList<>();
+    //     // TODO: Replace this with actual database data
+    //     for (int i = 1; i <= 10; i++) {
+    //         Employee emp = createSampleEmployee(i);
+    //         employees.add(emp);
+    //     }
+    // }
 
-    private Employee createSampleEmployee(int index) {
-        Employee emp = new Employee();
-        emp.setEmployeeCode("EMP" + String.format("%03d", index));
-        emp.setFirstName("First" + index);
-        emp.setLastName("Last" + index);
-        emp.setPositionId(index);
-        emp.setDepartmentId(index);
-        emp.setMiddleName("Middle" + index);
-        emp.setCurrentAddress("Current Address " + index);
-        emp.setHomeAddress("Home Address " + index);
-        emp.setContactNumberPrimary("09123456789");
-        emp.setPlaceOfBirth("Place of Birth " + index);
-        emp.setGender("Male");
-        emp.setCivilStatus("Single");
-        emp.setBloodType("O+");
-        emp.setSSSNumber("SSS-" + index);
-        emp.setPHICNumber("PHIC-" + index);
-        emp.setTIN("TIN-" + index);
-        emp.setHDMFNo("HDMF-" + index);
-        emp.setDateOfBirth(java.sql.Date.valueOf("2000-01-01"));
-        emp.setHireDate(java.sql.Date.valueOf("2023-01-01"));
-        emp.setRegularizationDate(java.sql.Date.valueOf("2023-07-01"));
-        emp.setStatus(EmployeeStatus.ACTIVE);
-        return emp;
+    // private Employee createSampleEmployee(int index) {
+    //     Employee emp = new Employee();
+    //     emp.setEmployeeCode("EMP" + String.format("%03d", index));
+    //     emp.setFirstName("First" + index);
+    //     emp.setLastName("Last" + index);
+    //     emp.setPositionId(index);
+    //     emp.setDepartmentId(index);
+    //     emp.setMiddleName("Middle" + index);
+    //     emp.setCurrentAddress("Current Address " + index);
+    //     emp.setHomeAddress("Home Address " + index);
+    //     emp.setContactNumberPrimary("09123456789");
+    //     emp.setPlaceOfBirth("Place of Birth " + index);
+    //     emp.setGender("Male");
+    //     emp.setCivilStatus("Single");
+    //     emp.setBloodType("O+");
+    //     emp.setSSSNumber("SSS-" + index);
+    //     emp.setPHICNumber("PHIC-" + index);
+    //     emp.setTIN("TIN-" + index);
+    //     emp.setHDMFNo("HDMF-" + index);
+    //     emp.setDateOfBirth(java.sql.Date.valueOf("2000-01-01"));
+    //     emp.setHireDate(java.sql.Date.valueOf("2023-01-01"));
+    //     emp.setRegularizationDate(java.sql.Date.valueOf("2023-07-01"));
+    //     emp.setStatus(EmployeeStatus.ACTIVE);
+    //     return emp;
+    // }
+
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/DECOHRS_DB";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    private Connection connection;
+
+    private void initializeEmployees() {
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            EmployeeService employeeService = new EmployeeService(connection);
+            employees = employeeService.getEmployees();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
