@@ -170,8 +170,8 @@ public class CreateEmployeeController {
         departments.add(new Department(1, "HR"));
         departments.add(new Department(2, "IT"));
         departments.add(new Department(3, "Finance"));
-        departments.add(new Department(4, "Marketing"));
-        departments.add(new Department(5, "Sales"));
+        departments.add(new Department(4, "Department 4"));
+        departments.add(new Department(5, "Department 5"));
 
         return departments; 
     }
