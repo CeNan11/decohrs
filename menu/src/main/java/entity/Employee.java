@@ -3,7 +3,6 @@ package entity;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Employee {
     // Primary Key
@@ -53,7 +52,7 @@ public class Employee {
     private FamilyBackground familyBackground;
     private Education education;
     private BirthCertificate birthCertificate;
-    private List<Child> children;
+    private ArrayList<Child> children;
 
     // Work Experience
     private ArrayList<WorkExperience> workExperiences;
@@ -62,6 +61,7 @@ public class Employee {
         this.children = new ArrayList<>();
         this.nationality = "Filipino";
         this.status = EmployeeStatus.ACTIVE;
+        this.workExperiences = new ArrayList<>();
     }
 
     // Getters
@@ -96,7 +96,7 @@ public class Employee {
     public FamilyBackground getFamilyBackground() { return familyBackground; }
     public Education getEducation() { return education; }
     public BirthCertificate getBirthCertificate() { return birthCertificate; }
-    public List<Child> getChildren() { return children; }
+    public ArrayList<Child> getChildren() { return children; }
     public ArrayList<WorkExperience> getWorkExperiences() { return workExperiences; }
     // Setters
     public void setEmployeeId(Integer employeeId) { this.employeeId = employeeId; }
@@ -130,7 +130,7 @@ public class Employee {
     public void setFamilyBackground(FamilyBackground familyBackground) { this.familyBackground = familyBackground; }
     public void setEducation(Education education) { this.education = education; }
     public void setBirthCertificate(BirthCertificate birthCertificate) { this.birthCertificate = birthCertificate; }
-    public void setChildren(List<Child> children) { this.children = children; }
+    public void setChildren(ArrayList<Child> children) { this.children = children; }
     public void addChild(Child child) { this.children.add(child); }
     public void setWorkExperiences(ArrayList<WorkExperience> workExperiences) { this.workExperiences = workExperiences; }
     public void addWorkExperience(WorkExperience workExperience) { this.workExperiences.add(workExperience); }
@@ -163,6 +163,7 @@ public class Employee {
                 ", emergencyContact=" + emergencyContact +
                 ", familyBackground=" + familyBackground +
                 ", education=" + education +
+                ", workExperiences=" + workExperiences +
                 ", birthCertificate=" + birthCertificate +
                 ", children=" + children +
                 '}';

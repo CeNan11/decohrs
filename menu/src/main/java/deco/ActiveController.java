@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entity.Employee;
-import entity.EmployeeStatus;
 import entity.User;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;

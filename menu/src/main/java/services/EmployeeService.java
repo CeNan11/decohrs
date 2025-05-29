@@ -91,6 +91,53 @@ public class EmployeeService {
         }
     }
 
+    public void insertChildren(int employeeId, ArrayList<Child> children) throws SQLException {
+        String sql = "INSERT INTO Children (" +
+            "employee_id, name, date_of_birth, place_of_birth, gender) " +
+            "VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            for (Child child : children) {
+                pstmt.setInt(1, employeeId);
+                pstmt.setString(2, child.getName());
+                pstmt.setDate(3, child.getDateOfBirth());
+                pstmt.setString(4, child.getPlaceOfBirth());
+                pstmt.setString(5, child.getGender());
+
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Child getChildById(int childId) throws SQLException {
+        String sql = "SELECT * FROM Children WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, childId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Child child = new Child();
+                    child.setChildId(rs.getInt("child_id"));
+                    child.setEmployeeId(rs.getInt("employee_id"));
+                    child.setName(rs.getString("name"));
+                    child.setDateOfBirth(rs.getDate("date_of_birth"));
+                    child.setPlaceOfBirth(rs.getString("place_of_birth"));
+                    child.setGender(rs.getString("gender"));
+
+                    return child;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
     public void insertEducation(int employeeId, Education education) throws SQLException {
         String sql = "INSERT INTO EducationalBackground (" +
             "employee_id, primary_school, primary_year_graduated, tertiary_school, tertiary_year_graduated, " +
@@ -184,8 +231,8 @@ public class EmployeeService {
     }
 
     // Get all employees
-    public List<Employee> getAllEmployees() throws SQLException {
-        List<Employee> employees = new ArrayList<>();
+    public ArrayList<Employee> getAllEmployees() throws SQLException {
+        ArrayList<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM Employees";
         
         try (Statement stmt = connection.createStatement();
@@ -196,6 +243,31 @@ public class EmployeeService {
             }
         }
         return employees;
+    }
+
+    public int getEmployeeCount() throws SQLException {
+        String sql = "SELECT COUNT(*) AS employee_count FROM Employees"; // Important: Alias the count
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {  // Move the cursor to the first (and only) row
+                return rs.getInt("employee_count"); // Use the alias to retrieve the count
+            } else {
+                return 0; // Handle the case where the table is empty (though it shouldn't happen)
+            }
+        }
+    }
+    
+    public int getEmployeeCountByStatus(String status) throws SQLException {
+        String sql = "SELECT COUNT(*) as employee_count FROM Employees WHERE employment_status = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, status);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("employee_count");
+            } else {
+                return 0;
+            }
+        } 
     }
 
     // Map ResultSet to Employee object
@@ -253,8 +325,14 @@ public class EmployeeService {
         family.setMotherDOB(rs.getDate("mother_DOB"));
         int siblings = 0;
         try { siblings = rs.getInt("number_of_siblings"); } catch (Exception ignore) {}
+        Dependent dependent = getEmployeeDependents(employee.getEmployeeId());
         family.setNumberOfSiblings(siblings);
+        family.setSpouseName(dependent.getFullName());
+        family.setSpouseBirthDate(dependent.getDateOfBirth());
+        family.setSpouseAddress(dependent.getAddress());
+        
         employee.setFamilyBackground(family);
+
         
         // Emergency contact
         EmergencyContact emergency = new EmergencyContact();
@@ -263,6 +341,14 @@ public class EmployeeService {
         emergency.setAddress(rs.getString("emergency_contact_address"));
         emergency.setContactNumber(rs.getString("emergency_contact_number"));
         employee.setEmergencyContact(emergency);
+
+        employee.setEducation(getEmployeeEducation(employee.getEmployeeId()));
+
+        for (WorkExperience experience : getEmployeeWorkExperience(employee.getEmployeeId())) {
+            if (experience != null) {
+                employee.addWorkExperience(experience);
+            }
+        }
 
         return employee;
     }
@@ -416,8 +502,8 @@ public class EmployeeService {
     }
 
     // Search employees by name
-    public List<Employee> searchEmployeesByName(String searchTerm) throws SQLException {
-        List<Employee> employees = new ArrayList<>();
+    public ArrayList<Employee> searchEmployeesByName(String searchTerm) throws SQLException {
+        ArrayList<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM Employees WHERE " +
             "first_name LIKE ? OR last_name LIKE ? OR middle_name LIKE ?";
         
@@ -437,8 +523,8 @@ public class EmployeeService {
     }
 
     // Get employees by department
-    public List<Employee> getEmployeesByDepartment(int departmentId) throws SQLException {
-        List<Employee> employees = new ArrayList<>();
+    public ArrayList<Employee> getEmployeesByDepartment(int departmentId) throws SQLException {
+        ArrayList<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM Employees WHERE current_department_id = ?";
         
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -454,8 +540,8 @@ public class EmployeeService {
     }
 
     // Get employees by position
-    public List<Employee> getEmployeesByPosition(int positionId) throws SQLException {
-        List<Employee> employees = new ArrayList<>();
+    public ArrayList<Employee> getEmployeesByPosition(int positionId) throws SQLException {
+        ArrayList<Employee> employees = new ArrayList<>();
         String sql = "SELECT * FROM Employees WHERE current_position_id = ?";
         
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -468,5 +554,130 @@ public class EmployeeService {
             }
         }
         return employees;
+    }
+
+    public ArrayList<Employee> getEmployeesByStatus(String status) throws SQLException {
+        ArrayList<Employee> employees = new ArrayList<>();
+        String sql = "SELECT * FROM Employees WHERE employment_status = ?";
+        
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, status);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    employees.add(mapResultSetToEmployee(rs));
+                }
+            }
+        }
+        return employees;
+    }
+
+    public Education getEmployeeEducation(int employeeId) throws SQLException {
+        Education education = new Education();
+        String sql = "SELECT * FROM EducationalBackground WHERE employee_id = ?";
+        
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, employeeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+
+                    education.setEducationId(rs.getInt("education_id"));
+                    education.setEmployeeId(rs.getInt("employee_id"));
+                    education.setPrimarySchool(rs.getString("primary_school"));
+                    education.setPrimaryYearGraduated(rs.getDate("primary_year_graduated"));
+                    education.setTertiarySchool(rs.getString("tertiary_school"));
+                    education.setTertiaryYearGraduated(rs.getDate("tertiary_year_graduated"));
+                    education.setCollegeSchool(rs.getString("college_school"));
+                    education.setCollegeYearGraduated(rs.getDate("college_year_graduated"));
+                    education.setVocationalSchool(rs.getString("vocational_school"));
+                    education.setVocationalYearGraduated(rs.getDate("vocational_year_graduated"));
+                    education.setCertificateLicenseName(rs.getString("certificate_license_name"));
+                    education.setDateIssued(rs.getDate("date_issued"));
+                    education.setValidUntil(rs.getDate("valid_until"));
+                }
+            }
+        }
+        return education;
+    }
+
+    public ArrayList<WorkExperience> getEmployeeWorkExperience(int employeeId) throws SQLException {
+        ArrayList<WorkExperience> workExperiences = new ArrayList<>();
+        String sql = "SELECT * FROM WorkExperience WHERE employee_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, employeeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    WorkExperience experience = new WorkExperience();
+                    experience.setWorkExperienceId(rs.getInt("work_experience_id"));
+                    experience.setEmployeeId(rs.getInt("employee_id"));
+                    experience.setCompanyName(rs.getString("company_name"));
+                    experience.setPositionHeld(rs.getString("position_held"));
+                    experience.setDuration(rs.getString("duration"));
+                    experience.setRemarks(rs.getString("remarks"));
+
+                    workExperiences.add(experience);
+                }
+            }
+        }
+        return workExperiences;
+    }
+
+    public Dependent getEmployeeDependents(int employeeId) throws SQLException {
+        Dependent dependent = new Dependent();
+        String sql = "SELECT * FROM Dependents WHERE employee_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, employeeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    dependent.setDependentId(rs.getInt("dependent_id"));
+                    dependent.setEmployeeId(rs.getInt("employee_id"));
+                    dependent.setFullName(rs.getString("full_name"));
+                    dependent.setDateOfBirth(rs.getDate("date_of_birth"));
+                    dependent.setAddress(rs.getString("address"));
+                }
+            }
+        }
+        return dependent;
+    }
+
+    public Child getEmployeeChildren(int employeeId) throws SQLException {
+        Child child = new Child();
+        String sql = "SELECT * FROM Children WHERE employee_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, employeeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    child.setChildId(rs.getInt("child_id"));
+                    child.setEmployeeId(rs.getInt("employee_id"));
+                    child.setName(rs.getString("name"));
+                    child.setDateOfBirth(rs.getDate("date_of_birth"));
+                    child.setPlaceOfBirth(rs.getString("place_of_birth"));
+                    child.setGender(rs.getString("gender"));
+                }
+            }
+        }
+        return child;
+    }
+
+    public void insertChild(Child child) throws SQLException {
+        String sql = "INSERT INTO Children (employee_id, name, date_of_birth, place_of_birth, gender)" + 
+        " VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, child.getEmployeeId());
+            pstmt.setString(2, child.getName());
+            pstmt.setDate(3, child.getDateOfBirth() != null ? child.getDateOfBirth() : null);
+            pstmt.setString(4, child.getPlaceOfBirth());
+            pstmt.setString(5, child.getGender());
+
+            pstmt.executeUpdate();
+        }
     }
 } 

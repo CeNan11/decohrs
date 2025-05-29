@@ -196,7 +196,7 @@
                                  </children>
                               </VBox>
                               <Pane VBox.vgrow="ALWAYS" />
-                              <Label stylesheets="@deco.css" text="COUNT" VBox.vgrow="ALWAYS">
+                              <Label fx:id="headCount" stylesheets="@deco.css" text="COUNT" VBox.vgrow="ALWAYS">
                                  <styleClass>
                                     <String fx:value="deco-font" />
                                     <String fx:value="deco-font-bold" />
@@ -223,7 +223,7 @@
                                        </children>
                                     </VBox>
                                     <Pane VBox.vgrow="ALWAYS" />
-                                    <Label stylesheets="@deco.css" text="COUNT" VBox.vgrow="ALWAYS">
+                                    <Label fx:id="headCountActive" stylesheets="@deco.css" text="COUNT" VBox.vgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="deco-font-bold" />
@@ -247,7 +247,7 @@
                                        </children>
                                     </VBox>
                                     <Pane VBox.vgrow="ALWAYS" />
-                                    <Label stylesheets="@deco.css" text="COUNT" VBox.vgrow="ALWAYS">
+                                    <Label fx:id="headCountInactive" stylesheets="@deco.css" text="COUNT" VBox.vgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="deco-font" />
                                           <String fx:value="deco-font-bold" />

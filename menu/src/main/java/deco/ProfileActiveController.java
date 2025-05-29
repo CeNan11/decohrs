@@ -4,8 +4,14 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
+import entity.Child;
 import entity.Employee;
 import entity.User;
 
@@ -84,6 +90,10 @@ public class ProfileActiveController {
     private User user;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
 
+    private static String localHost = "jdbc:mysql://localhost:3306/DECOHRS_DB";
+    private static String username = "root";
+    private static String pass = "";
+
     @FXML
     private void initialize() {
         Platform.runLater(() -> {
@@ -129,6 +139,20 @@ public class ProfileActiveController {
         
         contactNumber.setText(employee.getContactNumberPrimary());
         placeOfBirth.setText(employee.getPlaceOfBirth());
+
+        if (employee.getEmergencyContact() != null) {
+            emergencyContactName.setText(employee.getEmergencyContact().getName());
+        }
+        if (employee.getEmergencyContact().getContactNumber() != null) {
+            emergencyContactNumber.setText(employee.getEmergencyContact().getContactNumber());
+        }
+        if (employee.getEmergencyContact().getRelationship() != null) {
+            emergencyContactRelationship.setText(employee.getEmergencyContact().getRelationship());
+        }
+        if (employee.getEmergencyContact().getAddress() != null) {
+            emergencyContactAddress.setText(employee.getEmergencyContact().getAddress());
+        }
+        
         
         if (employee.getDateOfBirth() != null) {
             dateOfBirth.setText(dateFormat.format(employee.getDateOfBirth()));
@@ -180,45 +204,73 @@ public class ProfileActiveController {
         if (employee.getFamilyBackground().getSpouseBirthDate() != null) {
             spouseBirthDate.setText(dateFormat.format(employee.getFamilyBackground().getSpouseBirthDate()));
         }
+        if (employee.getEducation() != null) {
+            if (employee.getEducation().getPrimarySchool() != null) {
+                primarySchool.setText(employee.getEducation().getPrimarySchool());
+            }
+            if (employee.getEducation().getPrimaryYearGraduated() != null) {
+                primaryYearGraduated.setText(dateFormat.format(employee.getEducation().getPrimaryYearGraduated()));
+            }
+            if (employee.getEducation().getTertiarySchool() != null) {
+                tertiarySchool.setText(employee.getEducation().getTertiarySchool());
+            }
+            if (employee.getEducation().getTertiaryYearGraduated() != null) {
+                tertiaryYearGraduated.setText(dateFormat.format(employee.getEducation().getTertiaryYearGraduated()));
+            }
+            if (employee.getEducation().getCollegeSchool() != null) {
+                collegeSchool.setText(employee.getEducation().getCollegeSchool());
+            }
+            if (employee.getEducation().getCollegeYearGraduated() != null) {
+                collegeYearGraduated.setText(dateFormat.format(employee.getEducation().getCollegeYearGraduated()));
+            }
+            if (employee.getEducation().getVocationalSchool() != null) {
+                vocationalSchool.setText(employee.getEducation().getVocationalSchool());
+            }
+            if (employee.getEducation().getVocationalYearGraduated() != null) {
+                vocationalYearGraduated.setText(dateFormat.format(employee.getEducation().getVocationalYearGraduated()));
+            }
+            if (employee.getEducation().getPostGraduateSchool() != null) {
+                postGraduateSchool.setText(employee.getEducation().getPostGraduateSchool());
+            }
+            if (employee.getEducation().getPostGraduateYearGraduated() != null) {
+                postGraduateYearGraduated.setText(dateFormat.format(employee.getEducation().getPostGraduateYearGraduated()));
+            }
+            if (employee.getEducation().getCertificateLicenseName() != null) {
+                certificateLicenseName.setText(employee.getEducation().getCertificateLicenseName());
+            }
+            if (employee.getEducation().getDateIssued() != null) {
+                dateIssued.setText(dateFormat.format(employee.getEducation().getDateIssued()));
+            }
+            if (employee.getEducation().getValidUntil() != null) {
+                validUntil.setText(dateFormat.format(employee.getEducation().getValidUntil()));
+            }
+        }
+        if (employee.getWorkExperiences().size() > 0) {
+            experienceCompany1.setText(employee.getWorkExperiences().get(0).getCompanyName());
+            experiencePosition1.setText(employee.getWorkExperiences().get(0).getPositionHeld());
+            experienceDuration1.setText(employee.getWorkExperiences().get(0).getDuration());
+            experienceRemarks1.setText(employee.getWorkExperiences().get(0).getRemarks());
+        }
+        if (employee.getWorkExperiences().size() > 1) {
+            experienceCompany2.setText(employee.getWorkExperiences().get(1).getCompanyName());
+            experiencePosition2.setText(employee.getWorkExperiences().get(1).getPositionHeld());
+            experienceDuration2.setText(employee.getWorkExperiences().get(1).getDuration());
+            experienceRemarks2.setText(employee.getWorkExperiences().get(1).getRemarks());
+        }
+        if (employee.getWorkExperiences().size() > 2) {
+            experienceCompany3.setText(employee.getWorkExperiences().get(2).getCompanyName());
+            experiencePosition3.setText(employee.getWorkExperiences().get(2).getPositionHeld());
+            experienceDuration3.setText(employee.getWorkExperiences().get(2).getDuration());
+            experienceRemarks3.setText(employee.getWorkExperiences().get(2).getRemarks());
+        }
 
-        if (employee.getEducation().getPrimarySchool() != null) {
-            primarySchool.setText(employee.getEducation().getPrimarySchool());
+        ArrayList<Child> children = new ArrayList<>();
+        if (employee.getChildren() != null) {
+            for (Child child : employee.getChildren()) {
+                children.add(child);
+            }
         }
-        if (employee.getEducation().getPrimaryYearGraduated() != null) {
-            primaryYearGraduated.setText(dateFormat.format(employee.getEducation().getPrimaryYearGraduated()));
-        }
-        if (employee.getEducation().getTertiarySchool() != null) {
-            tertiarySchool.setText(employee.getEducation().getTertiarySchool());
-        }
-        tertiaryYearGraduated.setText(dateFormat.format(employee.getEducation().getTertiaryYearGraduated() != null ? employee.getEducation().getTertiaryYearGraduated() : ""));
-        if (employee.getEducation().getCollegeSchool() != null) {
-            collegeSchool.setText(employee.getEducation().getCollegeSchool());
-        }
-        collegeYearGraduated.setText(dateFormat.format(employee.getEducation().getCollegeYearGraduated() != null ? employee.getEducation().getCollegeYearGraduated() : ""));
-        if (employee.getEducation().getVocationalSchool() != null) {
-            vocationalSchool.setText(employee.getEducation().getVocationalSchool());
-        }
-        if (employee.getEducation().getVocationalYearGraduated() != null) {
-            vocationalYearGraduated.setText(dateFormat.format(employee.getEducation().getVocationalYearGraduated()));
-        }
-        if (employee.getEducation().getPostGraduateSchool() != null) {
-            postGraduateSchool.setText(employee.getEducation().getPostGraduateSchool());
-        }
-        if (employee.getEducation().getPostGraduateYearGraduated() != null) {
-            postGraduateYearGraduated.setText(dateFormat.format(employee.getEducation().getPostGraduateYearGraduated()));
-        }
-        if (employee.getEducation().getCertificateLicenseName() != null) {
-            certificateLicenseName.setText(employee.getEducation().getCertificateLicenseName());
-        }
-        if (employee.getEducation().getDateIssued() != null) {
-            dateIssued.setText(dateFormat.format(employee.getEducation().getDateIssued()));
-        }
-        if (employee.getEducation().getValidUntil() != null) {
-            validUntil.setText(dateFormat.format(employee.getEducation().getValidUntil()));
-        }
-
     }
-
     public Employee getEmployee() {
         return employee;
     }

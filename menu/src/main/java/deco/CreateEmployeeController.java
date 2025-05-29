@@ -19,6 +19,10 @@ import entity.Department;
 import entity.Education;
 import entity.EmergencyContact;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -28,6 +32,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.EmployeeService;
 import services.EntityService;
+import tables.ChildTableItem;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -97,7 +102,7 @@ public class CreateEmployeeController {
 
     // Children
     @FXML private VBox childrenContainer;
-    private List<Child> children = new ArrayList<>();
+    private ArrayList<Child> children = new ArrayList<>();
 
     @FXML private TextField experienceDuration1;
     @FXML private TextField experienceDuration2;
@@ -111,7 +116,6 @@ public class CreateEmployeeController {
     @FXML private TextField experienceRemarks1;
     @FXML private TextField experienceRemarks2;
     @FXML private TextField experienceRemarks3;
-    private ArrayList<WorkExperience> workExperiences;
 
     private User user;
     private ArrayList<Employee> employees;
@@ -158,13 +162,71 @@ public class CreateEmployeeController {
         position.getItems().addAll(positions.stream().map(Position::getPositionTitle).toArray(String[]::new));
         department.getItems().addAll(departments.stream().map(Department::getDepartmentName).toArray(String[]::new));
         
-        
+        initializeChildrenTable();
+
+        childGender.getItems().addAll("Male", "Female");
+
         // Initialize employees list if null
         if (employees == null) {
             employees = new ArrayList<>();
         }
     }
 
+    ObservableList<Child> childrenList = FXCollections.observableArrayList();
+    @FXML private TableView<Child> childrenTableView;
+    @FXML private TableColumn<Child, String> nameColumn;
+    @FXML private TableColumn<Child, String> dateOfBirthColumn;
+    @FXML private TableColumn<Child, String> placeOfBirthColumn;
+    @FXML private TableColumn<Child, String> genderColumn;
+    @FXML private TextField childName;
+    @FXML private DatePicker childDateOfBirth;
+    @FXML private TextField childPlaceOfBirth;
+    @FXML private ComboBox<String> childGender;
+
+    @FXML
+    private void initializeChildrenTable() {
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        dateOfBirthColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateOfBirth().toString()));
+        placeOfBirthColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPlaceOfBirth()));
+        genderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGender()));
+
+        childrenTableView.setItems(childrenList);
+    }
+
+    @FXML
+    private void addChild() {
+        String name = childName.getText().trim();
+        Date dateOfBirth = childDateOfBirth.getValue() != null ? Date.valueOf(childDateOfBirth.getValue()) : null;
+        String placeOfBirth = childPlaceOfBirth.getText().trim();
+        String gender = childGender.getValue();
+
+        if (name != null && dateOfBirth != null && placeOfBirth != null && gender != null) {
+            Child child = new Child();
+            child.setName(name);
+            child.setDateOfBirth(dateOfBirth);
+            child.setPlaceOfBirth(placeOfBirth);
+            child.setGender(gender);
+            childrenList.add(child);
+            childName.clear();
+            childDateOfBirth.setValue(null);
+            childPlaceOfBirth.clear();
+            childGender.setValue(null);
+
+            children.add(child);
+        } else {
+            showError("Error", "Please fill in all fields");
+        }
+    }
+
+    @FXML
+    private void removeChild() {
+        Child selectedChild = childrenTableView.getSelectionModel().getSelectedItem();
+        if (selectedChild != null) {
+            childrenList.remove(selectedChild);
+            children.remove(selectedChild);
+        }
+    }
+    
     public ArrayList<Department> createDepartments() {
         departments = new ArrayList<>();
         departments.add(new Department(1, "HR"));
@@ -217,27 +279,6 @@ public class CreateEmployeeController {
                 showError("Error uploading file", "Could not read the selected file.");
             }
         }
-    }
-
-    @FXML
-    private void handleAddChild() {
-        // Create a new child entry form
-        HBox childEntry = new HBox(10);
-        TextField childName = new TextField();
-        childName.setPromptText("Child's Name");
-        DatePicker childBirthDate = new DatePicker();
-        childBirthDate.setPromptText("Birth Date");
-        TextField childBirthPlace = new TextField();
-        childBirthPlace.setPromptText("Birth Place");
-        ComboBox<String> childGender = new ComboBox<>();
-        childGender.getItems().addAll("Male", "Female", "Other");
-        childGender.setPromptText("Gender");
-        Button removeButton = new Button("Remove");
-
-        childEntry.getChildren().addAll(childName, childBirthDate, childBirthPlace, childGender, removeButton);
-        childrenContainer.getChildren().add(childEntry);
-
-        removeButton.setOnAction(e -> childrenContainer.getChildren().remove(childEntry));
     }
 
     private Employee saveEmployee() {
@@ -366,6 +407,7 @@ public class CreateEmployeeController {
             employee.setEducation(education);
             ArrayList<WorkExperience> workExperiences = saveWorkAllExperience();
             employee.setWorkExperiences(workExperiences);
+            employee.setChildren(children);
 
             // Set status as ACTIVE for new employees
             
@@ -384,6 +426,9 @@ public class CreateEmployeeController {
 
                 // Insert work experiences into the database
                 employeeService.insertWorkExperience(employee.getEmployeeId(), employee.getWorkExperiences());
+
+                // Insert children into the database
+                employeeService.insertChildren(employee.getEmployeeId(), employee.getChildren());
                 
                 // Navigate back to active employees list
                 Object controller = App.setRoot("Active");

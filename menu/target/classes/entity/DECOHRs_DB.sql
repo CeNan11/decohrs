@@ -56,12 +56,9 @@ CREATE TABLE Employees (
 CREATE TABLE Dependents (
     dependent_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT NOT NULL,
-    relationship_type ENUM('Spouse', 'Partner', 'Child') NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     date_of_birth DATE,
-    place_of_birth VARCHAR(255),
     address TEXT,
-    gender ENUM('Male', 'Female', 'Other'),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE CASCADE
@@ -80,7 +77,6 @@ CREATE TABLE EducationalBackground (
     certificate_license_name VARCHAR(255) NULL,
     date_issued DATE NULL,
     valid_until DATE NULL,
-    remarks TEXT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE CASCADE
@@ -99,6 +95,17 @@ CREATE TABLE WorkExperience (
     FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE CASCADE
 );
 
+    CREATE TABLE Children (
+        child_id INT AUTO_INCREMENT PRIMARY KEY,
+        employee_id INT NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        date_of_birth DATE,
+        place_of_birth VARCHAR(255),
+        gender ENUM('Male', 'Female', 'Other'),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE CASCADE
+    );
 
 -- USERS (Admin, Employee, EVP)
 CREATE TABLE Users (

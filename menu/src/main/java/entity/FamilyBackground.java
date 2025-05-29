@@ -41,6 +41,8 @@ public class FamilyBackground {
                 ", motherName='" + motherName + '\'' +
                 ", numberOfSiblings=" + numberOfSiblings +
                 ", spouseName='" + spouseName + '\'' +
+                ", spouseAddress='" + spouseAddress + '\'' +
+                ", spouseBirthDate=" + spouseBirthDate +
                 '}';
     }
 }
