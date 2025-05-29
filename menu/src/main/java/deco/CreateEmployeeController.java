@@ -125,19 +125,28 @@ public class CreateEmployeeController {
 
     @FXML
     private void initialize() {
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EntityService entityService = new EntityService(connection);
+            if (entityService.getDepartments().isEmpty()) {
+                departments = createDepartments();
+            } else {
+                departments = entityService.getDepartments();
+            }
+
+            if (entityService.getPositions().isEmpty()) {
+                positions = createPositions();
+            } else {
+                positions = entityService.getPositions();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         // Initialize ComboBoxes
         gender.getItems().addAll("Male", "Female", "Other");
         civilStatus.getItems().addAll("Single", "Married", "Widowed", "Separated", "Divorced");
         bloodType.getItems().addAll("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
-
-        try {
-            Connection connection = DriverManager.getConnection(localHost, username, pass);
-            EntityService entityService = new EntityService(connection);
-            departments = entityService.getDepartments();
-            positions = entityService.getPositions();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
         position.getItems().addAll(positions.stream().map(Position::getPositionTitle).toArray(String[]::new));
         department.getItems().addAll(departments.stream().map(Department::getDepartmentName).toArray(String[]::new));
@@ -147,6 +156,28 @@ public class CreateEmployeeController {
         if (employees == null) {
             employees = new ArrayList<>();
         }
+    }
+
+    public ArrayList<Department> createDepartments() {
+        departments = new ArrayList<>();
+        departments.add(new Department(1, "Department 1"));
+        departments.add(new Department(2, "Department 2"));
+        departments.add(new Department(3, "Department 3"));
+        departments.add(new Department(4, "Department 4"));
+        departments.add(new Department(5, "Department 5"));
+
+        return departments; 
+    }
+
+    public ArrayList<Position> createPositions() {
+        positions = new ArrayList<>();
+        positions.add(new Position(1, "Position 1"));
+        positions.add(new Position(2, "Position 2"));
+        positions.add(new Position(3, "Position 3"));
+        positions.add(new Position(4, "Position 4"));
+        positions.add(new Position(5, "Position 5"));
+
+        return positions;
     }
 
     public void setEmployees(ArrayList<Employee> employees) {
