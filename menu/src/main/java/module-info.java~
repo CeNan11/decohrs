@@ -4,7 +4,6 @@ module deco {
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.sql;
-    requires java.desktop;
 
     opens deco to javafx.fxml;
     opens entity to javafx.fxml;
