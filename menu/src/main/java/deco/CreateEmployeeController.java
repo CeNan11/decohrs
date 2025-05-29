@@ -130,12 +130,19 @@ public class CreateEmployeeController {
             EntityService entityService = new EntityService(connection);
             if (entityService.getDepartments().isEmpty()) {
                 departments = createDepartments();
+
+                for (Department department : departments) {
+                    entityService.insertDepartment(department);
+                }
             } else {
                 departments = entityService.getDepartments();
             }
 
             if (entityService.getPositions().isEmpty()) {
                 positions = createPositions();
+                for (Position position : positions) {
+                    entityService.insertPosition(position);
+                }
             } else {
                 positions = entityService.getPositions();
             }
