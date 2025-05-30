@@ -210,3 +210,21 @@ BEGIN
         e.employee_id = employee_id_param;
 END //
 DELIMITER ;
+
+CREATE TABLE EmployeeFiles (
+    file_id INT AUTO_INCREMENT PRIMARY KEY,
+    employee_id INT NOT NULL,
+    file_path VARCHAR(512) NOT NULL, -- Path on the server
+    original_filename VARCHAR(255),
+    mime_type VARCHAR(100),
+    file_size_bytes BIGINT,
+    file_type VARCHAR(50), -- 'profile_picture', 'resume', 'certificate'
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (employee_id) REFERENCES Employees(employee_id) ON DELETE CASCADE
+);
+
+INSERT INTO Departments (department_id, department_name) VALUES (1, 'HR');
+INSERT INTO Departments (department_id, department_name) VALUES (2, 'IT');
+INSERT INTO Departments (department_id, department_name) VALUES (3, 'Finance');
+INSERT INTO Departments (department_id, department_name) VALUES (4, 'Marketing');
+INSERT INTO Departments (department_id, department_name) VALUES (5, 'Sales');

@@ -1,6 +1,8 @@
 package entity;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
 
 public class Education {
     private Integer educationId;
@@ -38,6 +40,22 @@ public class Education {
     public String getCertificateLicenseName() { return certificateLicenseName; }
     public Date getDateIssued() { return dateIssued; }
     public Date getValidUntil() { return validUntil; }
+    public String getHighestAttainment() {
+        if (postGraduateYearGraduated != null) {
+            return "Post Graduate";
+        }
+        if (collegeYearGraduated != null) {
+            return "College";
+        }
+        if (vocationalYearGraduated != null) {
+            return "Vocational";
+        }
+        return "Primary";
+    }
+
+    public static List<String> getHighestAttainmentList() {
+        return Arrays.asList("Primary", "Vocational", "College", "Post Graduate");
+    }
 
     // Setters
     public void setEducationId(Integer educationId) { this.educationId = educationId; }
@@ -60,6 +78,8 @@ public class Education {
     @Override 
     public String toString() {
         return String.format("Education { " +
+            "educationId: %s, " +
+            "employeeId: %s, " +
             "primarySchool: %s, " +
             "primaryYearGraduated: %s, " +
             "tertiarySchool: %s, " +
@@ -73,7 +93,7 @@ public class Education {
             "certificateLicenseName: %s, " +
             "dateIssued: %s, " +
             "validUntil: %s }", 
-            primarySchool, primaryYearGraduated, tertiarySchool, tertiaryYearGraduated, 
+            educationId, employeeId, primarySchool, primaryYearGraduated, tertiarySchool, tertiaryYearGraduated, 
             collegeSchool, collegeYearGraduated, vocationalSchool, vocationalYearGraduated, 
             postGraduateSchool, postGraduateYearGraduated, certificateLicenseName, 
             dateIssued, validUntil);

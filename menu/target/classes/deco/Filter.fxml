@@ -258,7 +258,7 @@
                <children>
                   <HBox alignment="TOP_CENTER" spacing="20.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#handleClose" stylesheets="@deco.css" text="CANCEL">
+                        <Button mnemonicParsing="false" onAction="#cancelFilters" stylesheets="@deco.css" text="CANCEL">
                            <styleClass>
                               <String fx:value="default-button" />
                               <String fx:value="font-size-s" />

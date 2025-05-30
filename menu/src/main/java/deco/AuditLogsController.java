@@ -57,6 +57,11 @@ public class AuditLogsController {
     public void initialize() {
         setupColumns();
         initializeAuditLogsTableView();
+        // Ensure the table is sorted by idColumn ascending on load
+        idColumn.setSortType(TableColumn.SortType.DESCENDING);
+        auditLogsTableView.getSortOrder().clear();
+        auditLogsTableView.getSortOrder().add(idColumn);
+        auditLogsTableView.sort();
     }    
             
     public void setClockService(ClockService clockService) {
@@ -93,7 +98,12 @@ public class AuditLogsController {
                 getEmployeeName(String.valueOf(auditLog.getTargetEmployee()))
             ));
         }
+        FXCollections.sort(logData, (a, b) -> Integer.compare(
+            Integer.parseInt(a.getId()), // ascending
+            Integer.parseInt(b.getId())
+        ));
         auditLogsTableView.setItems(logData);
+        // Remove sort logic from here
     }
 
     private String getEmployeeName(String employeeId) {
@@ -107,10 +117,12 @@ public class AuditLogsController {
 
     public void setupColumns() {
         idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId()));
+        idColumn.setComparator((s1, s2) -> Integer.compare(Integer.parseInt(s1), Integer.parseInt(s2))); // ascending
         timestampColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreated_at()));
         userColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPerformed_by()));
         actionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAction()));
         employeeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTarget_employee()));
+        // Remove sort logic from here
     }
 
     @FXML private void navigateToHome() throws IOException {

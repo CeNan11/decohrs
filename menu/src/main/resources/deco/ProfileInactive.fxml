@@ -969,7 +969,7 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#navigateToEdit" prefHeight="40.0" prefWidth="300.0" stylesheets="@deco.css">
+                              <HBox fx:id="adminEdit" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#navigateToEdit" prefHeight="40.0" prefWidth="300.0" stylesheets="@deco.css">
                                  <children>
                                     <Label stylesheets="@deco.css" text="EDIT" textFill="WHITE">
                                        <styleClass>

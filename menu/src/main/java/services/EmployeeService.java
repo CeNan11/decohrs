@@ -615,18 +615,39 @@ public class EmployeeService {
     }
 
     public boolean updateChild(Child child) throws SQLException {
-        String sql = "UPDATE Children SET " +
-            "name = ?, date_of_birth = ?, place_of_birth = ?, gender = ? " +
-            "WHERE child_id = ?";
+        if (child.getChildId() == null) {
+            // INSERT
+            String sql = "INSERT INTO Children (employee_id, name, date_of_birth, place_of_birth, gender) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setInt(1, safeInt(child.getEmployeeId()));
+                pstmt.setString(2, safeString(child.getName()));
+                safeSetDate(pstmt, 3, child.getDateOfBirth());
+                pstmt.setString(4, safeString(child.getPlaceOfBirth()));
+                pstmt.setString(5, safeString(child.getGender()));
+                int affectedRows = pstmt.executeUpdate();
+                return affectedRows > 0;
+            }
+        } else {
+            // UPDATE
+            String sql = "UPDATE Children SET employee_id = ?, name = ?, date_of_birth = ?, place_of_birth = ?, gender = ? WHERE child_id = ?";
+            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+                pstmt.setInt(1, safeInt(child.getEmployeeId()));
+                pstmt.setString(2, safeString(child.getName()));
+                safeSetDate(pstmt, 3, child.getDateOfBirth());
+                pstmt.setString(4, safeString(child.getPlaceOfBirth()));
+                pstmt.setString(5, safeString(child.getGender()));
+                pstmt.setInt(6, safeInt(child.getChildId()));
+                int affectedRows = pstmt.executeUpdate();
+                return affectedRows > 0;
+            }
+        }
+    }
 
+    // For deletion, use a separate method:
+    public boolean deleteChild(int childId) throws SQLException {
+        String sql = "DELETE FROM Children WHERE child_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            int paramIndex = 1;
-            pstmt.setString(paramIndex++, safeString(child.getName()));
-            safeSetDate(pstmt, paramIndex++, child.getDateOfBirth());
-            pstmt.setString(paramIndex++, safeString(child.getPlaceOfBirth()));
-            pstmt.setString(paramIndex++, safeString(child.getGender()));
-            pstmt.setInt(paramIndex++, safeInt(child.getChildId()));
-
+            pstmt.setInt(1, childId);
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
         }
@@ -636,6 +657,10 @@ public class EmployeeService {
         String sql = "UPDATE WorkExperience SET " +
             "company_name = ?, position_held = ?, duration = ?, remarks = ? " +
             "WHERE work_experience_id = ?";
+        if (experience.getWorkExperienceId() == 0) {
+            sql = "INSERT INTO WorkExperience (employee_id, company_name, position_held, duration, remarks) " +
+            "VALUES (?, ?, ?, ?, ?)";
+        }
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             int paramIndex = 1;
@@ -644,6 +669,31 @@ public class EmployeeService {
             pstmt.setString(paramIndex++, safeString(experience.getDuration()));
             pstmt.setString(paramIndex++, safeString(experience.getRemarks()));
             pstmt.setInt(paramIndex++, safeInt(experience.getWorkExperienceId()));
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
+
+    public boolean updateEducation(Education education) throws SQLException {
+        String sql = "UPDATE EducationalBackground SET " +
+            "primary_school = ?, primary_year_graduated = ?, tertiary_school = ?, tertiary_year_graduated = ?, college_school = ?, college_year_graduated = ?, vocational_school = ?, vocational_year_graduated = ?, certificate_license_name = ?, date_issued = ?, valid_until = ? " +
+            "WHERE education_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            int paramIndex = 1;
+            pstmt.setString(paramIndex++, safeString(education.getPrimarySchool()));
+            safeSetDate(pstmt, paramIndex++, education.getPrimaryYearGraduated());
+            pstmt.setString(paramIndex++, safeString(education.getTertiarySchool()));
+            safeSetDate(pstmt, paramIndex++, education.getTertiaryYearGraduated());
+            pstmt.setString(paramIndex++, safeString(education.getCollegeSchool()));
+            safeSetDate(pstmt, paramIndex++, education.getCollegeYearGraduated());
+            pstmt.setString(paramIndex++, safeString(education.getVocationalSchool()));
+            safeSetDate(pstmt, paramIndex++, education.getVocationalYearGraduated());
+            pstmt.setString(paramIndex++, safeString(education.getCertificateLicenseName()));
+            safeSetDate(pstmt, paramIndex++, education.getDateIssued());
+            safeSetDate(pstmt, paramIndex++, education.getValidUntil());
+            pstmt.setInt(paramIndex++, safeInt(education.getEducationId()));
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;

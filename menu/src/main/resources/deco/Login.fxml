@@ -71,7 +71,7 @@
                   <String fx:value="deco-font-bold" />
                </styleClass>
             </Button>
-            <TextField fx:id="passwordTextField" promptText="PASSWORD SHOWN" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+            <TextField fx:id="passwordTextField" focusTraversable="false" promptText="PASSWORD SHOWN" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                <styleClass>
                   <String fx:value="transparent-textfield" />
                   <String fx:value="font-size-s" />

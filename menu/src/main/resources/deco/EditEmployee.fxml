@@ -191,7 +191,7 @@
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                    <ComboBox fx:id="position" minWidth="500.0" promptText="POSITION" stylesheets="@deco.css">
+                                    <ComboBox fx:id="position" focusTraversable="false" minWidth="500.0" promptText="POSITION" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -215,7 +215,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <DatePicker fx:id="hireDate" minWidth="500.0" promptText="DATE HIRED" stylesheets="@deco.css">
+                                    <DatePicker fx:id="hireDate" focusTraversable="false" minWidth="500.0" promptText="DATE HIRED" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="crud-padding-datePicker" />
                                           <String fx:value="deco-font" />
@@ -241,7 +241,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ComboBox fx:id="department" minWidth="500.0" promptText="DEPARTMENT" stylesheets="@deco.css">
+                                    <ComboBox fx:id="department" focusTraversable="false" minWidth="500.0" promptText="DEPARTMENT" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -265,7 +265,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <DatePicker fx:id="regularizationDate" minWidth="500.0" promptText="DATE REGULARIZED" stylesheets="@deco.css">
+                                    <DatePicker fx:id="regularizationDate" focusTraversable="false" minWidth="500.0" promptText="DATE REGULARIZED" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="crud-padding-datePicker" />
                                           <String fx:value="deco-font" />
@@ -388,7 +388,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <DatePicker fx:id="dateOfBirth" minWidth="500.0" promptText="DATE OF BIRTH" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
+                                    <DatePicker fx:id="dateOfBirth" focusTraversable="false" minWidth="500.0" promptText="DATE OF BIRTH" stylesheets="@deco.css" VBox.vgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="crud-padding-datePicker" />
                                           <String fx:value="deco-font" />
@@ -410,7 +410,7 @@
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                    <ComboBox fx:id="civilStatus" minWidth="500.0" promptText="CIVIL STATUS" stylesheets="@deco.css">
+                                    <ComboBox fx:id="civilStatus" focusTraversable="false" minWidth="500.0" promptText="CIVIL STATUS" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -444,7 +444,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ComboBox fx:id="gender" depthTest="DISABLE" minWidth="500.0" promptText="GENDER" stylesheets="@deco.css">
+                                    <ComboBox fx:id="gender" depthTest="DISABLE" focusTraversable="false" minWidth="500.0" promptText="GENDER" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -468,7 +468,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ComboBox fx:id="bloodType" minWidth="500.0" promptText="BLOOD TYPE" stylesheets="@deco.css">
+                                    <ComboBox fx:id="bloodType" focusTraversable="false" minWidth="500.0" promptText="BLOOD TYPE" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -733,7 +733,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker fx:id="spouseBirthDate" promptText="DATE OF BIRTH" stylesheets="@deco.css">
+                              <DatePicker fx:id="spouseBirthDate" focusTraversable="false" promptText="DATE OF BIRTH" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -791,7 +791,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker fx:id="fathersBirthdate" promptText="DATE OF BIRTH" stylesheets="@deco.css">
+                              <DatePicker fx:id="fathersBirthdate" focusTraversable="false" promptText="DATE OF BIRTH" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -849,7 +849,7 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <DatePicker fx:id="mothersBirthdate" promptText="DATE OF BIRTH" stylesheets="@deco.css">
+                              <DatePicker fx:id="mothersBirthdate" focusTraversable="false" promptText="DATE OF BIRTH" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -925,7 +925,7 @@
                                           <Insets left="20.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <DatePicker fx:id="childDateOfBirth" maxWidth="1.7976931348623157E308" promptText="DATE OF BIRTH" stylesheets="@deco.css">
+                                    <DatePicker fx:id="childDateOfBirth" focusTraversable="false" maxWidth="1.7976931348623157E308" promptText="DATE OF BIRTH" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="crud-padding-datePicker" />
                                           <String fx:value="deco-font" />
@@ -947,7 +947,7 @@
                                           <Insets left="20.0" />
                                        </padding>
                                     </Label>
-                                    <ComboBox fx:id="childGender" maxWidth="1.7976931348623157E308" promptText="GENDER" stylesheets="@deco.css">
+                                    <ComboBox fx:id="childGender" focusTraversable="false" maxWidth="1.7976931348623157E308" promptText="GENDER" stylesheets="@deco.css">
                                        <styleClass>
                                           <String fx:value="default-button" />
                                           <String fx:value="font-size-s" />
@@ -1124,7 +1124,7 @@
                         </VBox>
                         <VBox spacing="22.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <DatePicker fx:id="primaryYearGraduated" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="primaryYearGraduated" focusTraversable="false" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1132,7 +1132,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker fx:id="tertiaryYearGraduated" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="tertiaryYearGraduated" focusTraversable="false" layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1140,7 +1140,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker fx:id="collegeYearGraduated" layoutX="10.0" layoutY="68.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="collegeYearGraduated" focusTraversable="false" layoutX="10.0" layoutY="68.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1148,7 +1148,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker fx:id="vocationalYearGraduated" layoutX="10.0" layoutY="126.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="vocationalYearGraduated" focusTraversable="false" layoutX="10.0" layoutY="126.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1156,7 +1156,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker fx:id="postGraduateYearGraduated" layoutX="10.0" layoutY="184.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
+                              <DatePicker fx:id="postGraduateYearGraduated" focusTraversable="false" layoutX="10.0" layoutY="184.0" maxWidth="1.7976931348623157E308" promptText="YEAR GRADUATED" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1164,7 +1164,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker fx:id="dateIssued" layoutX="10.0" layoutY="242.0" maxWidth="1.7976931348623157E308" promptText="ISSUED ON" stylesheets="@deco.css">
+                              <DatePicker fx:id="dateIssued" focusTraversable="false" layoutX="10.0" layoutY="242.0" maxWidth="1.7976931348623157E308" promptText="ISSUED ON" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1172,7 +1172,7 @@
                                     <String fx:value="font-size-s" />
                                  </styleClass>
                               </DatePicker>
-                              <DatePicker fx:id="validUntil" layoutX="10.0" layoutY="300.0" maxWidth="1.7976931348623157E308" promptText="VALID UNTIL" stylesheets="@deco.css">
+                              <DatePicker fx:id="validUntil" focusTraversable="false" layoutX="10.0" layoutY="300.0" maxWidth="1.7976931348623157E308" promptText="VALID UNTIL" stylesheets="@deco.css">
                                  <styleClass>
                                     <String fx:value="crud-padding-datePicker" />
                                     <String fx:value="deco-font" />
@@ -1390,14 +1390,6 @@
                   </HBox>
                   <HBox alignment="CENTER" layoutX="30.0" layoutY="30.0" spacing="20.0">
                      <children>
-                        <Button mnemonicParsing="false" stylesheets="@deco.css" text="CANCEL">
-                           <styleClass>
-                              <String fx:value="default-button" />
-                              <String fx:value="deco-font" />
-                              <String fx:value="deco-font-bold" />
-                              <String fx:value="font-size-m" />
-                           </styleClass>
-                        </Button>
                         <Button fx:id="transferButton" layoutX="307.0" layoutY="50.0" mnemonicParsing="false" onAction="#transferEmployee" stylesheets="@deco.css" text="TRANSFER TO INACTIVE">
                            <styleClass>
                               <String fx:value="default-button" />

@@ -428,7 +428,7 @@ public class CreateEmployeeController {
                 Object controller = App.setRoot("Active");
                 ((ActiveController) controller).setUser(user);
                 
-                entityService.insertAuditLog(new AuditLog(user.getUsername(), employeeId, "Employee created successfully"));
+                entityService.insertAuditLog(new AuditLog("Employee created successfully", employeeId, user.getUsername()));
                 System.out.println(employee);
             } catch (Exception e) {
                 showError("Database Error", "Failed to save employee: " + e.getMessage());

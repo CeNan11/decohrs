@@ -5,6 +5,8 @@ module deco {
     requires javafx.graphics;
     requires java.sql;
     requires java.desktop;
+    requires spring.beans;
+    requires spring.core;
 
     opens deco to javafx.fxml;
     opens entity to javafx.fxml;

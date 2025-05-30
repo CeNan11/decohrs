@@ -23,6 +23,9 @@ import javafx.util.Duration;
 import services.ClockService;
 import services.EmployeeService;
 import services.FilterData;
+import entity.Position;
+import entity.Department;
+import services.EntityService;
 
 //Correct Import
 import javafx.beans.value.ChangeListener;
@@ -42,9 +45,13 @@ public class ActiveController implements FilterableController {
 
     // ===== Class Properties =====
     private ArrayList<Employee> employees;
+    private ArrayList<Employee> masterEmployees; // Store the full, unfiltered list
     private User user;
     private static final int ITEMS_PER_PAGE = 19;
     private int currentPage = 0;
+    private FilterData lastUsedFilterData = null;
+    private ArrayList<Position> positions;
+    private ArrayList<Department> departments;
 
     // ===== Initialization Methods =====
     @FXML
@@ -250,7 +257,9 @@ public class ActiveController implements FilterableController {
             
             FilterController filterController = loader.getController();
             filterController.setParentController(this);
-            
+            if (lastUsedFilterData != null) {
+                filterController.setPreviousFilterData(lastUsedFilterData);
+            }
             setupFilterOverlay(overlay, filterController);
             
         } catch (IOException e) {
@@ -306,7 +315,21 @@ public class ActiveController implements FilterableController {
 
     @Override
     public void applyFilterData(FilterData data) {
-        System.out.println(data);
+        lastUsedFilterData = data;
+        if (isFilterEmpty(data)) {
+            setEmployees(new ArrayList<>(masterEmployees));
+        } else {
+            ArrayList<Employee> filtered = new ArrayList<>(FilterData.filterEmployees(masterEmployees, data, positions, departments));
+            setEmployees(filtered);
+        }
+        updatePage(0); // Refresh the UI to show filtered results
+    }
+
+    private boolean isFilterEmpty(FilterData data) {
+        return (data.getSortBy() == null && data.getOrderBy() == null && data.getPosition() == null &&
+                data.getDepartment() == null && data.getGender() == null && data.getCivilStatus() == null &&
+                data.getEducationAttainment() == null && data.getDateHired() == null &&
+                data.getDateRegularized() == null && data.getDateOfBirth() == null);
     }
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/DECOHRS_DB";
@@ -320,6 +343,11 @@ public class ActiveController implements FilterableController {
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             EmployeeService employeeService = new EmployeeService(connection);
             employees = employeeService.getEmployees();
+            masterEmployees = new ArrayList<>(employees); // Save the full list
+            // Load positions and departments
+            EntityService entityService = new EntityService(connection);
+            positions = new ArrayList<>(entityService.getPositions());
+            departments = new ArrayList<>(entityService.getDepartments());
         } catch (SQLException e) {
             e.printStackTrace();
         }

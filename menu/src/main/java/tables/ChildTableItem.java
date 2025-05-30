@@ -17,9 +17,13 @@ public class ChildTableItem {
         this.gender = new SimpleStringProperty(gender);
     }
 
+    @SuppressWarnings("exports")
     public StringProperty nameProperty() { return name; }
+    @SuppressWarnings("exports")
     public StringProperty dateOfBirthProperty() { return dateOfBirth; }
+    @SuppressWarnings("exports")
     public StringProperty placeOfBirthProperty() { return placeOfBirth; }
+    @SuppressWarnings("exports")
     public StringProperty genderProperty() { return gender; }
 
     public String getName() { return name.get(); }

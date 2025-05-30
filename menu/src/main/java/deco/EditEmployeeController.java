@@ -10,12 +10,15 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.springframework.beans.BeanUtils;
+
 import entity.Employee;
 import entity.EmployeeStatus;
 import entity.FamilyBackground;
 import entity.Position;
 import entity.User;
 import entity.WorkExperience;
+import entity.AuditLog;
 import entity.Child;
 import entity.Department;
 import entity.Education;
@@ -151,7 +154,6 @@ public class EditEmployeeController {
     
     public void setEmployee(Employee employee) {
         this.employee = employee;
-        System.out.println(employee.getEmployeeId());
     }
 
     public void setUser(User user) {
@@ -212,13 +214,19 @@ public class EditEmployeeController {
         }
     }
 
-    @FXML
+    @FXML   
     private void navigateToProfile() throws IOException {
-
-        Object controller = App.setRoot("ProfileActive");
-        ((ProfileActiveController) controller).setEmployee(employee);
-        ((ProfileActiveController) controller).setUser(user);
+        if (newEmployee.getStatus() == EmployeeStatus.ACTIVE) {
+            Object controller = App.setRoot("ProfileActive");
+            ((ProfileActiveController) controller).setEmployee(newEmployee);
+            ((ProfileActiveController) controller).setUser(user);
+        } else {
+            Object controller = App.setRoot("ProfileInactive");
+            ((ProfileInactiveController) controller).setEmployee(employee);
+            ((ProfileInactiveController) controller).setUser(user);
+        }
     }
+
     private void showError(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -227,21 +235,85 @@ public class EditEmployeeController {
         alert.showAndWait();
     }
 
+    private boolean confirmationDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
+    }
+
     @FXML
     private void handleSave() {
-        if (checkIfChangedandSaveEmployee() || checkIfChangedandSaveEmergencyContact() || checkIfChangedandSaveFamilyBackground() || newEmployee.getStatus() != employee.getStatus()) {
+        if (!confirmationDialog("Are you sure you want to save the changes?", "Save Changes")) {
+            return;
+        }
+
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EntityService entityService = new EntityService(connection);
+
+        boolean workChanged = checkIfChangedandSaveWorkAllExperience();
+        boolean educationChanged = checkIfChangedandSaveEducation();
+        boolean employeeChanged = checkIfChangedandSaveEmployee();
+        boolean emergencyChanged = checkIfChangedandSaveEmergencyContact();
+        boolean familyChanged = checkIfChangedandSaveFamilyBackground();
+        boolean statusChanged = newEmployee.getStatus() != employee.getStatus();
+        boolean childrenChanged = checkIfChangedandSaveChildren();
+
+        if (employeeChanged || emergencyChanged || familyChanged || statusChanged ||
+        (workChanged && educationChanged) || (workChanged && childrenChanged) || (educationChanged && childrenChanged)) {
             System.out.println("Employee has changed");
             updateEmployee();
+            updateWorkExperience();
+            updateEducation();
+            updateChildren();
+            entityService.insertAuditLog(new AuditLog("Employee updated successfully", employee.getEmployeeId(), user.getUsername()));
         }
-        if (checkIfChangedandSaveEducation()) {
-            System.out.println("Education has changed");
-        }
-        if (checkIfChangedandSaveWorkAllExperience()) {
+        if (workChanged) {
             System.out.println("Work Experience has changed");
+            updateWorkExperience();
+            entityService.insertAuditLog(new AuditLog("Work Experience updated successfully", employee.getEmployeeId(), user.getUsername()));
+        }
+        if (educationChanged) {
+            System.out.println("Education has changed");
+            updateEducation();
+            entityService.insertAuditLog(new AuditLog("Education updated successfully", employee.getEmployeeId(), user.getUsername()));
+        }
+        if (childrenChanged) {
+            System.out.println("Children has changed");
+            updateChildren();
+            entityService.insertAuditLog(new AuditLog("Children updated successfully", employee.getEmployeeId(), user.getUsername()));
+        }
+
+
+        // Optionally: always print the newEmployee for debugging
+        System.out.println(newEmployee);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            navigateToProfile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @FXML private Button transferButton;
+
+    private void updateChildren() {
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EmployeeService employeeService = new EmployeeService(connection);
+            for (Child child : newEmployee.getChildren()) {
+                employeeService.updateChild(child);
+            }
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void updateEmployee() {
@@ -249,6 +321,30 @@ public class EditEmployeeController {
             Connection connection = DriverManager.getConnection(localHost, username, pass);
             EmployeeService employeeService = new EmployeeService(connection);
             employeeService.updateEmployee(newEmployee);
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateEducation() {
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EmployeeService employeeService = new EmployeeService(connection);
+            employeeService.updateEducation(newEmployee.getEducation());
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateWorkExperience() {
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EmployeeService employeeService = new EmployeeService(connection);
+            for (WorkExperience workExperience : newEmployee.getWorkExperiences()) {
+                employeeService.updateWorkExperience(workExperience);
+            }
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -270,36 +366,125 @@ public class EditEmployeeController {
 
     private Employee newEmployee;
 
-    private boolean checkIfChangedandSaveEmployee() {
-        Employee oldEmployee = this.employee;
-        Employee employee = this.employee;
+    private boolean checkIfChangedandSaveChildren() {
+        ArrayList<Child> oldChildren = employee.getChildren();
+        ArrayList<Child> newChildren = new ArrayList<>();
         boolean isChanged = false;
 
-        isChanged |= updateIfChanged(oldEmployee.getEmployeeCode(), getTextOrNull(employeeCode), employee::setEmployeeCode);
-        isChanged |= updateIfChanged(oldEmployee.getFirstName(), getTextOrNull(firstName), employee::setFirstName);
-        isChanged |= updateIfChanged(oldEmployee.getMiddleName(), getTextOrNull(middleName), employee::setMiddleName);
-        isChanged |= updateIfChanged(oldEmployee.getLastName(), getTextOrNull(lastName), employee::setLastName);
-        isChanged |= updateIfChanged(oldEmployee.getSuffix(), getTextOrNull(suffix), employee::setSuffix);
-        isChanged |= updateIfChanged(oldEmployee.getCurrentAddress(), getTextOrNull(currentAddress), employee::setCurrentAddress);
-        isChanged |= updateIfChanged(oldEmployee.getHomeAddress(), getTextOrNull(homeAddress), employee::setHomeAddress);
-        isChanged |= updateIfChanged(oldEmployee.getContactNumberPrimary(), getTextOrNull(contactNumber), employee::setContactNumberPrimary);
-        isChanged |= updateIfChanged(oldEmployee.getPlaceOfBirth(), getTextOrNull(placeOfBirth), employee::setPlaceOfBirth);
-        isChanged |= updateIfChanged(oldEmployee.getDateOfBirth(), getDateOrNull(dateOfBirth), employee::setDateOfBirth);
-        isChanged |= updateIfChanged(oldEmployee.getGender(), gender.getValue(), employee::setGender);
-        isChanged |= updateIfChanged(oldEmployee.getCivilStatus(), civilStatus.getValue(), employee::setCivilStatus);
-        isChanged |= updateIfChanged(oldEmployee.getBloodType(), bloodType.getValue(), employee::setBloodType);
-        isChanged |= updateIfChanged(oldEmployee.getDepartmentId(), departments.stream().filter(d -> d.getDepartmentName().equals(department.getValue())).findFirst().orElse(null).getDepartmentId(), employee::setDepartmentId);
-        isChanged |= updateIfChanged(oldEmployee.getPositionId(), positions.stream().filter(p -> p.getPositionTitle().equals(position.getValue())).findFirst().orElse(null).getPositionId(), employee::setPositionId);
-        isChanged |= updateIfChanged(oldEmployee.getHireDate(), getDateOrNull(hireDate), employee::setHireDate);
-        isChanged |= updateIfChanged(oldEmployee.getRegularizationDate(), getDateOrNull(regularizationDate), employee::setRegularizationDate);
-        isChanged |= updateIfChanged(oldEmployee.getSSSNumber(), getTextOrNull(sssNumber), employee::setSSSNumber);
-        isChanged |= updateIfChanged(oldEmployee.getPHICNumber(), getTextOrNull(philHealthNumber), employee::setPHICNumber);
-        isChanged |= updateIfChanged(oldEmployee.getTIN(), getTextOrNull(tinNumber), employee::setTIN);
-        isChanged |= updateIfChanged(oldEmployee.getHDMFNo(), getTextOrNull(pagIbigNumber), employee::setHDMFNo);
+        for (Child child : children) {
+            Child newChild = new Child();
+            BeanUtils.copyProperties(child, newChild);
+            newChild.setEmployeeId(employee.getEmployeeId());
+            newChildren.add(newChild);
+        }
+
+        if (!Objects.equals(oldChildren, newChildren)) {
+            isChanged = true;
+        }
 
         if (isChanged) {
-            newEmployee = new Employee(employee);
-            System.out.println(newEmployee);
+            newEmployee.setChildren(newChildren);
+        }
+        return isChanged;
+    }
+
+    private boolean checkIfChangedandSaveEmployee() {
+        Employee oldEmployee = this.employee;
+        Employee newEmp = new Employee();
+        boolean isChanged = false;
+
+        // Make sure newEmp is an actual copy of the data, not a blank object
+        BeanUtils.copyProperties(oldEmployee, newEmp);
+
+        if (!Objects.equals(getTextOrNull(employeeCode), oldEmployee.getEmployeeCode())) {
+            newEmp.setEmployeeCode(getTextOrNull(employeeCode));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(firstName), oldEmployee.getFirstName())) {
+            newEmp.setFirstName(getTextOrNull(firstName));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(middleName), oldEmployee.getMiddleName())) {
+            newEmp.setMiddleName(getTextOrNull(middleName));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(lastName), oldEmployee.getLastName())) {
+            newEmp.setLastName(getTextOrNull(lastName));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(suffix), oldEmployee.getSuffix())) {
+            newEmp.setSuffix(getTextOrNull(suffix));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(currentAddress), oldEmployee.getCurrentAddress())) {
+            newEmp.setCurrentAddress(getTextOrNull(currentAddress));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(homeAddress), oldEmployee.getHomeAddress())) {
+            newEmp.setHomeAddress(getTextOrNull(homeAddress));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(contactNumber), oldEmployee.getContactNumberPrimary())) {
+            newEmp.setContactNumberPrimary(getTextOrNull(contactNumber));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(placeOfBirth), oldEmployee.getPlaceOfBirth())) {
+            newEmp.setPlaceOfBirth(getTextOrNull(placeOfBirth));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(dateOfBirth), oldEmployee.getDateOfBirth())) {
+            newEmp.setDateOfBirth(getDateOrNull(dateOfBirth));
+            isChanged = true;
+        }
+        if (!Objects.equals(gender.getValue(), oldEmployee.getGender())) {
+            newEmp.setGender(gender.getValue());
+            isChanged = true;
+        }
+        if (!Objects.equals(civilStatus.getValue(), oldEmployee.getCivilStatus())) {
+            newEmp.setCivilStatus(civilStatus.getValue());
+            isChanged = true;
+        }
+        if (!Objects.equals(bloodType.getValue(), oldEmployee.getBloodType())) {
+            newEmp.setBloodType(bloodType.getValue());
+            isChanged = true;
+        }
+        Integer newDeptId = departments.stream().filter(d -> d.getDepartmentName().equals(department.getValue())).findFirst().orElse(null) != null ? departments.stream().filter(d -> d.getDepartmentName().equals(department.getValue())).findFirst().orElse(null).getDepartmentId() : null;
+        if (!Objects.equals(newDeptId, oldEmployee.getDepartmentId())) {
+            newEmp.setDepartmentId(newDeptId);
+            isChanged = true;
+        }
+        Integer newPosId = positions.stream().filter(p -> p.getPositionTitle().equals(position.getValue())).findFirst().orElse(null) != null ? positions.stream().filter(p -> p.getPositionTitle().equals(position.getValue())).findFirst().orElse(null).getPositionId() : null;
+        if (!Objects.equals(newPosId, oldEmployee.getPositionId())) {
+            newEmp.setPositionId(newPosId);
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(hireDate), oldEmployee.getHireDate())) {
+            newEmp.setHireDate(getDateOrNull(hireDate));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(regularizationDate), oldEmployee.getRegularizationDate())) {
+            newEmp.setRegularizationDate(getDateOrNull(regularizationDate));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(sssNumber), oldEmployee.getSSSNumber())) {
+            newEmp.setSSSNumber(getTextOrNull(sssNumber));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(philHealthNumber), oldEmployee.getPHICNumber())) {
+            newEmp.setPHICNumber(getTextOrNull(philHealthNumber));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(tinNumber), oldEmployee.getTIN())) {
+            newEmp.setTIN(getTextOrNull(tinNumber));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(pagIbigNumber), oldEmployee.getHDMFNo())) {
+            newEmp.setHDMFNo(getTextOrNull(pagIbigNumber));
+            isChanged = true;
+        }
+
+        if (isChanged) {
+            newEmployee = newEmp;
         }
         return isChanged;
     }
@@ -312,35 +497,75 @@ public class EditEmployeeController {
     private Date getDateOrNull(DatePicker picker) {
         return picker.getValue() != null ? Date.valueOf(picker.getValue()) : null;
     }
-
     private boolean checkIfChangedandSaveEmergencyContact() {
         EmergencyContact oldEmergencyContact = employee.getEmergencyContact();
-        EmergencyContact emergencyContact = new EmergencyContact();
+        EmergencyContact newEmergencyContact = new EmergencyContact();
         boolean isChanged = false;
-
-        isChanged |= updateIfChanged(oldEmergencyContact.getName(), getTextOrNull(emergencyContactName), emergencyContact::setName);
-        isChanged |= updateIfChanged(oldEmergencyContact.getRelationship(), getTextOrNull(emergencyContactRelationship), emergencyContact::setRelationship);
-        isChanged |= updateIfChanged(oldEmergencyContact.getAddress(), getTextOrNull(emergencyContactAddress), emergencyContact::setAddress);
-        isChanged |= updateIfChanged(oldEmergencyContact.getContactNumber(), getTextOrNull(emergencyContactNumber), emergencyContact::setContactNumber);
-
-        if (isChanged) {
-            newEmployee.setEmergencyContact(emergencyContact);
+    
+        // Make sure newEmergencyContact is an actual copy of the data, not a blank object
+        BeanUtils.copyProperties(oldEmergencyContact, newEmergencyContact);
+    
+        //Check if fields have changes
+        if (!Objects.equals(getTextOrNull(emergencyContactName), oldEmergencyContact.getName())) {
+            newEmergencyContact.setName(getTextOrNull(emergencyContactName));
+            isChanged = true;
         }
+        if (!Objects.equals(getTextOrNull(emergencyContactRelationship), oldEmergencyContact.getRelationship())) {
+            newEmergencyContact.setRelationship(getTextOrNull(emergencyContactRelationship));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(emergencyContactAddress), oldEmergencyContact.getAddress())) {
+            newEmergencyContact.setAddress(getTextOrNull(emergencyContactAddress));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(emergencyContactNumber), oldEmergencyContact.getContactNumber())) {
+            newEmergencyContact.setContactNumber(getTextOrNull(emergencyContactNumber));
+            isChanged = true;
+        }
+    
+        if (isChanged) {
+            newEmployee.setEmergencyContact(newEmergencyContact);
+        }
+    
         return isChanged;
     }
-
+    
     private boolean checkIfChangedandSaveFamilyBackground() {
         FamilyBackground oldFB = employee.getFamilyBackground();
         FamilyBackground newFB = new FamilyBackground();
         boolean isChanged = false;
 
-        isChanged |= updateIfChanged(oldFB.getFatherName(), getTextOrNull(fathersName), newFB::setFatherName);
-        isChanged |= updateIfChanged(oldFB.getFatherDOB(), getDateOrNull(fathersBirthdate), newFB::setFatherDOB);
-        isChanged |= updateIfChanged(oldFB.getMotherName(), getTextOrNull(mothersName), newFB::setMotherName);
-        isChanged |= updateIfChanged(oldFB.getMotherDOB(), getDateOrNull(mothersBirthdate), newFB::setMotherDOB);
-        isChanged |= updateIfChanged(oldFB.getSpouseName(), getTextOrNull(spouseName), newFB::setSpouseName);
-        isChanged |= updateIfChanged(oldFB.getSpouseAddress(), getTextOrNull(spouseAddress), newFB::setSpouseAddress);
-        isChanged |= updateIfChanged(oldFB.getSpouseBirthDate(), getDateOrNull(spouseBirthDate), newFB::setSpouseBirthDate);
+        // Make sure newFB is an actual copy of the data, not a blank object
+        BeanUtils.copyProperties(oldFB, newFB);
+
+        if (!Objects.equals(getTextOrNull(fathersName), oldFB.getFatherName())) {
+            newFB.setFatherName(getTextOrNull(fathersName));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(fathersBirthdate), oldFB.getFatherDOB())) {
+            newFB.setFatherDOB(getDateOrNull(fathersBirthdate));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(mothersName), oldFB.getMotherName())) {
+            newFB.setMotherName(getTextOrNull(mothersName));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(mothersBirthdate), oldFB.getMotherDOB())) {
+            newFB.setMotherDOB(getDateOrNull(mothersBirthdate));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(spouseName), oldFB.getSpouseName())) {
+            newFB.setSpouseName(getTextOrNull(spouseName));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(spouseAddress), oldFB.getSpouseAddress())) {
+            newFB.setSpouseAddress(getTextOrNull(spouseAddress));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(spouseBirthDate), oldFB.getSpouseBirthDate())) {
+            newFB.setSpouseBirthDate(getDateOrNull(spouseBirthDate));
+            isChanged = true;
+        }
 
         if (isChanged) {
             newEmployee.setFamilyBackground(newFB);
@@ -350,157 +575,134 @@ public class EditEmployeeController {
 
     private boolean checkIfChangedandSaveEducation() {
         Education oldEducation = employee.getEducation();
-        Education education = new Education();
+        Education newEducation = new Education();
         boolean isChanged = false;
 
-        isChanged |= updateIfChanged(oldEducation.getPrimarySchool(), getTextOrNull(primarySchool), education::setPrimarySchool);
-        isChanged |= updateIfChanged(oldEducation.getPrimaryYearGraduated(), getDateOrNull(primaryYearGraduated), education::setPrimaryYearGraduated);
-        isChanged |= updateIfChanged(oldEducation.getTertiarySchool(), getTextOrNull(tertiarySchool), education::setTertiarySchool);
-        isChanged |= updateIfChanged(oldEducation.getTertiaryYearGraduated(), getDateOrNull(tertiaryYearGraduated), education::setTertiaryYearGraduated);
-        isChanged |= updateIfChanged(oldEducation.getCollegeSchool(), getTextOrNull(collegeSchool), education::setCollegeSchool);
-        isChanged |= updateIfChanged(oldEducation.getCollegeYearGraduated(), getDateOrNull(collegeYearGraduated), education::setCollegeYearGraduated);
-        isChanged |= updateIfChanged(oldEducation.getVocationalSchool(), getTextOrNull(vocationalSchool), education::setVocationalSchool);
-        isChanged |= updateIfChanged(oldEducation.getVocationalYearGraduated(), getDateOrNull(vocationalYearGraduated), education::setVocationalYearGraduated);
-        isChanged |= updateIfChanged(oldEducation.getPostGraduateSchool(), getTextOrNull(postGraduateSchool), education::setPostGraduateSchool);
-        isChanged |= updateIfChanged(oldEducation.getPostGraduateYearGraduated(), getDateOrNull(postGraduateYearGraduated), education::setPostGraduateYearGraduated);
-        isChanged |= updateIfChanged(oldEducation.getCertificateLicenseName(), getTextOrNull(certificateLicenseName), education::setCertificateLicenseName);
-        isChanged |= updateIfChanged(oldEducation.getDateIssued(), getDateOrNull(dateIssued), education::setDateIssued);
-        isChanged |= updateIfChanged(oldEducation.getValidUntil(), getDateOrNull(validUntil), education::setValidUntil);
+        // Make sure newEducation is an actual copy of the data, not a blank object
+        BeanUtils.copyProperties(oldEducation, newEducation);
+
+        if (!Objects.equals(getTextOrNull(primarySchool), oldEducation.getPrimarySchool())) {
+            newEducation.setPrimarySchool(getTextOrNull(primarySchool));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(primaryYearGraduated), oldEducation.getPrimaryYearGraduated())) {
+            newEducation.setPrimaryYearGraduated(getDateOrNull(primaryYearGraduated));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(tertiarySchool), oldEducation.getTertiarySchool())) {
+            newEducation.setTertiarySchool(getTextOrNull(tertiarySchool));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(tertiaryYearGraduated), oldEducation.getTertiaryYearGraduated())) {
+            newEducation.setTertiaryYearGraduated(getDateOrNull(tertiaryYearGraduated));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(collegeSchool), oldEducation.getCollegeSchool())) {
+            newEducation.setCollegeSchool(getTextOrNull(collegeSchool));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(collegeYearGraduated), oldEducation.getCollegeYearGraduated())) {
+            newEducation.setCollegeYearGraduated(getDateOrNull(collegeYearGraduated));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(vocationalSchool), oldEducation.getVocationalSchool())) {
+            newEducation.setVocationalSchool(getTextOrNull(vocationalSchool));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(vocationalYearGraduated), oldEducation.getVocationalYearGraduated())) {
+            newEducation.setVocationalYearGraduated(getDateOrNull(vocationalYearGraduated));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(postGraduateSchool), oldEducation.getPostGraduateSchool())) {
+            newEducation.setPostGraduateSchool(getTextOrNull(postGraduateSchool));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(postGraduateYearGraduated), oldEducation.getPostGraduateYearGraduated())) {
+            newEducation.setPostGraduateYearGraduated(getDateOrNull(postGraduateYearGraduated));
+            isChanged = true;
+        }
+        if (!Objects.equals(getTextOrNull(certificateLicenseName), oldEducation.getCertificateLicenseName())) {
+            newEducation.setCertificateLicenseName(getTextOrNull(certificateLicenseName));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(dateIssued), oldEducation.getDateIssued())) {
+            newEducation.setDateIssued(getDateOrNull(dateIssued));
+            isChanged = true;
+        }
+        if (!Objects.equals(getDateOrNull(validUntil), oldEducation.getValidUntil())) {
+            newEducation.setValidUntil(getDateOrNull(validUntil));
+            isChanged = true;
+        }
 
         if (isChanged) {
-            newEmployee.setEducation(education);
+            newEducation.setEmployeeId(employee.getEmployeeId());
+            newEmployee.setEducation(newEducation);
         }
         return isChanged;
     }
 
     private boolean checkIfChangedandSaveWorkAllExperience() throws NullPointerException {
         boolean isChanged = false;
-        
         if (employee.getWorkExperiences().size() == 0) {
             return false;
         }
+        ArrayList<WorkExperience> oldWorkExperiences = employee.getWorkExperiences();
+        ArrayList<WorkExperience> newWorkExperiences = new ArrayList<>();
 
-        WorkExperience work1 = new WorkExperience();
-        WorkExperience oldWorkExperience = employee.getWorkExperiences().get(0);
-        String oldWorkCompany1 = oldWorkExperience.getCompanyName();
-        String newWorkCompany1 = experienceCompany1.getText().trim() != null ? experienceCompany1.getText().trim() : null;
-        if (oldWorkCompany1 != null && newWorkCompany1 != null) {
-            if (!newWorkCompany1.equals(oldWorkCompany1)) {
-                work1.setCompanyName(experienceCompany1.getText().trim());
+        // Helper to process each work experience
+        for (int i = 0; i < oldWorkExperiences.size() && i < 3; i++) {
+            WorkExperience oldWork = oldWorkExperiences.get(i);
+            WorkExperience newWork = new WorkExperience();
+            BeanUtils.copyProperties(oldWork, newWork);
+            boolean localChanged = false;
+            String newCompany = null, newPosition = null, newDuration = null, newRemarks = null;
+            switch (i) {
+                case 0:
+                    newCompany = getTextOrNull(experienceCompany1);
+                    newPosition = getTextOrNull(experiencePosition1);
+                    newDuration = getTextOrNull(experienceDuration1);
+                    newRemarks = getTextOrNull(experienceRemarks1);
+                    break;
+                case 1:
+                    newCompany = getTextOrNull(experienceCompany2);
+                    newPosition = getTextOrNull(experiencePosition2);
+                    newDuration = getTextOrNull(experienceDuration2);
+                    newRemarks = getTextOrNull(experienceRemarks2);
+                    break;
+                case 2:
+                    newCompany = getTextOrNull(experienceCompany3);
+                    newPosition = getTextOrNull(experiencePosition3);
+                    newDuration = getTextOrNull(experienceDuration3);
+                    newRemarks = getTextOrNull(experienceRemarks3);
+                    break;
+            }
+            if (!Objects.equals(newCompany, oldWork.getCompanyName())) {
+                newWork.setCompanyName(newCompany);
+                localChanged = true;
+            }
+            if (!Objects.equals(newPosition, oldWork.getPositionHeld())) {
+                newWork.setPositionHeld(newPosition);
+                localChanged = true;
+            }
+            if (!Objects.equals(newDuration, oldWork.getDuration())) {
+                newWork.setDuration(newDuration);
+                localChanged = true;
+            }
+            if (!Objects.equals(newRemarks, oldWork.getRemarks())) {
+                newWork.setRemarks(newRemarks);
+                localChanged = true;
+            }
+            if (localChanged) {
                 isChanged = true;
             }
+            newWorkExperiences.add(newWork);
         }
-        String oldWorkPosition1 = oldWorkExperience.getPositionHeld();
-        String newWorkPosition1 = experiencePosition1.getText().trim() != null ? experiencePosition1.getText().trim() : null;
-        if (oldWorkPosition1 != null && newWorkPosition1 != null) {
-            if (!newWorkPosition1.equals(oldWorkPosition1)) {
-                work1.setPositionHeld(experiencePosition1.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkDuration1 = oldWorkExperience.getDuration();
-        String newWorkDuration1 = experienceDuration1.getText().trim() != null ? experienceDuration1.getText().trim() : null;
-        if (oldWorkDuration1 != null && newWorkDuration1 != null) {
-            if (!newWorkDuration1.equals(oldWorkDuration1)) {
-                work1.setDuration(experienceDuration1.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkRemarks1 = oldWorkExperience.getRemarks();
-        String newWorkRemarks1 = experienceRemarks1.getText().trim() != null ? experienceRemarks1.getText().trim() : null;
-        if (oldWorkRemarks1 != null && newWorkRemarks1 != null) {
-            if (!newWorkRemarks1.equals(oldWorkRemarks1)) {
-                work1.setRemarks(experienceRemarks1.getText().trim());
-                isChanged = true;
-            }
-        }
-
-        if (employee.getWorkExperiences().size() == 1) {
-            if (isChanged) {
-                newEmployee.setWorkExperiences(new ArrayList<>(Arrays.asList(work1)));
-            }
-            return isChanged;
-        }
-
-        WorkExperience work2 = new WorkExperience();
-        oldWorkExperience = employee.getWorkExperiences().get(1);
-        String oldWorkCompany2 = oldWorkExperience.getCompanyName();
-        String newWorkCompany2 = experienceCompany2.getText().trim() != null ? experienceCompany2.getText().trim() : null;
-        if (oldWorkCompany2 != null && newWorkCompany2 != null) {
-            if (!newWorkCompany2.equals(oldWorkCompany2)) {
-                work2.setCompanyName(experienceCompany2.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkPosition2 = oldWorkExperience.getPositionHeld();
-        String newWorkPosition2 = experiencePosition2.getText().trim() != null ? experiencePosition2.getText().trim() : null;
-        if (oldWorkPosition2 != null && newWorkPosition2 != null) {
-            if (!newWorkPosition2.equals(oldWorkPosition2)) {
-                work2.setPositionHeld(experiencePosition2.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkDuration2 = oldWorkExperience.getDuration();
-        String newWorkDuration2 = experienceDuration2.getText().trim() != null ? experienceDuration2.getText().trim() : null;
-        if (oldWorkDuration2 != null && newWorkDuration2 != null) {
-            if (!newWorkDuration2.equals(oldWorkDuration2)) {
-                work2.setDuration(experienceDuration2.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkRemarks2 = oldWorkExperience.getRemarks();
-        String newWorkRemarks2 = experienceRemarks2.getText().trim() != null ? experienceRemarks2.getText().trim() : null;
-        if (oldWorkRemarks2 != null && newWorkRemarks2 != null) {
-            if (!newWorkRemarks2.equals(oldWorkRemarks2)) {
-                work2.setRemarks(experienceRemarks2.getText().trim());
-                isChanged = true;
-            }
-        }
-
-        if (employee.getWorkExperiences().size() == 2) {
-            if (isChanged) {
-                newEmployee.setWorkExperiences(new ArrayList<>(Arrays.asList(work1, work2)));
-            }
-            return isChanged;
-        }
-
-        WorkExperience work3 = new WorkExperience();    
-        oldWorkExperience = employee.getWorkExperiences().get(2);
-        String oldWorkCompany3 = oldWorkExperience.getCompanyName();
-        String newWorkCompany3 = experienceCompany3.getText().trim() != null ? experienceCompany3.getText().trim() : null;
-        if (oldWorkCompany3 != null && newWorkCompany3 != null) {
-            if (!newWorkCompany3.equals(oldWorkCompany3)) {
-                work3.setCompanyName(experienceCompany3.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkPosition3 = oldWorkExperience.getPositionHeld();
-        String newWorkPosition3 = experiencePosition3.getText().trim() != null ? experiencePosition3.getText().trim() : null;
-        if (oldWorkPosition3 != null && newWorkPosition3 != null) {
-            if (!newWorkPosition3.equals(oldWorkPosition3)) {
-                work3.setPositionHeld(experiencePosition3.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkDuration3 = oldWorkExperience.getDuration();
-        String newWorkDuration3 = experienceDuration3.getText().trim() != null ? experienceDuration3.getText().trim() : null;
-        if (oldWorkDuration3 != null && newWorkDuration3 != null) {
-            if (!newWorkDuration3.equals(oldWorkDuration3)) {
-                work3.setDuration(experienceDuration3.getText().trim());
-                isChanged = true;
-            }
-        }
-        String oldWorkRemarks3 = oldWorkExperience.getRemarks();
-        String newWorkRemarks3 = experienceRemarks3.getText().trim() != null ? experienceRemarks3.getText().trim() : null;
-        if (oldWorkRemarks3 != null && newWorkRemarks3 != null) {
-            if (!newWorkRemarks3.equals(oldWorkRemarks3)) {
-                work3.setRemarks(experienceRemarks3.getText().trim());
-                isChanged = true;
-            }
-        }
-
+        // If any changes, update newEmployee
         if (isChanged) {
-            newEmployee.setWorkExperiences(new ArrayList<>(Arrays.asList(work1, work2, work3)));
+            for (WorkExperience work : newWorkExperiences) {
+                work.setEmployeeId(employee.getEmployeeId());
+            }
+            newEmployee.setWorkExperiences(newWorkExperiences);
         }
         return isChanged;
     }

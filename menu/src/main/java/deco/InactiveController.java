@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import entity.EmployeeStatus;
 import entity.User;
 import entity.Employee;
+import entity.Position;
+import entity.Department;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -24,6 +26,7 @@ import javafx.util.Duration;
 import services.ClockService;
 import services.EmployeeService;
 import services.FilterData;
+import services.EntityService;
 
 public class InactiveController implements FilterableController {
     // ===== FXML Components =====
@@ -39,6 +42,9 @@ public class InactiveController implements FilterableController {
 
     // ===== Class Properties =====
     private ArrayList<Employee> employees;
+    private ArrayList<Employee> masterEmployees;
+    private ArrayList<Position> positions;
+    private ArrayList<Department> departments;
     private User user;
     private static final int ITEMS_PER_PAGE = 20;
     private int currentPage = 0;
@@ -276,8 +282,20 @@ public class InactiveController implements FilterableController {
 
     @Override
     public void applyFilterData(FilterData data) {
-        // TODO: Implement filter functionality
-        System.out.println(data);
+        if (isFilterEmpty(data)) {
+            setEmployees(new ArrayList<>(masterEmployees));
+        } else {
+            ArrayList<Employee> filtered = new ArrayList<>(FilterData.filterEmployees(masterEmployees, data, positions, departments));
+            setEmployees(filtered);
+        }
+        updatePage(0);
+    }
+
+    private boolean isFilterEmpty(FilterData data) {
+        return (data.getSortBy() == null && data.getOrderBy() == null && data.getPosition() == null &&
+                data.getDepartment() == null && data.getGender() == null && data.getCivilStatus() == null &&
+                data.getEducationAttainment() == null && data.getDateHired() == null &&
+                data.getDateRegularized() == null && data.getDateOfBirth() == null);
     }
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/DECOHRS_DB";
@@ -291,6 +309,11 @@ public class InactiveController implements FilterableController {
             connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             EmployeeService employeeService = new EmployeeService(connection);
             employees = employeeService.getEmployees();
+            masterEmployees = new ArrayList<>(employees);
+            // Load positions and departments
+            EntityService entityService = new EntityService(connection);
+            positions = new ArrayList<>(entityService.getPositions());
+            departments = new ArrayList<>(entityService.getDepartments());
         } catch (SQLException e) {
             e.printStackTrace();
         }

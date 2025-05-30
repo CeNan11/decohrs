@@ -6,6 +6,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import services.EntityService;
 
 import java.io.IOException;
@@ -90,6 +92,8 @@ public class ProfileInactiveController {
     @FXML private Label experienceRemarks1;
     @FXML private Label experienceRemarks2;
     @FXML private Label experienceRemarks3;
+    @FXML private VBox adminView;
+    @FXML private HBox adminEdit;
     
 
     private Employee employee;
@@ -102,8 +106,26 @@ public class ProfileInactiveController {
 
     @FXML
     private void initialize() {
+        adminView.setManaged(false);    
+        adminView.setVisible(false);
+        adminEdit.setManaged(false);
+        adminEdit.setVisible(false);
         Platform.runLater(() -> {
             setEmployeeData();
+            if (user.getRole() == User.roles.GUEST) {
+                adminView.setManaged(false);    
+                adminView.setVisible(false);
+            } else {
+                adminView.setManaged(true);
+                adminView.setVisible(true);
+            }
+            if (user.getRole() == User.roles.ADMIN) {
+                adminEdit.setManaged(true);
+                adminEdit.setVisible(true);
+            } else {
+                adminEdit.setManaged(false);
+                adminEdit.setVisible(false);
+            }
         });
     }
 
