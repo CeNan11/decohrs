@@ -1,10 +1,16 @@
 package deco;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
+import entity.AuditLog;
+import entity.Employee;
 import entity.User;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,10 +21,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import services.ClockService;
+import services.EmployeeService;
+import services.EntityService;
 import tables.AuditLogTableItem;
 
 public class AuditLogsController {
@@ -27,47 +34,31 @@ public class AuditLogsController {
     @FXML private StackPane stackPane;
 
     private User user;
+    private ArrayList<AuditLog> auditLogs;
+    private ArrayList<Employee> employees;
 
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/DECOHRS_DB";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+    private Connection connection;
 
     @SuppressWarnings("unused")
     private ClockService clockService;
     
+    ObservableList<AuditLogTableItem> logData = FXCollections.observableArrayList();
     @FXML private TableView<AuditLogTableItem> auditLogsTableView;
     @FXML private TableColumn<AuditLogTableItem, String> idColumn;
     @FXML private TableColumn<AuditLogTableItem, String> timestampColumn;
     @FXML private TableColumn<AuditLogTableItem, String> userColumn;
     @FXML private TableColumn<AuditLogTableItem, String> actionColumn;
-    @FXML private TableColumn<AuditLogTableItem, String> detailsColumn;
+    @FXML private TableColumn<AuditLogTableItem, String> employeeColumn;
 
-    private final ObservableList<AuditLogTableItem> logData = FXCollections.observableArrayList();
 
     public void initialize() {
         setupColumns();
-
-        // Add sample data
-        logData.add(new AuditLogTableItem(
-            "12345",
-            LocalDateTime.now().toString(),
-            "System",
-            "Application Start",
-            "Audit system initialized"
-            ));
-
-            auditLogsTableView.setItems(logData);
-        }    
-        
-        public void setupColumns() {
-            idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        initializeAuditLogsTableView();
+    }    
             
-            timestampColumn.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
-            
-            userColumn.setCellValueFactory(new PropertyValueFactory<>("user"));   
-            
-            actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
-            
-            detailsColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
-        }
-    
     public void setClockService(ClockService clockService) {
         this.clockService = clockService;
         time.textProperty().bind(clockService.timeProperty());
@@ -75,6 +66,51 @@ public class AuditLogsController {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setAuditLogs(ArrayList<AuditLog> auditLogs) {
+        this.auditLogs = auditLogs;
+    }
+
+
+    private void initializeAuditLogsTableView() {
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            EntityService entityService = new EntityService(connection);
+            auditLogs = entityService.getAuditLogs();
+            EmployeeService employeeService = new EmployeeService(connection);
+            employees = employeeService.getEmployees();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        for (AuditLog auditLog : auditLogs) {
+            logData.add(new AuditLogTableItem(
+                String.valueOf(auditLog.getId()),
+                auditLog.getDateCreated().toString(),
+                auditLog.getPerformedBy(),
+                auditLog.getAction(),
+                getEmployeeName(String.valueOf(auditLog.getTargetEmployee()))
+            ));
+        }
+        auditLogsTableView.setItems(logData);
+    }
+
+    private String getEmployeeName(String employeeId) {
+        for (Employee employee : employees) {
+            if (employee.getEmployeeId() == Integer.parseInt(employeeId)) {
+                return employee.getFirstName() + " " + employee.getLastName();
+            }
+        }
+        return "Unknown Employee";
+    }
+
+    public void setupColumns() {
+        idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId()));
+        timestampColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreated_at()));
+        userColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPerformed_by()));
+        actionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAction()));
+        employeeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTarget_employee()));
     }
 
     @FXML private void navigateToHome() throws IOException {

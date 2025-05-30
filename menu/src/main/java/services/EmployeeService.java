@@ -2,8 +2,6 @@ package services;
 
 import entity.Employee;
 import entity.EmployeeStatus;
-import entity.Department;
-import entity.Position;
 import entity.EmergencyContact;
 import entity.FamilyBackground;
 import entity.Education;
@@ -13,7 +11,6 @@ import entity.WorkExperience;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class EmployeeService {
     private Connection connection;
@@ -111,39 +108,13 @@ public class EmployeeService {
         }
     }
 
-    public Child getChildById(int childId) throws SQLException {
-        String sql = "SELECT * FROM Children WHERE id = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, childId);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    Child child = new Child();
-                    child.setChildId(rs.getInt("child_id"));
-                    child.setEmployeeId(rs.getInt("employee_id"));
-                    child.setName(rs.getString("name"));
-                    child.setDateOfBirth(rs.getDate("date_of_birth"));
-                    child.setPlaceOfBirth(rs.getString("place_of_birth"));
-                    child.setGender(rs.getString("gender"));
-
-                    return child;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-
     public void insertEducation(int employeeId, Education education) throws SQLException {
         String sql = "INSERT INTO EducationalBackground (" +
             "employee_id, primary_school, primary_year_graduated, tertiary_school, tertiary_year_graduated, " +
             "college_school, college_year_graduated, vocational_school, vocational_year_graduated, " +
+            "post_graduate_school, post_graduate_year_graduated, " +
             "certificate_license_name, date_issued, valid_until) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             int paramIndex = 1;
@@ -156,6 +127,8 @@ public class EmployeeService {
             pstmt.setDate(paramIndex++, education.getCollegeYearGraduated() != null ? education.getCollegeYearGraduated() : null);
             pstmt.setString(paramIndex++, education.getVocationalSchool() != null ? education.getVocationalSchool() : "");
             pstmt.setDate(paramIndex++, education.getVocationalYearGraduated() != null ? education.getVocationalYearGraduated() : null);
+            pstmt.setString(paramIndex++, education.getPostGraduateSchool() != null ? education.getPostGraduateSchool() : "");
+            pstmt.setDate(paramIndex++, education.getPostGraduateYearGraduated() != null ? education.getPostGraduateYearGraduated() : null);
             pstmt.setString(paramIndex++, education.getCertificateLicenseName() != null ? education.getCertificateLicenseName() : "");
             pstmt.setDate(paramIndex++, education.getDateIssued() != null ? education.getDateIssued() : null);
             pstmt.setDate(paramIndex++, education.getValidUntil() != null ? education.getValidUntil() : null);
@@ -350,90 +323,14 @@ public class EmployeeService {
             }
         }
 
-        return employee;
-    }
-
-    // Load related data for an employee
-    // private void loadEmployeeRelatedData(Employee employee) throws SQLException {
-    //     // Load education
-    //     loadEducation(employee);
-        
-    //     // Load dependents
-    //     loadDependents(employee);
-        
-    //     // Load work experience
-    //     loadWorkExperience(employee);
-    // }
-
-    // Load education records
-    // private void loadEducation(Employee employee) throws SQLException {
-    //     String sql = "SELECT * FROM EducationalBackground WHERE employee_id = ?";
-        
-    //     try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-    //         pstmt.setInt(1, employee.getEmployeeId());
-            
-    //         try (ResultSet rs = pstmt.executeQuery()) {
-    //             if (rs.next()) {
-    //                 Education education = new Education();
-    //                 education.setEducationLevel(rs.getString("education_level"));
-    //                 education.setInstitutionName(rs.getString("institution_name"));
-    //                 education.setCourseDegreeProgram(rs.getString("course_degree_program"));
-    //                 education.setYearGraduated(rs.getString("year_graduated"));
-    //                 education.setCertificateLicenseName(rs.getString("certificate_license_name"));
-    //                 education.setDateIssued(rs.getDate("date_issued"));
-    //                 education.setValidUntil(rs.getDate("valid_until"));
-    //                 education.setRemarks(rs.getString("remarks"));
-    //                 employee.setEducation(education);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // Load dependents
-    // private void loadDependents(Employee employee) throws SQLException {
-    //     String sql = "SELECT * FROM Dependents WHERE employee_id = ? AND relationship_type = 'Child'";
-    //     List<Child> children = new ArrayList<>();
-        
-    //     try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-    //         pstmt.setInt(1, employee.getEmployeeId());
-            
-    //         try (ResultSet rs = pstmt.executeQuery()) {
-    //             while (rs.next()) {
-    //                 Child child = new Child();
-    //                 child.setFullName(rs.getString("full_name"));
-    //                 child.setDateOfBirth(rs.getDate("date_of_birth"));
-    //                 child.setPlaceOfBirth(rs.getString("place_of_birth"));
-    //                 child.setAddress(rs.getString("address"));
-    //                 child.setGender(rs.getString("gender"));
-    //                 children.add(child);
-    //             }
-    //         }
-    //     }
-    //     employee.setChildren(children);
-    // }
-
-    // Load work experience
-    private void loadWorkExperience(Employee employee) throws SQLException {
-        String sql = "SELECT * FROM WorkExperience WHERE employee_id = ?";
-        List<WorkExperience> experiences = new ArrayList<>();
-        
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, employee.getEmployeeId());
-            
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    WorkExperience experience = new WorkExperience();
-                    experience.setCompanyName(rs.getString("company_name"));
-                    experience.setPositionHeld(rs.getString("position_held"));
-                    // TODO: Work experience in SQL load
-
-                    experiences.add(experience);
-                }
+        for (Child child : getEmployeeChildren(employee.getEmployeeId())) {
+            if (child != null) {
+                employee.addChild(child);
             }
         }
-        // Note: You'll need to add a setter for work experiences in the Employee class
-    }
 
+        return employee;
+    }
     // Update employee
     public boolean updateEmployee(Employee employee) throws SQLException {
         String sql = "UPDATE Employees SET " +
@@ -449,41 +346,41 @@ public class EmployeeService {
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             int paramIndex = 1;
-            pstmt.setString(paramIndex++, employee.getEmployeeCode() != null ? employee.getEmployeeCode() : "");
-            pstmt.setString(paramIndex++, employee.getLastName() != null ? employee.getLastName() : "");
-            pstmt.setString(paramIndex++, employee.getFirstName() != null ? employee.getFirstName() : "");
-            pstmt.setString(paramIndex++, employee.getMiddleName() != null ? employee.getMiddleName() : "");
-            pstmt.setString(paramIndex++, employee.getSuffix() != null ? employee.getSuffix() : "");
-            pstmt.setString(paramIndex++, employee.getContactNumberPrimary() != null ? employee.getContactNumberPrimary() : "");
-            pstmt.setString(paramIndex++, employee.getCurrentAddress() != null ? employee.getCurrentAddress() : "");
-            pstmt.setString(paramIndex++, employee.getHomeAddress() != null ? employee.getHomeAddress() : "");
-            pstmt.setDate(paramIndex++, employee.getDateOfBirth() != null ? employee.getDateOfBirth() : null);
-            pstmt.setString(paramIndex++, employee.getPlaceOfBirth() != null ? employee.getPlaceOfBirth() : "");
-            pstmt.setString(paramIndex++, employee.getGender() != null ? employee.getGender() : "");
-            pstmt.setString(paramIndex++, employee.getCivilStatus() != null ? employee.getCivilStatus() : "");
-            pstmt.setString(paramIndex++, employee.getBloodType() != null ? employee.getBloodType() : "");
+            pstmt.setString(paramIndex++, safeString(employee.getEmployeeCode()));
+            pstmt.setString(paramIndex++, safeString(employee.getLastName()));
+            pstmt.setString(paramIndex++, safeString(employee.getFirstName()));
+            pstmt.setString(paramIndex++, safeString(employee.getMiddleName()));
+            pstmt.setString(paramIndex++, safeString(employee.getSuffix()));
+            pstmt.setString(paramIndex++, safeString(employee.getContactNumberPrimary()));
+            pstmt.setString(paramIndex++, safeString(employee.getCurrentAddress()));
+            pstmt.setString(paramIndex++, safeString(employee.getHomeAddress()));
+            safeSetDate(pstmt, paramIndex++, employee.getDateOfBirth());
+            pstmt.setString(paramIndex++, safeString(employee.getPlaceOfBirth()));
+            pstmt.setString(paramIndex++, safeString(employee.getGender()));
+            pstmt.setString(paramIndex++, safeString(employee.getCivilStatus()));
+            pstmt.setString(paramIndex++, safeString(employee.getBloodType()));
             pstmt.setInt(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getNumberOfSiblings() != null) ? employee.getFamilyBackground().getNumberOfSiblings() : 0);
-            pstmt.setDate(paramIndex++, employee.getHireDate() != null ? employee.getHireDate() : null);
-            pstmt.setDate(paramIndex++, employee.getRegularizationDate() != null ? employee.getRegularizationDate() : null);
+            safeSetDate(pstmt, paramIndex++, employee.getHireDate());
+            safeSetDate(pstmt, paramIndex++, employee.getRegularizationDate());
             pstmt.setString(paramIndex++, employee.getStatus() != null ? employee.getStatus().toString() : "ACTIVE");
-            pstmt.setString(paramIndex++, employee.getSSSNumber() != null ? employee.getSSSNumber() : "");
-            pstmt.setString(paramIndex++, employee.getPHICNumber() != null ? employee.getPHICNumber() : "");
-            pstmt.setString(paramIndex++, employee.getTIN() != null ? employee.getTIN() : "");
-            pstmt.setString(paramIndex++, employee.getHDMFNo() != null ? employee.getHDMFNo() : "");
+            pstmt.setString(paramIndex++, safeString(employee.getSSSNumber()));
+            pstmt.setString(paramIndex++, safeString(employee.getPHICNumber()));
+            pstmt.setString(paramIndex++, safeString(employee.getTIN()));
+            pstmt.setString(paramIndex++, safeString(employee.getHDMFNo()));
             // Family background
             pstmt.setString(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getFatherName() != null) ? employee.getFamilyBackground().getFatherName() : "");
-            pstmt.setDate(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getFatherDOB() != null) ? employee.getFamilyBackground().getFatherDOB() : null);
+            safeSetDate(pstmt, paramIndex++, (employee.getFamilyBackground() != null) ? employee.getFamilyBackground().getFatherDOB() : null);
             pstmt.setString(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getMotherName() != null) ? employee.getFamilyBackground().getMotherName() : "");
-            pstmt.setDate(paramIndex++, (employee.getFamilyBackground() != null && employee.getFamilyBackground().getMotherDOB() != null) ? employee.getFamilyBackground().getMotherDOB() : null);
+            safeSetDate(pstmt, paramIndex++, (employee.getFamilyBackground() != null) ? employee.getFamilyBackground().getMotherDOB() : null);
             // Emergency contact
             pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getName() != null) ? employee.getEmergencyContact().getName() : "");
             pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getRelationship() != null) ? employee.getEmergencyContact().getRelationship() : "");
             pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getAddress() != null) ? employee.getEmergencyContact().getAddress() : "");
             pstmt.setString(paramIndex++, (employee.getEmergencyContact() != null && employee.getEmergencyContact().getContactNumber() != null) ? employee.getEmergencyContact().getContactNumber() : "");
             // Department and Position
-            pstmt.setInt(paramIndex++, employee.getDepartmentId() != null ? employee.getDepartmentId() : 0);
-            pstmt.setInt(paramIndex++, employee.getPositionId() != null ? employee.getPositionId() : 0);
-            pstmt.setInt(paramIndex++, employee.getEmployeeId() != null ? employee.getEmployeeId() : 0);
+            pstmt.setInt(paramIndex++, safeInt(employee.getDepartmentId()));
+            pstmt.setInt(paramIndex++, safeInt(employee.getPositionId()));
+            pstmt.setInt(paramIndex++, safeInt(employee.getEmployeeId()));
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
@@ -645,8 +542,8 @@ public class EmployeeService {
         return dependent;
     }
 
-    public Child getEmployeeChildren(int employeeId) throws SQLException {
-        Child child = new Child();
+    public ArrayList<Child> getEmployeeChildren(int employeeId) throws SQLException {
+        ArrayList<Child> children = new ArrayList<>();
         String sql = "SELECT * FROM Children WHERE employee_id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -654,16 +551,19 @@ public class EmployeeService {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
+                    Child child = new Child();
                     child.setChildId(rs.getInt("child_id"));
                     child.setEmployeeId(rs.getInt("employee_id"));
                     child.setName(rs.getString("name"));
                     child.setDateOfBirth(rs.getDate("date_of_birth"));
                     child.setPlaceOfBirth(rs.getString("place_of_birth"));
                     child.setGender(rs.getString("gender"));
+
+                    children.add(child);
                 }
             }
         }
-        return child;
+        return children;
     }
 
     public void insertChild(Child child) throws SQLException {
@@ -678,6 +578,75 @@ public class EmployeeService {
             pstmt.setString(5, child.getGender());
 
             pstmt.executeUpdate();
+        }
+    }
+
+    private void safeSetDate(PreparedStatement pstmt, int parameterIndex, java.sql.Date date) throws SQLException {
+        if (date == null || date.toString().equals("0000-00-00")) {
+            pstmt.setNull(parameterIndex, java.sql.Types.DATE);
+        } else {
+            pstmt.setDate(parameterIndex, date);
+        }
+    }
+
+    private String safeString(String value) {
+        return value != null ? value : "";
+    }
+
+    private Integer safeInt(Integer value) {
+        return value != null ? value : 0;
+    }
+
+    public boolean updateDependent(Dependent dependent) throws SQLException {
+        String sql = "UPDATE Dependents SET " +
+            "full_name = ?, date_of_birth = ?, address = ? " +
+            "WHERE dependent_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            int paramIndex = 1;
+            pstmt.setString(paramIndex++, safeString(dependent.getFullName()));
+            safeSetDate(pstmt, paramIndex++, dependent.getDateOfBirth());
+            pstmt.setString(paramIndex++, safeString(dependent.getAddress()));
+            pstmt.setInt(paramIndex++, safeInt(dependent.getDependentId()));
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
+
+    public boolean updateChild(Child child) throws SQLException {
+        String sql = "UPDATE Children SET " +
+            "name = ?, date_of_birth = ?, place_of_birth = ?, gender = ? " +
+            "WHERE child_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            int paramIndex = 1;
+            pstmt.setString(paramIndex++, safeString(child.getName()));
+            safeSetDate(pstmt, paramIndex++, child.getDateOfBirth());
+            pstmt.setString(paramIndex++, safeString(child.getPlaceOfBirth()));
+            pstmt.setString(paramIndex++, safeString(child.getGender()));
+            pstmt.setInt(paramIndex++, safeInt(child.getChildId()));
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
+
+    public boolean updateWorkExperience(WorkExperience experience) throws SQLException {
+        String sql = "UPDATE WorkExperience SET " +
+            "company_name = ?, position_held = ?, duration = ?, remarks = ? " +
+            "WHERE work_experience_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            int paramIndex = 1;
+            pstmt.setString(paramIndex++, safeString(experience.getCompanyName()));
+            pstmt.setString(paramIndex++, safeString(experience.getPositionHeld()));
+            pstmt.setString(paramIndex++, safeString(experience.getDuration()));
+            pstmt.setString(paramIndex++, safeString(experience.getRemarks()));
+            pstmt.setInt(paramIndex++, safeInt(experience.getWorkExperienceId()));
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
         }
     }
 } 

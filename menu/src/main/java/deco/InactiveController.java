@@ -1,6 +1,9 @@
 package deco;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import entity.EmployeeStatus;
@@ -8,6 +11,8 @@ import entity.User;
 import entity.Employee;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -17,6 +22,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import services.ClockService;
+import services.EmployeeService;
 import services.FilterData;
 
 public class InactiveController implements FilterableController {
@@ -29,6 +35,7 @@ public class InactiveController implements FilterableController {
     @FXML private Label pageLabel;
     @FXML private Label totalLabel;
     @FXML private HBox auditLogsHBox;
+    @FXML private TextField searchField;
 
     // ===== Class Properties =====
     private ArrayList<Employee> employees;
@@ -39,21 +46,22 @@ public class InactiveController implements FilterableController {
     // ===== Initialization Methods =====
     @FXML
     private void initialize() {
-        initializeEmployees();
         Platform.runLater(() -> {
+            if (employees == null) {
+                employees = new ArrayList<>();
+            }
+            initializeEmployees();
             updatePage(currentPage);
         });
-    }
+        
+        searchField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                searchEmployeesByName(newValue); // Call search method with new value
+            }
+        });
 
-    private void initializeEmployees() {
-        employees = new ArrayList<>();
-        // TODO: Replace this with actual database data
-        for (int i = 1; i <= 10; i++) {
-            Employee emp = createSampleEmployee(i);
-            employees.add(emp);
-        }
     }
-
     // ===== Data Management Methods =====
     public void setEmployees(ArrayList<Employee> employees) {
         this.employees = employees;
@@ -63,6 +71,36 @@ public class InactiveController implements FilterableController {
         return employees;
     }
 
+    @FXML
+    private void searchEmployeesByName(String searchTerm) {
+        searchTerm = searchTerm.trim().toLowerCase(); // Get search term
+
+        if (searchTerm.isEmpty()) {
+            // If the search term is empty, reload all employees
+            initializeEmployees();
+            updatePage(0); // Reset to the first page
+            return;
+        }
+
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            EmployeeService employeeService = new EmployeeService(connection);
+            ArrayList<Employee> searchResults = (ArrayList<Employee>) employeeService.searchEmployeesByName(searchTerm);
+
+            // Update the employees list with the search results
+            employees = searchResults;
+
+            // Update the page to display the search results (start from page 0)
+            updatePage(0);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle the error (e.g., show an error message to the user)
+            System.err.println("Error searching employees: " + e.getMessage());
+        }
+    }
+
+
     // ===== Page Management Methods =====
     public void updatePage(int page) {
         currentPage = page;
@@ -71,6 +109,7 @@ public class InactiveController implements FilterableController {
         
         int start = currentPage * ITEMS_PER_PAGE;
         int end = Math.min(start + ITEMS_PER_PAGE, employees.size());
+        
         
         addEmployeeCards(start, end);
         updateNavigationButtons();
@@ -88,17 +127,20 @@ public class InactiveController implements FilterableController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile_CardAlt.fxml"));
                 Node card = loader.load();
                 ProfileCardAltController controller = loader.getController();
-                controller.setUser(user);
-
                 Employee employee = employees.get(i);
+                
                 controller.initData(
                     employee.getStatus(),
-                    employee.getFirstName() + " " + employee.getLastName(),
-                    employee.getPositionId().toString()
+                    employee.getFirstName() + " " + employee.getMiddleName() + " " + employee.getLastName(),
+                    employee.getPositionId().toString(),
+                    employee.getDepartmentId().toString()
                 );
+
+                controller.setUser(user);
                 controller.setEmployee(employee);
-                
-                flowPane.getChildren().add(card);
+                if (employee.getStatus() == EmployeeStatus.INACTIVE) {
+                    flowPane.getChildren().add(card);
+                }
             } catch (IOException error) {
                 error.printStackTrace();
             }
@@ -238,29 +280,19 @@ public class InactiveController implements FilterableController {
         System.out.println(data);
     }
 
-    private Employee createSampleEmployee(int index) {
-        Employee emp = new Employee();
-        emp.setEmployeeCode("EMP" + String.format("%03d", index));
-        emp.setFirstName("First" + index);
-        emp.setLastName("Last" + index);
-        emp.setPositionId(index);
-        emp.setDepartmentId(index);
-        emp.setMiddleName("Middle" + index);
-        emp.setCurrentAddress("Current Address " + index);
-        emp.setHomeAddress("Home Address " + index);
-        emp.setContactNumberPrimary("09123456789");
-        emp.setPlaceOfBirth("Place of Birth " + index);
-        emp.setGender("Male");
-        emp.setCivilStatus("Single");
-        emp.setBloodType("O+");
-        emp.setSSSNumber("SSS-" + index);
-        emp.setPHICNumber("PHIC-" + index);
-        emp.setTIN("TIN-" + index);
-        emp.setHDMFNo("HDMF-" + index);
-        emp.setDateOfBirth(java.sql.Date.valueOf("2000-01-01"));
-        emp.setHireDate(java.sql.Date.valueOf("2023-01-01"));
-        emp.setRegularizationDate(java.sql.Date.valueOf("2023-07-01"));
-        emp.setStatus(EmployeeStatus.INACTIVE);
-        return emp;
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/DECOHRS_DB";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
+
+    private Connection connection;
+
+    private void initializeEmployees() {
+        try {
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            EmployeeService employeeService = new EmployeeService(connection);
+            employees = employeeService.getEmployees();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

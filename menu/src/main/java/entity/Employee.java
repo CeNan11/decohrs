@@ -64,6 +64,43 @@ public class Employee {
         this.workExperiences = new ArrayList<>();
     }
 
+    public Employee(Employee employee) {
+        this.employeeId = employee.getEmployeeId();
+        this.employeeCode = employee.getEmployeeCode();
+        this.lastName = employee.getLastName();
+        this.firstName = employee.getFirstName();
+        this.middleName = employee.getMiddleName();
+        this.suffix = employee.getSuffix();
+        this.dateOfBirth = employee.getDateOfBirth();
+        this.placeOfBirth = employee.getPlaceOfBirth();
+        this.nationality = employee.getNationality();
+        this.emailAddress = employee.getEmailAddress();
+        this.contactNumberPrimary = employee.getContactNumberPrimary();
+        this.currentAddress = employee.getCurrentAddress();
+        this.homeAddress = employee.getHomeAddress();
+        this.departmentId = employee.getDepartmentId();
+        this.positionId = employee.getPositionId();
+        this.hireDate = employee.getHireDate();
+        this.regularizationDate = employee.getRegularizationDate();
+        this.createdAt = employee.getCreatedAt();
+        this.updatedAt = employee.getUpdatedAt();
+        this.gender = employee.getGender();
+        this.civilStatus = employee.getCivilStatus();
+        this.bloodType = employee.getBloodType();
+        this.status = employee.getStatus();
+        this.sssNumber = employee.getSSSNumber();
+        this.philHealthNumber = employee.getPHICNumber();
+        this.tinNumber = employee.getTIN();
+        this.pagIbigNumber = employee.getHDMFNo();
+        this.dependent = employee.getDependent();
+        this.emergencyContact = employee.getEmergencyContact();
+        this.familyBackground = employee.getFamilyBackground();
+        this.education = employee.getEducation();
+        this.birthCertificate = employee.getBirthCertificate();
+        this.children = employee.getChildren();
+        this.workExperiences = employee.getWorkExperiences();
+    }
+
     // Getters
     public Integer getEmployeeId() { return employeeId; }
     public String getEmployeeCode() { return employeeCode; }
@@ -98,6 +135,7 @@ public class Employee {
     public BirthCertificate getBirthCertificate() { return birthCertificate; }
     public ArrayList<Child> getChildren() { return children; }
     public ArrayList<WorkExperience> getWorkExperiences() { return workExperiences; }
+    public Dependent getDependent() { return dependent; }
     // Setters
     public void setEmployeeId(Integer employeeId) { this.employeeId = employeeId; }
     public void setEmployeeCode(String employeeCode) { this.employeeCode = employeeCode; }
@@ -134,6 +172,7 @@ public class Employee {
     public void addChild(Child child) { this.children.add(child); }
     public void setWorkExperiences(ArrayList<WorkExperience> workExperiences) { this.workExperiences = workExperiences; }
     public void addWorkExperience(WorkExperience workExperience) { this.workExperiences.add(workExperience); }
+    public void setDependent(Dependent dependent) { this.dependent = dependent; }
 
     @Override
     public String toString() {

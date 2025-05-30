@@ -1,18 +1,25 @@
 package deco;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import services.EntityService;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import entity.Child;
+import entity.Department;
 import entity.Employee;
+import entity.Position;
 import entity.User;
 
 public class ProfileActiveController {
@@ -84,7 +91,7 @@ public class ProfileActiveController {
     @FXML private Label experienceRemarks1;
     @FXML private Label experienceRemarks2;
     @FXML private Label experienceRemarks3;
-    
+    @FXML private VBox adminView;
 
     private Employee employee;
     private User user;
@@ -98,6 +105,11 @@ public class ProfileActiveController {
     private void initialize() {
         Platform.runLater(() -> {
             setEmployeeData();
+            if (user.getRole() == User.roles.GUEST) {
+                adminView.setVisible(false);
+            } else {
+                adminView.setVisible(true);
+            }
         });
     }
 
@@ -126,8 +138,21 @@ public class ProfileActiveController {
         
         currentAddress.setText(employee.getCurrentAddress());
         homeAddress.setText(employee.getHomeAddress()); 
-        position.setText(employee.getPositionId().toString());
-        department.setText(employee.getDepartmentId().toString());
+        
+        Position position = null;
+        Department department = null;
+        
+        try {
+            Connection connection = DriverManager.getConnection(localHost, username, pass);
+            EntityService entityService = new EntityService(connection);
+            position = entityService.getPositionById(Integer.parseInt(employee.getPositionId().toString()));
+            department = entityService.getDepartmentById(Integer.parseInt(employee.getDepartmentId().toString()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        this.position.setText(position.getPositionTitle());
+        this.department.setText(department.getDepartmentName());
             
         // Format dates
         if (employee.getHireDate() != null) {
@@ -264,15 +289,42 @@ public class ProfileActiveController {
             experienceRemarks3.setText(employee.getWorkExperiences().get(2).getRemarks());
         }
 
-        ArrayList<Child> children = new ArrayList<>();
-        if (employee.getChildren() != null) {
-            for (Child child : employee.getChildren()) {
-                children.add(child);
-            }
-        }
+        initializeChildren();
+        initializeChildrenTable();
+        setChildren(employee.getChildren());
     }
+
+    private ObservableList<Child> childrenList = FXCollections.observableArrayList();
+    @FXML private TableView<Child> childrenTableView;
+    @FXML private TableColumn<Child, String> nameColumn;
+    @FXML private TableColumn<Child, String> dateOfBirthColumn;
+    @FXML private TableColumn<Child, String> placeOfBirthColumn;
+    @FXML private TableColumn<Child, String> genderColumn;
+
+    private void initializeChildren() {
+        childrenTableView.setItems(childrenList);
+    }
+
+    private void initializeChildrenTable() {
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        dateOfBirthColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDateOfBirth().toString()));
+        placeOfBirthColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPlaceOfBirth()));
+        genderColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getGender()));
+    }
+
     public Employee getEmployee() {
         return employee;
+    }
+
+    public void setChildren(ArrayList<Child> children) {
+        childrenList.setAll(children);
+    }
+
+    @FXML
+    private void navigateToEdit() throws IOException {
+        Object controller = App.setRoot("EditEmployee");
+        ((EditEmployeeController) controller).setUser(user);
+        ((EditEmployeeController) controller).setEmployee(employee);
     }
 
     @FXML

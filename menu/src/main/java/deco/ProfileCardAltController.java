@@ -1,36 +1,45 @@
 package deco;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import entity.Department;
 import entity.Employee;
 import entity.EmployeeStatus;
+import entity.Position;
 import entity.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import services.EntityService;
 
 public class ProfileCardAltController {
-    // ===== FXML Components =====
-    @FXML private Label status;
-    @FXML private Label name;
-    @FXML private Label position;
+    @FXML private Label status, name, position, department;
     @FXML private ImageView profilePhoto;
-
-    // ===== Class Properties =====
     private Employee employee;
     private User user;
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/DECOHRS_DB";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "";
 
-    // ===== Data Management Methods =====
-    public void initData(EmployeeStatus status, String name, String positionId) {
+    public void initData(EmployeeStatus status, String name, String position, String department) {
         this.status.setText(status.toString());
         this.name.setText(name);
-        this.position.setText(String.valueOf(positionId));
+        Position positionString = null;
+        Department departmentString = null;
         
-        // Set status color based on employee status
-        if (status == EmployeeStatus.ACTIVE) {
-            this.status.getStyleClass().add("status-active");
-        } else {
-            this.status.getStyleClass().add("status-inactive");
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            EntityService entityService = new EntityService(connection);
+            positionString = entityService.getPositionById(Integer.parseInt(position));
+            departmentString = entityService.getDepartmentById(Integer.parseInt(department));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        this.position.setText(positionString.getPositionTitle());
+        this.department.setText(departmentString.getDepartmentName());
     }
 
     public void setEmployee(Employee employee) {
@@ -41,28 +50,10 @@ public class ProfileCardAltController {
         this.user = user;
     }
 
-    // ===== UI Update Methods =====
-    public void setStatus(EmployeeStatus status) {
-        this.status.setText(status.toString());
-        // Update status color
-        this.status.getStyleClass().clear();
-        this.status.getStyleClass().add("font-size-m");
-        this.status.getStyleClass().add("deco-font");
-        this.status.getStyleClass().add("deco-font-bold");
-        if (status == EmployeeStatus.ACTIVE) {
-            this.status.getStyleClass().add("status-active");
-        } else {
-            this.status.getStyleClass().add("status-inactive");
-        }
-    }
-
-    public void setName(String name) {
-        this.name.setText(name);
-    }
-
-    public void setPosition(String position) {
-        this.position.setText(position);
-    }
+    public void setStatus(EmployeeStatus status) {this.status.setText(status.toString());}
+    public void setName(String name) {this.name.setText(name);}
+    public void setPosition(String position) {this.position.setText(position);}
+    public void setDepartment(String department) {this.department.setText(department);}
 
     // ===== Navigation Methods =====
     @FXML

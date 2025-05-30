@@ -10,9 +10,11 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 import entity.User;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import services.ClockService;
 import services.EmployeeService;
 
@@ -24,6 +26,7 @@ public class HomeController {
     @FXML private Label headCount;
     @FXML private Label headCountActive;
     @FXML private Label headCountInactive;
+    @FXML private VBox headCountVBox;
 
     private User user;
     @FXML private HBox auditLogsHBox;
@@ -34,7 +37,7 @@ public class HomeController {
     @FXML
     private void initialize() {
         LocalDate currentDate = LocalDate.now();
-
+        headCountVBox.setVisible(false);
         String dayOfTheWeek = currentDate.getDayOfWeek()
                 .getDisplayName(TextStyle.FULL, Locale.ENGLISH)
                 .toUpperCase();
@@ -43,6 +46,14 @@ public class HomeController {
 
         date.setText(String.format("It is %s!%n%s", dayOfTheWeek, formattedDate));  
         initializeHeadCount();
+
+        Platform.runLater(() -> {
+            if (user.getRole() == User.roles.GUEST) {
+                headCountVBox.setVisible(false);
+            } else {
+                headCountVBox.setVisible(true);
+            }
+        });
     }
 
     @FXML

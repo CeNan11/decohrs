@@ -74,6 +74,8 @@ CREATE TABLE EducationalBackground (
     college_year_graduated Date,
     vocational_school VARCHAR(255) NULL,
     vocational_year_graduated Date,
+    post_graduate_school VARCHAR(255) NULL,
+    post_graduate_year_graduated Date,
     certificate_license_name VARCHAR(255) NULL,
     date_issued DATE NULL,
     valid_until DATE NULL,
@@ -128,7 +130,14 @@ CREATE TABLE UserRoles (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (role_id) REFERENCES Roles(role_id) ON DELETE CASCADE
 );
-
+CREATE TABLE AuditLogs (
+    audit_log_id INT AUTO_INCREMENT PRIMARY KEY,
+    performed_by VARCHAR(255) NOT NULL,
+    action VARCHAR(255) NOT NULL,
+    target_employee INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (target_employee) REFERENCES Employees(employee_id)
+);
 -- Headcount Request
 -- CREATE TABLE HeadcountRequests (
 --     request_id INT AUTO_INCREMENT PRIMARY KEY,

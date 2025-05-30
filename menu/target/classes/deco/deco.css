@@ -21,6 +21,9 @@
 .font-size-s {
     -fx-font-size: 16
 }
+.font-size-sl {
+    -fx-font-size: 20
+}
 .font-size-m {
     -fx-font-size: 28
 }
@@ -305,11 +308,74 @@
     -fx-background-color: #000000; /* Black color */
     -fx-pref-height: 1px; /* Height for horizontal, width for vertical */
     -fx-pref-width: 100%;   /* Occupy full width of container */
-  }
+}
   
-  .separator:vertical {
+.separator:vertical {
     -fx-background-color: #000000;
     -fx-pref-width: 1px;   /* Width for vertical, height for horizontal */
     -fx-pref-height: 100%;  /* Occupy full height of container */
-  }
+}
   
+  /* Make the TableView background transparent */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.audit-logs-table {
+    -fx-background-color: transparent;
+}
+/* Make the column header background transparent */
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.audit-logs-table .column-header-background {
+    -fx-background-color: #ABBEEF;
+}
+
+/* Make the column header section transparent */
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+/* Make the column headers transparent */
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+/* Make table cells transparent */
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color: transparent;  /* Optional: Remove cell borders */
+}
+
+/* Make alternating row colors transparent (if any) */
+.table-row-cell:even {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: transparent;
+}
+
+/*Remove horizontal grid lines*/
+.table-view .table-column {
+  -fx-border-style: null;
+}
+
+/*Remove vertical grid lines*/
+.table-view {
+  -fx-border-style: null;
+  -fx-text-fill: black;
+}
+    
+.table-view .table-row-cell:selected {
+    -fx-background-color: lightblue; /* Background color when selected */
+    -fx-text-fill: black; /* Text color when selected */
+}
+
+/* Style for a selected row that is also focused */
+.table-row-cell:selected:focused {
+    -fx-background-color: lightblue; /* Background color when selected and focused */
+    -fx-text-fill: black; /* Text color when selected and focused */
+}

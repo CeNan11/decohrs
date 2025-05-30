@@ -9,44 +9,44 @@ import javafx.beans.property.StringProperty;
  */
 public class AuditLogTableItem {
     private final StringProperty id = new SimpleStringProperty();
-    private final StringProperty timestamp = new SimpleStringProperty();
-    private final StringProperty user = new SimpleStringProperty();
+    private final StringProperty created_at = new SimpleStringProperty();
+    private final StringProperty performed_by = new SimpleStringProperty();
     private final StringProperty action = new SimpleStringProperty();
-    private final StringProperty details = new SimpleStringProperty();
+    private final StringProperty target_employee = new SimpleStringProperty();
 
-    public AuditLogTableItem(String id, String timestamp, String user, String action, String details) {
+    public AuditLogTableItem(String id, String created_at, String performed_by, String action, String target_employee) {
         setId(id);
-        setTimestamp(timestamp);
-        setUser(user);
+        setCreated_at(created_at);
+        setPerformed_by(performed_by);
         setAction(action);
-        setDetails(details);
+        setTarget_employee(target_employee);
     }
 
     // Property getters for JavaFX binding
     @SuppressWarnings("exports")
     public StringProperty idProperty() { return id; }
     @SuppressWarnings("exports")
-    public StringProperty timestampProperty() { return timestamp; }
+    public StringProperty created_atProperty() { return created_at; }
     @SuppressWarnings("exports")
-    public StringProperty userProperty() { return user; }
+    public StringProperty performed_byProperty() { return performed_by; }
     @SuppressWarnings("exports")
     public StringProperty actionProperty() { return action; }
     @SuppressWarnings("exports")
-    public StringProperty detailsProperty() { return details; }
+    public StringProperty target_employeeProperty() { return target_employee; }
 
     // Standard getters and setters
     public String getId() { return id.get(); }
     public void setId(String id) { this.id.set(id); }
 
-    public String getTimestamp() { return timestamp.get(); }
-    public void setTimestamp(String timestamp) { this.timestamp.set(timestamp); }
+    public String getCreated_at() { return created_at.get(); }
+    public void setCreated_at(String created_at) { this.created_at.set(created_at); }
 
-    public String getUser() { return user.get(); }
-    public void setUser(String user) { this.user.set(user); }
+    public String getPerformed_by() { return performed_by.get(); }
+    public void setPerformed_by(String performed_by) { this.performed_by.set(performed_by); }
 
     public String getAction() { return action.get(); }
     public void setAction(String action) { this.action.set(action); }
 
-    public String getDetails() { return details.get(); }
-    public void setDetails(String details) { this.details.set(details); }
+    public String getTarget_employee() { return target_employee.get(); }
+    public void setTarget_employee(String target_employee) { this.target_employee.set(target_employee); }
 }

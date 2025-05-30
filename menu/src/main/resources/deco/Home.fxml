@@ -178,7 +178,7 @@
                   <String fx:value="deco-shadow" />
                </styleClass>
             </VBox>
-            <VBox layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" stylesheets="@deco.css" GridPane.columnIndex="1">
+            <VBox fx:id="headCountVBox" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" stylesheets="@deco.css" GridPane.columnIndex="1">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>

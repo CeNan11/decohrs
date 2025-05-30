@@ -135,7 +135,7 @@
                               <Image url="@../deco_images/search.png" />
                            </image>
                         </ImageView>
-                        <TextField promptText="SEARCH" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchField" promptText="SEARCH" stylesheets="@deco.css" HBox.hgrow="ALWAYS">
                            <styleClass>
                               <String fx:value="font-size-s" />
                               <String fx:value="deco-font-bold" />

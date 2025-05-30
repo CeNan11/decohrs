@@ -1,5 +1,6 @@
 package services;
 
+import entity.AuditLog;
 import entity.Department;
 import entity.Employee;
 import entity.Position;
@@ -126,5 +127,42 @@ public class EntityService {
             }
         }
         return null;
+    }
+
+    public int insertAuditLog(AuditLog auditLog) throws SQLException {
+        String sql = "INSERT INTO AuditLogs (performed_by, action, target_employee) VALUES (?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, auditLog.getPerformedBy());
+            pstmt.setString(2, auditLog.getAction());
+            pstmt.setInt(3, auditLog.getTargetEmployee());
+            pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public ArrayList<AuditLog> getAuditLogs() throws SQLException {
+        ArrayList<AuditLog> auditLogs = new ArrayList<>();
+        String sql = "SELECT * FROM AuditLogs";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                AuditLog auditLog = new AuditLog();
+                auditLog.setId(rs.getInt("audit_log_id"));
+                auditLog.setPerformedBy(rs.getString("performed_by"));
+                auditLog.setAction(rs.getString("action"));
+                auditLog.setTargetEmployee(rs.getInt("target_employee"));
+                auditLog.setDateCreated(rs.getDate("created_at"));
+                auditLogs.add(auditLog);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return auditLogs;
     }
 }

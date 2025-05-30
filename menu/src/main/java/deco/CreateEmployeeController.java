@@ -6,7 +6,6 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import entity.Employee;
 import entity.EmployeeStatus;
@@ -14,25 +13,20 @@ import entity.FamilyBackground;
 import entity.Position;
 import entity.User;
 import entity.WorkExperience;
+import entity.AuditLog;
 import entity.Child;
 import entity.Department;
 import entity.Education;
 import entity.EmergencyContact;
-import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import services.EmployeeService;
 import services.EntityService;
-import tables.ChildTableItem;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -285,15 +279,15 @@ public class CreateEmployeeController {
         Employee employee = new Employee();
             
         // Set basic employee information
-        employee.setEmployeeCode(employeeCode.getText());
-        employee.setFirstName(firstName.getText());
-        employee.setMiddleName(middleName.getText());
-        employee.setLastName(lastName.getText());
-        employee.setSuffix(suffix.getText());
-        employee.setCurrentAddress(currentAddress.getText());
-        employee.setHomeAddress(homeAddress.getText());
-        employee.setContactNumberPrimary(contactNumber.getText());
-        employee.setPlaceOfBirth(placeOfBirth.getText());
+        employee.setEmployeeCode(employeeCode.getText().trim());
+        employee.setFirstName(firstName.getText().trim());
+        employee.setMiddleName(middleName.getText().trim());
+        employee.setLastName(lastName.getText().trim());
+        employee.setSuffix(suffix.getText().trim());
+        employee.setCurrentAddress(currentAddress.getText().trim());
+        employee.setHomeAddress(homeAddress.getText().trim());
+        employee.setContactNumberPrimary(contactNumber.getText().trim());
+        employee.setPlaceOfBirth(placeOfBirth.getText().trim());
         employee.setDateOfBirth(dateOfBirth.getValue() != null ? Date.valueOf(dateOfBirth.getValue()) : null);
         employee.setGender(gender.getValue());
         employee.setCivilStatus(civilStatus.getValue());
@@ -314,10 +308,10 @@ public class CreateEmployeeController {
         employee.setRegularizationDate(regularizationDate.getValue() != null ? Date.valueOf(regularizationDate.getValue()) : null);
 
         // Set government IDs
-        employee.setSSSNumber(sssNumber.getText());
-        employee.setPHICNumber(philHealthNumber.getText());
-        employee.setTIN(tinNumber.getText());
-        employee.setHDMFNo(pagIbigNumber.getText());
+        employee.setSSSNumber(sssNumber.getText().trim());
+        employee.setPHICNumber(philHealthNumber.getText().trim());
+        employee.setTIN(tinNumber.getText().trim());
+        employee.setHDMFNo(pagIbigNumber.getText().trim());
 
         // Set status
         employee.setStatus(EmployeeStatus.ACTIVE);
@@ -327,22 +321,22 @@ public class CreateEmployeeController {
 
     private EmergencyContact saveEmergencyContact() {
         EmergencyContact emergencyContact = new EmergencyContact();
-        emergencyContact.setName(emergencyContactName.getText());
-        emergencyContact.setRelationship(emergencyContactRelationship.getText());
-        emergencyContact.setAddress(emergencyContactAddress.getText());
-        emergencyContact.setContactNumber(emergencyContactNumber.getText());
+        emergencyContact.setName(emergencyContactName.getText().trim());
+        emergencyContact.setRelationship(emergencyContactRelationship.getText().trim());
+        emergencyContact.setAddress(emergencyContactAddress.getText().trim());
+        emergencyContact.setContactNumber(emergencyContactNumber.getText().trim());
 
         return emergencyContact;
     }
 
     private FamilyBackground saveFamilyBackground() {
         FamilyBackground familyBackground = new FamilyBackground();
-        familyBackground.setFatherName(fathersName.getText());
+        familyBackground.setFatherName(fathersName.getText().trim());
         familyBackground.setFatherDOB(fathersBirthdate.getValue() != null ? Date.valueOf(fathersBirthdate.getValue()) : null);
-        familyBackground.setMotherName(mothersName.getText());
+        familyBackground.setMotherName(mothersName.getText().trim());
         familyBackground.setMotherDOB(mothersBirthdate.getValue() != null ? Date.valueOf(mothersBirthdate.getValue()) : null);
-        familyBackground.setSpouseName(spouseName.getText());
-        familyBackground.setSpouseAddress(spouseAddress.getText());
+        familyBackground.setSpouseName(spouseName.getText().trim());
+        familyBackground.setSpouseAddress(spouseAddress.getText().trim());
         familyBackground.setSpouseBirthDate(spouseBirthDate.getValue() != null ? Date.valueOf(spouseBirthDate.getValue()) : null);
 
         return familyBackground;
@@ -350,17 +344,17 @@ public class CreateEmployeeController {
 
     private Education saveEducation() {
         Education education = new Education();
-        education.setPrimarySchool(primarySchool.getText());
+        education.setPrimarySchool(primarySchool.getText().trim());
         education.setPrimaryYearGraduated(primaryYearGraduated.getValue() != null ? Date.valueOf(primaryYearGraduated.getValue()) : null);
-        education.setTertiarySchool(tertiarySchool.getText());
+        education.setTertiarySchool(tertiarySchool.getText().trim());
         education.setTertiaryYearGraduated(tertiaryYearGraduated.getValue() != null ? Date.valueOf(tertiaryYearGraduated.getValue()) : null);
-        education.setCollegeSchool(collegeSchool.getText());
+        education.setCollegeSchool(collegeSchool.getText().trim());
         education.setCollegeYearGraduated(collegeYearGraduated.getValue() != null ? Date.valueOf(collegeYearGraduated.getValue()) : null);
-        education.setVocationalSchool(vocationalSchool.getText());
+        education.setVocationalSchool(vocationalSchool.getText().trim());
         education.setVocationalYearGraduated(vocationalYearGraduated.getValue() != null ? Date.valueOf(vocationalYearGraduated.getValue()) : null);
-        education.setPostGraduateSchool(postGraduateSchool.getText());
+        education.setPostGraduateSchool(postGraduateSchool.getText().trim());
         education.setPostGraduateYearGraduated(postGraduateYearGraduated.getValue() != null ? Date.valueOf(postGraduateYearGraduated.getValue()) : null);
-        education.setCertificateLicenseName(certificateLicenseName.getText());
+        education.setCertificateLicenseName(certificateLicenseName.getText().trim());
         education.setDateIssued(dateIssued.getValue() != null ? Date.valueOf(dateIssued.getValue()) : null);
         education.setValidUntil(validUntil.getValue() != null ? Date.valueOf(validUntil.getValue()) : null);
 
@@ -371,24 +365,24 @@ public class CreateEmployeeController {
         ArrayList<WorkExperience> workExperiences = new ArrayList<>();
         
         WorkExperience work1 = new WorkExperience();
-        work1.setCompanyName(experienceCompany1.getText());
-        work1.setPositionHeld(experiencePosition1.getText());
-        work1.setDuration(experienceDuration1.getText());
-        work1.setRemarks(experienceRemarks1.getText());
+        work1.setCompanyName(experienceCompany1.getText().trim());
+        work1.setPositionHeld(experiencePosition1.getText().trim());
+        work1.setDuration(experienceDuration1.getText().trim());
+        work1.setRemarks(experienceRemarks1.getText().trim());
         workExperiences.add(work1);
 
         WorkExperience work2 = new WorkExperience();
-        work2.setCompanyName(experienceCompany2.getText());
-        work2.setPositionHeld(experiencePosition2.getText());
-        work2.setDuration(experienceDuration2.getText());
-        work2.setRemarks(experienceRemarks2.getText());
+        work2.setCompanyName(experienceCompany2.getText().trim());
+        work2.setPositionHeld(experiencePosition2.getText().trim());
+        work2.setDuration(experienceDuration2.getText().trim());
+        work2.setRemarks(experienceRemarks2.getText().trim());
         workExperiences.add(work2);
 
         WorkExperience work3 = new WorkExperience();    
-        work3.setCompanyName(experienceCompany3.getText());
-        work3.setPositionHeld(experiencePosition3.getText());
-        work3.setDuration(experienceDuration3.getText());
-        work3.setRemarks(experienceRemarks3.getText());
+        work3.setCompanyName(experienceCompany3.getText().trim());
+        work3.setPositionHeld(experiencePosition3.getText().trim());
+        work3.setDuration(experienceDuration3.getText().trim());
+        work3.setRemarks(experienceRemarks3.getText().trim());
         workExperiences.add(work3);
 
         return workExperiences;
@@ -408,8 +402,6 @@ public class CreateEmployeeController {
             ArrayList<WorkExperience> workExperiences = saveWorkAllExperience();
             employee.setWorkExperiences(workExperiences);
             employee.setChildren(children);
-
-            // Set status as ACTIVE for new employees
             
             // Save employee to database
             try {
@@ -418,22 +410,25 @@ public class CreateEmployeeController {
                 EmployeeService employeeService = new EmployeeService(connection);
                 int employeeId = employeeService.insertEmployee(employee);
 
+                EntityService entityService = new EntityService(connection);
+                
                 // Set the employee ID to the employee object
                 employee.setEmployeeId(employeeId);
-
+                
                 // Insert education into the database
                 employeeService.insertEducation(employee.getEmployeeId(), employee.getEducation());    
-
+                
                 // Insert work experiences into the database
                 employeeService.insertWorkExperience(employee.getEmployeeId(), employee.getWorkExperiences());
-
+                
                 // Insert children into the database
                 employeeService.insertChildren(employee.getEmployeeId(), employee.getChildren());
                 
                 // Navigate back to active employees list
                 Object controller = App.setRoot("Active");
                 ((ActiveController) controller).setUser(user);
-
+                
+                entityService.insertAuditLog(new AuditLog(user.getUsername(), employeeId, "Employee created successfully"));
                 System.out.println(employee);
             } catch (Exception e) {
                 showError("Database Error", "Failed to save employee: " + e.getMessage());
